@@ -51,7 +51,7 @@
                      <children>
                         <ImageView pickOnBounds="true">
                            <image>
-                              <Image url="@../resources/upv.jpg" />
+                              <Image url="@../resources/carta_nautica.jpg" />
                            </image>
                         </ImageView>
                         <MenuButton fx:id="map_pin" mnemonicParsing="false" prefHeight="60.0" prefWidth="48.0" visible="false">
