@@ -10,6 +10,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.YEARS;
 import java.util.ResourceBundle;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -29,8 +30,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class FXMLRegisterController implements Initializable {
     
@@ -85,6 +91,8 @@ public class FXMLRegisterController implements Initializable {
     private Tooltip tooltip1;
     @FXML
     private Tooltip tooltip2;
+    @FXML
+    private ComboBox<String> imageAvatar;
 
     private void checkPassword() {
         String password = passwordField.getText();
@@ -186,10 +194,95 @@ private void handleBAcceptOnAction(ActionEvent event) {
     // you must initialize here all related with the object 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        // Lista de nombres de imágenes
+        String[] avatarNames = { "user.png", "woman.png", "gamer.png", "hacker.png" };
+
+        // Añadir nombres de archivo al ComboBox
+        imageAvatar.getItems().addAll(avatarNames);
+
+         // Cell factory para mostrar imágenes en el desplegable
+        imageAvatar.setCellFactory(listView -> new ListCell<>() {
+        private final ImageView imageView = new ImageView();
+        
+        
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null) {
+                setGraphic(null);
+            } else {
+                Image image = new Image(getClass().getResourceAsStream("/resources/" + item));
+                imageView.setImage(image);
+                imageView.setFitWidth(50);
+                imageView.setFitHeight(50);
+                setGraphic(imageView);
+            }
+        }
+    });
+        
+        
+        // Imagen también en el botón principal del ComboBox
+    imageAvatar.setButtonCell(new ListCell<>() {
+        private final ImageView imageView = new ImageView();
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null) {
+                setGraphic(null);
+            } else {
+                Image image = new Image(getClass().getResourceAsStream("/resources/" + item));
+                imageView.setImage(image);
+                imageView.setFitWidth(50);
+                imageView.setFitHeight(50);
+                setGraphic(imageView);
+            }
+        }
+    });
+        
+        
+    
+        // Seleccionar por defecto el primero
+        if (!imageAvatar.getItems().isEmpty()) {
+        imageAvatar.getSelectionModel().selectFirst();
+        }
+        
+        
+        
+        
+        
+        
+        
         tooltip1.install(interrogante1, tooltip1);
         tooltip2.install(interrogante2, tooltip2);
         interrogante1.setFocusTraversable(false);
         interrogante2.setFocusTraversable(false);
+        
+        // Evento al presionar el botón para mostrar el Tooltip
+        interrogante1.setOnAction(event -> {
+        // Mostrar el tooltip manualmente cuando se presione el botón
+        tooltip1.show(interrogante1, 860, 290);
+
+        // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(e -> tooltip1.hide());
+        pause.play();
+         });
+        
+        // Evento al presionar el botón para mostrar el Tooltip
+        interrogante2.setOnAction(event -> {
+        // Mostrar el tooltip manualmente cuando se presione el botón
+        tooltip2.show(interrogante2, 720, 405);
+
+        // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(e -> tooltip2.hide());
+        pause.play();
+         });
+        
+        
+
         
         
         // Inicializar propiedades antes de usarlas
