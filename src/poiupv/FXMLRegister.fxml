@@ -31,12 +31,13 @@
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
          </padding>
       </HBox>
-      <GridPane hgap="12.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="351.0" prefWidth="673.0" vgap="12.0" VBox.vgrow="ALWAYS">
+      <GridPane hgap="12.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="494.0" prefWidth="741.0" vgap="12.0" VBox.vgrow="ALWAYS">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="454.6666259765625" minWidth="-Infinity" prefWidth="357.33331298828125" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="203.3333638509115" prefWidth="300.66667683919275" />
          </columnConstraints>
          <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="NEVER" />
             <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="NEVER" />
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" vgrow="ALWAYS" />
             <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="ALWAYS" />
@@ -47,7 +48,24 @@
             <RowConstraints />
          </rowConstraints>
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnSpan="2" GridPane.rowIndex="0" GridPane.vgrow="NEVER">
+            <HBox GridPane.columnSpan="2">
+               <children>
+                  <VBox fillWidth="false">
+                     <children>
+                        <Label text="User:" textFill="#025477" />
+                        <TextField fx:id="userField" minWidth="150.0" prefHeight="26.0" prefWidth="345.0" promptText="LettersNumbersSymbols" />
+                     </children>
+                  </VBox>
+                  <Label fx:id="userError" text="User already in use" textFill="#ca0505" visible="false" />
+               </children>
+               <GridPane.margin>
+                  <Insets left="12.0" />
+               </GridPane.margin>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
                <children>
                   <VBox fillWidth="false">
                      <children>
@@ -61,7 +79,7 @@
                   <Insets left="12.0" />
                </GridPane.margin>
             </HBox>
-            <HBox prefHeight="50.0" prefWidth="415.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <HBox prefHeight="50.0" prefWidth="415.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <children>
                   <VBox prefHeight="50.0" prefWidth="209.0">
                      <children>
@@ -75,7 +93,7 @@
                   <Insets left="12.0" />
                </GridPane.margin>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <children>
                   <VBox prefHeight="50.0" prefWidth="209.0">
                      <children>
@@ -89,12 +107,12 @@
                   <Insets left="12.0" />
                </GridPane.margin>
             </HBox>
-            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="12.0" />
                </GridPane.margin>
             </Separator>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                <children>
                   <VBox prefHeight="50.0" prefWidth="213.0">
                      <children>
@@ -108,26 +126,26 @@
                   <Insets left="12.0" />
                </GridPane.margin>
             </HBox>
-            <Button fx:id="bAccept" mnemonicParsing="false" onAction="#handleBAcceptOnAction" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: #0685BC;" text="Register" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Button fx:id="bAccept" mnemonicParsing="false" onAction="#handleBAcceptOnAction" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: #0685BC;" text="Register" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets left="30.0" />
                </GridPane.margin>
                <graphic>
                   <ImageView fitHeight="33.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/accept_white.png" />
+                        <Image url="@../resources/accept_white.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="bCancel" mnemonicParsing="false" prefHeight="0.0" prefWidth="95.0" style="-fx-background-color: #0685BC;" text="Cancel" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Button fx:id="bCancel" mnemonicParsing="false" prefHeight="3.0" prefWidth="105.0" style="-fx-background-color: #0685BC;" text="Cancel" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets left="145.0" />
                </GridPane.margin>
                <graphic>
                   <ImageView fitHeight="89.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/cancel_white.png" />
+                        <Image url="@../resources/cancel_white.png" />
                      </image>
                   </ImageView>
                </graphic>

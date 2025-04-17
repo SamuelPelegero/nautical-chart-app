@@ -56,12 +56,18 @@ public class FXMLRegisterController implements Initializable {
     private BooleanProperty validPassword;
     private BooleanProperty confirmPasswords;
     private BooleanProperty validDate;
+     private BooleanProperty validUser;
     
     // listener to register on textProperty() or valueProperty()
     private ChangeListener<String> listenerEmail;
     private ChangeListener<String> listenerPassword;
     private ChangeListener<String> listenerPassword2;
     private ChangeListener<String> listenerDate;
+    private ChangeListener<String> listenerUser;
+    @FXML
+    private TextField userField;
+    @FXML
+    private Label userError;
 
     private void checkPassword() {
         String password = passwordField.getText();
@@ -80,6 +86,13 @@ public class FXMLRegisterController implements Initializable {
         boolean isValid = email.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
         validEmail.set(isValid); //actualiza la property asociada
         showError(isValid, emailField, emailError); //muestra o esconde el mensaje de error
+    }
+    
+    private void checkUser() {
+        String user = userField.getText();
+        boolean isValid = user.matches("^[A-Za-z][A-Za-z0-9_]{3,19}$"); //TODO: Se debe comprobar que el usuario no existe
+        validUser.set(isValid); //actualiza la property asociada
+        showError(isValid, userField, userError); //muestra o esconde el mensaje de error
     }
 
     private void checkDate(){
@@ -101,7 +114,7 @@ public class FXMLRegisterController implements Initializable {
     @FXML
 private void handleBAcceptOnAction(ActionEvent event) {
     // Verificar que todos los campos sean válidos
-    if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get()) {
+    if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get() && validUser.get()) {
         System.out.println("✅ Registro exitoso!");
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
 
@@ -114,6 +127,7 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
         // Limpiar los campos después del registro
         emailField.clear();
+        userField.clear();
         passwordField.clear();
         passwordConfirmField.clear();
         dateField.setValue(null);
@@ -122,6 +136,7 @@ private void handleBAcceptOnAction(ActionEvent event) {
         validPassword.set(false);
         confirmPasswords.set(false);
         validDate.set(false);
+        validUser.set(false);
     
         // Cerrar la ventana de registro
         Stage currentStage = (Stage) bAccept.getScene().getWindow();
@@ -159,9 +174,14 @@ private void handleBAcceptOnAction(ActionEvent event) {
         validPassword = new SimpleBooleanProperty(false);
         confirmPasswords = new SimpleBooleanProperty(false);
         validDate = new SimpleBooleanProperty(false);
+        validUser = new SimpleBooleanProperty(false);
         
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) checkEmail();
+        });
+        
+        userField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) checkUser();
         });
 
         passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
@@ -190,7 +210,8 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
         BooleanBinding validFields = validEmail.and(validPassword)
                 .and(confirmPasswords)
-                .and(validDate);
+                .and(validDate)
+                .and(validUser);
 
         bAccept.disableProperty().bind(Bindings.not(validFields));
 
