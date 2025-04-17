@@ -20,12 +20,20 @@ public class PoiUPVApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/poiupv/FXMLRegister.fxml"));
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-        Scene scene = new Scene(root);
-        stage.setTitle("Puntos de interes UPV");
-        stage.setScene(scene);
-        stage.show();
+    Parent root = FXMLLoader.load(getClass().getResource("/poiupv/FXMLRegister.fxml"));
+    stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+    Scene scene = new Scene(root);
+
+    // Fijar el tamaño de la ventana
+    stage.setWidth(800);    // Ancho fijo
+    stage.setHeight(600);   // Alto fijo
+
+    // Deshabilitar el cambio de tamaño
+    stage.setResizable(false);
+
+    stage.setTitle("Registrate");
+    stage.setScene(scene);
+    stage.show();
     }
 
     /**

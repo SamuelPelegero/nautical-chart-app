@@ -7,6 +7,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -21,7 +22,7 @@
    <children>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #0685BC;">
          <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Register form">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrate">
                <font>
                   <Font name="Arial Rounded MT Bold" size="36.0" />
                </font>
@@ -52,11 +53,29 @@
                <children>
                   <VBox fillWidth="false">
                      <children>
-                        <Label text="User:" textFill="#025477" />
-                        <TextField fx:id="userField" minWidth="150.0" prefHeight="26.0" prefWidth="345.0" promptText="LettersNumbersSymbols" />
+                        <Label text="Usuario:" textFill="#025477" />
+                        <TextField fx:id="userField" minWidth="150.0" prefHeight="26.0" prefWidth="345.0" promptText="LetrasNumerosSimbolos" />
                      </children>
                   </VBox>
-                  <Label fx:id="userError" text="User already in use" textFill="#ca0505" visible="false" />
+                  <Button fx:id="interrogante1" alignment="CENTER" mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/interrogante.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip fx:id="tooltip1" text="El usuario debe tener entre 6 y 15 caracteres, sin espacios, pudiendo usar guiones o sub-guiones." />
+                     </tooltip>
+                     <HBox.margin>
+                        <Insets left="5.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Label fx:id="userError" prefHeight="17.0" prefWidth="289.0" text="Nombre de usuario no disponible" textFill="#ca0505" visible="false">
+                     <HBox.margin>
+                        <Insets left="20.0" top="20.0" />
+                     </HBox.margin></Label>
                </children>
                <GridPane.margin>
                   <Insets left="12.0" />
@@ -69,11 +88,11 @@
                <children>
                   <VBox fillWidth="false">
                      <children>
-                        <Label text="Email:" textFill="#025477" />
-                        <TextField fx:id="emailField" minWidth="150.0" prefHeight="26.0" prefWidth="345.0" promptText="yourEmail@domain.com" />
+                        <Label text=" Dirección de correo:" textFill="#025477" />
+                        <TextField fx:id="emailField" minWidth="150.0" prefHeight="26.0" prefWidth="345.0" promptText="tuCorreo@dominio.com" />
                      </children>
                   </VBox>
-                  <Label fx:id="emailError" text="Incorrect Email" textFill="#ca0505" translateY="5.0" visible="false" />
+                  <Label fx:id="emailError" text=" Dirección de correo no válida" textFill="#ca0505" translateY="5.0" visible="false" />
                </children>
                <GridPane.margin>
                   <Insets left="12.0" />
@@ -83,11 +102,29 @@
                <children>
                   <VBox prefHeight="50.0" prefWidth="209.0">
                      <children>
-                        <Label text="Password:" textFill="#025477" />
-                        <PasswordField fx:id="passwordField" minWidth="150.0" prefHeight="26.0" prefWidth="191.0" promptText="LettersNumbersSymbols" />
+                        <Label text="Contraseña:" textFill="#025477" />
+                        <PasswordField fx:id="passwordField" minWidth="150.0" prefHeight="26.0" prefWidth="191.0" promptText="LetrasNumerosSimbolos" />
                      </children>
                   </VBox>
-                  <Label fx:id="passwordError" prefHeight="17.0" prefWidth="245.0" text="It must be a combination of 8 to 15 numbers or letters, without blank spaces" textFill="#ca0505" visible="false" />
+                  <Button fx:id="interrogante2" alignment="CENTER" mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/interrogante.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip fx:id="tooltip2" text="La contraseña debe tener entre 8 y 20 caracteres, incluir al menos una letra mayúscula, una minúscula, un dígito y un carácter especial (!@#$%&amp;*()-+=)." />
+                     </tooltip>
+                     <HBox.margin>
+                        <Insets left="5.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Label fx:id="passwordError" prefHeight="17.0" prefWidth="245.0" text="Contraseña no válida" textFill="#ca0505" visible="false">
+                     <HBox.margin>
+                        <Insets left="20.0" top="20.0" />
+                     </HBox.margin></Label>
                </children>
                <GridPane.margin>
                   <Insets left="12.0" />
@@ -97,11 +134,14 @@
                <children>
                   <VBox prefHeight="50.0" prefWidth="209.0">
                      <children>
-                        <Label text="Repeat Password:" textFill="#025477" />
-                        <PasswordField fx:id="passwordConfirmField" minWidth="150.0" prefHeight="26.0" prefWidth="350.0" promptText="LettersNumbersSymbols" />
+                        <Label text="Repetir contraseña:" textFill="#025477" />
+                        <PasswordField fx:id="passwordConfirmField" minWidth="150.0" prefHeight="26.0" prefWidth="350.0" promptText="LetrasNumerosSimbolos" />
                      </children>
                   </VBox>
-                  <Label fx:id="passwordConfirmError" text="Passwords don't match" textFill="#ca0505" visible="false" />
+                  <Label fx:id="passwordConfirmError" prefHeight="37.0" prefWidth="459.0" text="Las contraseñas no coinciden" textFill="#ca0505" visible="false">
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding></Label>
                </children>
                <GridPane.margin>
                   <Insets left="12.0" />
@@ -116,17 +156,20 @@
                <children>
                   <VBox prefHeight="50.0" prefWidth="213.0">
                      <children>
-                        <Label text="Birthdate:" textFill="#025477" />
+                        <Label text="Fecha de nacimiento:" textFill="#025477" />
                         <DatePicker fx:id="dateField" prefHeight="25.0" prefWidth="205.0" />
                      </children>
                   </VBox>
-                  <Label fx:id="dateError" text="User must be 16 years old" textFill="#ca0505" visible="false" />
+                  <Label fx:id="dateError" text="El usuario debe tener al menos 16 años" textFill="#ca0505" visible="false">
+                     <HBox.margin>
+                        <Insets left="20.0" top="22.0" />
+                     </HBox.margin></Label>
                </children>
                <GridPane.margin>
                   <Insets left="12.0" />
                </GridPane.margin>
             </HBox>
-            <Button fx:id="bAccept" mnemonicParsing="false" onAction="#handleBAcceptOnAction" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: #0685BC;" text="Register" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <Button fx:id="bAccept" mnemonicParsing="false" onAction="#handleBAcceptOnAction" prefHeight="41.0" prefWidth="116.0" style="-fx-background-color: #0685BC;" text="Registrarse" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets left="30.0" />
                </GridPane.margin>
@@ -138,9 +181,9 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="bCancel" mnemonicParsing="false" prefHeight="3.0" prefWidth="105.0" style="-fx-background-color: #0685BC;" text="Cancel" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <Button fx:id="bCancel" alignment="CENTER" mnemonicParsing="false" prefHeight="3.0" prefWidth="105.0" style="-fx-background-color: #0685BC;" text="Cancelar" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <GridPane.margin>
-                  <Insets left="145.0" />
+                  <Insets left="160.0" />
                </GridPane.margin>
                <graphic>
                   <ImageView fitHeight="89.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
