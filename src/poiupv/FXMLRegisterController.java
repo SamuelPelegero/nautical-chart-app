@@ -93,6 +93,8 @@ public class FXMLRegisterController implements Initializable {
     private Tooltip tooltip2;
     @FXML
     private ComboBox<String> imageAvatar;
+    @FXML
+    private Button bIniciarSesion;
 
     private void checkPassword() {
         String password = passwordField.getText();
@@ -374,6 +376,30 @@ private void handleBAcceptOnAction(ActionEvent event) {
         bAccept.disableProperty().bind(Bindings.not(validFields));
 
         bCancel.setOnAction(event -> bCancel.getScene().getWindow().hide());
+    }
+
+    @FXML
+    private void handleBIniciarSesionOnAction(ActionEvent event) {
+        try {
+        // Cargar la pantalla de inicio de sesión
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLLogIn.fxml"));
+        Parent root = loader.load();
+        
+        // Obtener la ventana actual y cerrarla (si es necesario)
+        Stage currentStage = (Stage) bIniciarSesion.getScene().getWindow();
+        currentStage.close(); // Cerrar ventana de registro
+        
+        // Crear el nuevo Stage para la ventana de inicio de sesión
+        Stage newStage = new Stage();
+        newStage.setScene(new Scene(root));
+        newStage.setResizable(false);
+        newStage.setTitle("Iniciar Sesión");
+        newStage.show();
+        
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+        
     }
  }
 
