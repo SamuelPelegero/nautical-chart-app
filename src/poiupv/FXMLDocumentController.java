@@ -75,6 +75,8 @@ public class FXMLDocumentController implements Initializable {
     private SplitPane splitPane;
     @FXML
     private Label mousePosition;
+    @FXML
+    private ListView<String> menu_listview;
 
     @FXML
     void zoomIn(ActionEvent event) {
