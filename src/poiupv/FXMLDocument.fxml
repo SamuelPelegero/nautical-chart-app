@@ -46,11 +46,11 @@
          <items>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleRealizarProblema" text="Realizar Problema" />
-                  <Button mnemonicParsing="false" onAction="#handleModificarPerfil" text="Modificar Perfil" />
-                  <Button mnemonicParsing="false" onAction="#handleMostrarResultados" text="Mostrar Resultados" />
-                  <Button mnemonicParsing="false" onAction="#handleCerrarSesion" text="Cerrar Sesión" />
-                  <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="489.0" prefWidth="164.0" />
+                  <Button mnemonicParsing="false" onAction="#handleRealizarProblema" prefHeight="25.0" prefWidth="119.0" text="Realizar Problema" translateX="22.0" translateY="25.0" />
+                  <Button mnemonicParsing="false" onAction="#handleModificarPerfil" prefHeight="25.0" prefWidth="119.0" text="Modificar Perfil" translateX="22.0" translateY="50.0" />
+                  <Button mnemonicParsing="false" onAction="#handleMostrarResultados" text="Mostrar Resultados" translateX="22.0" translateY="75.0" />
+                  <Button mnemonicParsing="false" onAction="#handleCerrarSesion" prefHeight="25.0" prefWidth="119.0" text="Cerrar Sesión" translateX="22.0" translateY="100.0" />
+                  <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="259.0" prefWidth="164.0" translateY="125.0" />
                </children>
             </VBox>
             <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" onMousePressed="#addPoi" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
