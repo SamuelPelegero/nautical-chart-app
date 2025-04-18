@@ -17,10 +17,13 @@ import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -37,6 +40,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import poiupv.Poi;
@@ -218,6 +222,36 @@ public class FXMLDocumentController implements Initializable {
                 map_listview.getItems().add(poi);
             }
         }
+    }
+    //METODOS MENU
+    private void abrirVentanaModal(String rutaFXML, String titulo) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle(titulo);
+            stage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana principal
+            stage.setScene(new Scene(root));
+            stage.showAndWait(); // Espera a que se cierre
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void handleRealizarProblema(ActionEvent event) {
+        abrirVentanaModal("/poiupv/RealizarProblema.fxml", "Realizar problema");
+    }
+
+    public void handleModificarPerfil(ActionEvent event) {
+        abrirVentanaModal("/poiupv/ModificarPerfil.fxml", "Modificar perfil");
+    }
+
+    public void handleMostrarResultados(ActionEvent event) {
+        abrirVentanaModal("/poiupv/MostrarResultados.fxml", "Mostrar resultados");
+    }
+
+    public void handleCerrarSesion(ActionEvent event) {
+        abrirVentanaModal("/poiupv/Login.fxml", "Cerrar sesión");
     }
 
 
