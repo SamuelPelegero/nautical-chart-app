@@ -171,11 +171,12 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
         // Abrir la interfaz principal (FXMLDocumentController)
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLDocument.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Interfaz Principal");
+            stage.setTitle("Menú Principal");
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
