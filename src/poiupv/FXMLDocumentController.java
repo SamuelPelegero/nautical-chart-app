@@ -78,14 +78,14 @@ public class FXMLDocumentController implements Initializable {
     private Label mousePosition;
     @FXML
     private ListView<String> menu_listview;
-    @FXML
+    /*@FXML
     private Button btnRealizarProblema;
     @FXML
     private Button btnModificarPerfil;
     @FXML
     private Button btnMostrarResultados;
     @FXML
-    private Button btnCerrarSesion;
+    private Button btnCerrarSesion;*/
 
     @FXML
     void zoomIn(ActionEvent event) {
@@ -234,7 +234,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
-    //METODOS MENU
+    /*//METODOS MENU
     private void abrirVentanaModal(String rutaFXML, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
@@ -289,7 +289,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void handleCerrarSesion(ActionEvent event) {
         abrirVentanaModal("/poiupv/Login.fxml", "Cerrar sesión");
-    }
+    }*/
 
 
 }
