@@ -54,7 +54,7 @@ public class FXMLLogInController {
         if (username.equals(validUsername) && password.equals(validPassword)) { //TODO: Verificar el usuario y la contraseña
             // Si son correctas, procedemos a abrir la interfaz principal
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLDocument.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
                 Parent root = loader.load();
                 
                 // Obtener el Stage actual y cerrarlo (si es necesario)
@@ -64,7 +64,8 @@ public class FXMLLogInController {
                 // Crear el nuevo Stage para la interfaz principal
                 Stage newStage = new Stage();
                 newStage.setScene(new Scene(root));
-                newStage.setTitle("Interfaz Principal");
+                newStage.setTitle("Menú Principal");
+                newStage.setResizable(false);
                 newStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
