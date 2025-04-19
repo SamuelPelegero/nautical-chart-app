@@ -46,10 +46,10 @@
          <items>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleRealizarProblema" prefHeight="25.0" prefWidth="119.0" text="Realizar Problema" translateX="22.0" translateY="25.0" />
-                  <Button mnemonicParsing="false" onAction="#handleModificarPerfil" prefHeight="25.0" prefWidth="119.0" text="Modificar Perfil" translateX="22.0" translateY="50.0" />
-                  <Button mnemonicParsing="false" onAction="#handleMostrarResultados" text="Mostrar Resultados" translateX="22.0" translateY="75.0" />
-                  <Button mnemonicParsing="false" onAction="#handleCerrarSesion" prefHeight="25.0" prefWidth="119.0" text="Cerrar Sesión" translateX="22.0" translateY="100.0" />
+                  <Button fx:id="btnRealizarProblema" mnemonicParsing="false" onAction="#handleRealizarProblema" prefHeight="25.0" prefWidth="119.0" text="Realizar Problema" translateX="22.0" translateY="25.0" />
+                  <Button fx:id="btnModificarPerfil" mnemonicParsing="false" onAction="#handleModificarPerfil" prefHeight="25.0" prefWidth="119.0" text="Modificar Perfil" translateX="22.0" translateY="50.0" />
+                  <Button fx:id="btnMostrarResultados" mnemonicParsing="false" onAction="#handleMostrarResultados" text="Mostrar Resultados" translateX="22.0" translateY="75.0" />
+                  <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#handleCerrarSesion" prefHeight="25.0" prefWidth="119.0" text="Cerrar Sesión" translateX="22.0" translateY="100.0" />
                   <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="259.0" prefWidth="164.0" translateY="125.0" />
                </children>
             </VBox>
