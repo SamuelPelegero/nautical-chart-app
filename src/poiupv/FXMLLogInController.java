@@ -111,9 +111,6 @@ public class FXMLLogInController {
     @FXML
     public void initialize() {
         
-       
-     System.out.println("Initialize con @FXML ejecutándose");
-        
         if (userField != null && passwordField != null && bAccept != null) {
             bAccept.disableProperty().bind(
                 userField.textProperty().isEmpty()
