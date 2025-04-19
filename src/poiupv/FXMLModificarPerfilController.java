@@ -42,7 +42,6 @@ public class FXMLModificarPerfilController implements Initializable {
     
     
     private boolean emailTouched = false;
-    private boolean userTouched = false;
     private boolean passwordTouched = false;
     private boolean passwordConfirmTouched = false;
     private boolean dateTouched = false;
@@ -71,30 +70,25 @@ public class FXMLModificarPerfilController implements Initializable {
     private BooleanProperty validPassword;
     private BooleanProperty confirmPasswords;
     private BooleanProperty validDate;
-     private BooleanProperty validUser;
     
     // listener to register on textProperty() or valueProperty()
     private ChangeListener<String> listenerEmail;
     private ChangeListener<String> listenerPassword;
     private ChangeListener<String> listenerPassword2;
     private ChangeListener<String> listenerDate;
-    private ChangeListener<String> listenerUser;
-    @FXML
-    private TextField userField;
-    @FXML
-    private Label userError;
-    @FXML
-    private Button interrogante1;
+
+
     @FXML
     private Button interrogante2;
-    @FXML
-    private Tooltip tooltip1;
+
     @FXML
     private Tooltip tooltip2;
     @FXML
     private ComboBox<String> imageAvatar;
-    @FXML
-    private Button bIniciarSesion;
+
+  
+    
+    
 
     private void checkPassword() {
         String password = passwordField.getText();
@@ -115,12 +109,7 @@ public class FXMLModificarPerfilController implements Initializable {
         showError(isValid, emailField, emailError);
     }
     
-    private void checkUser() {
-        String user = userField.getText();
-        boolean isValid = user.matches("^[a-zA-Z0-9 _-]{6,15}$") && !user.contains(" "); //TODO: Se debe comprobar que el usuario no existe
-        validUser.set(isValid); //actualiza la property asociada
-        showError(isValid, userField, userError); //muestra o esconde el mensaje de error
-    }
+   
 
     private void checkDate(){
     try{    
@@ -140,8 +129,10 @@ public class FXMLModificarPerfilController implements Initializable {
     
     @FXML
 private void handleBAcceptOnAction(ActionEvent event) {
-    // Verificar que todos los campos sean válidos
-    if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get() && validUser.get()) {
+    // Verificar que los campos modificados sean validos
+    
+
+    if ( validEmail.get() && validPassword.get() && confirmPasswords.get() &&  validDate.get() ) {
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
 
         // Opcional: Mostrar un mensaje en una etiqueta
@@ -153,7 +144,6 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
         // Limpiar los campos después del registro
         emailField.clear();
-        userField.clear();
         passwordField.clear();
         passwordConfirmField.clear();
         dateField.setValue(null);
@@ -162,8 +152,8 @@ private void handleBAcceptOnAction(ActionEvent event) {
         validPassword.set(false);
         confirmPasswords.set(false);
         validDate.set(false);
-        validUser.set(false);
-    
+
+        
         // Cerrar la ventana de registro
         Stage currentStage = (Stage) bAccept.getScene().getWindow();
         currentStage.close();
@@ -281,7 +271,7 @@ private void handleBAcceptOnAction(ActionEvent event) {
         validPassword = new SimpleBooleanProperty(false);
         confirmPasswords = new SimpleBooleanProperty(false);
         validDate = new SimpleBooleanProperty(false);
-        validUser = new SimpleBooleanProperty(false);
+        
         
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) { // cuando pierde el foco
@@ -295,20 +285,7 @@ private void handleBAcceptOnAction(ActionEvent event) {
      
         
         
-        userField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // cuando pierde el foco
-            userTouched = true;
-            checkUser();
-            } else {
-            showError(true, userField, userError); // ocultamos el error al entrar
-    }
-        });
         
-        userField.textProperty().addListener((obs, oldVal, newVal) -> {
-        if (userTouched) {
-        checkUser();
-        }
-        });
 
         passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) { // cuando pierde el foco
@@ -359,8 +336,8 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
         BooleanBinding validFields = validEmail.and(validPassword)
                 .and(confirmPasswords)
-                .and(validDate)
-                .and(validUser);
+                .and(validDate);
+              
 
         bAccept.disableProperty().bind(Bindings.not(validFields));
 

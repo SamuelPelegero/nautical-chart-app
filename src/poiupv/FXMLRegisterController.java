@@ -302,7 +302,7 @@ private void handleBAcceptOnAction(ActionEvent event) {
             showError(true, emailField, emailError); // ocultamos el error al entrar
             }
         });
-        
+     
      
         
         
@@ -356,17 +356,20 @@ private void handleBAcceptOnAction(ActionEvent event) {
         });
         
 
-        dateField.setConverter(new LocalDateStringConverter() {
-            @Override
-            public LocalDate fromString(String value) {
-                try {
-                    return super.fromString(value);
-                } catch (Exception e) {
-                    dateError.setVisible(true);
-                    return null;
-                }
-            }
-        });
+       dateField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+    if (!newVal) { // cuando pierde el foco
+        dateTouched = true;
+        checkDate();
+    } else {
+        showError(true, dateField, dateError); // ocultamos el error al entrar
+    }
+});
+
+// Escuchar cambios en la fecha para validar sin necesidad de perder el foco
+dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
+    dateTouched = true;
+    checkDate();
+});
 
         BooleanBinding validFields = validEmail.and(validPassword)
                 .and(confirmPasswords)

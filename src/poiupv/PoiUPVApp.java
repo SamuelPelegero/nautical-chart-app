@@ -20,16 +20,13 @@ public class PoiUPVApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("/poiupv/FXMLLogIn.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("/poiupv/FXMLogIn.fxml"));
     stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
     Scene scene = new Scene(root);
 
-    // Fijar el tamaño de la ventana
-    stage.setWidth(800);    // Ancho fijo
-    stage.setHeight(500);   // Alto fijo
-
+    
     // Deshabilitar el cambio de tamaño
-    stage.setResizable(false);
+    stage.setResizable(true);
 
     stage.setTitle("Iniciar sesión");
     stage.setScene(scene);
