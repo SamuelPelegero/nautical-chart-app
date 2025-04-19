@@ -25,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -77,6 +78,14 @@ public class FXMLDocumentController implements Initializable {
     private Label mousePosition;
     @FXML
     private ListView<String> menu_listview;
+    @FXML
+    private Button btnRealizarProblema;
+    @FXML
+    private Button btnModificarPerfil;
+    @FXML
+    private Button btnMostrarResultados;
+    @FXML
+    private Button btnCerrarSesion;
 
     @FXML
     void zoomIn(ActionEvent event) {
@@ -233,25 +242,51 @@ public class FXMLDocumentController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle(titulo);
             stage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana principal
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root,300, 250));
             stage.showAndWait(); // Espera a que se cierre
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
+    @FXML
     public void handleRealizarProblema(ActionEvent event) {
         abrirVentanaModal("/poiupv/RealizarProblema.fxml", "Realizar problema");
     }
-
+    @FXML
     public void handleModificarPerfil(ActionEvent event) {
-        abrirVentanaModal("/poiupv/ModificarPerfil.fxml", "Modificar perfil");
-    }
+         try {
+        URL fxmlLocation = getClass().getResource("/poiupv/FXMLModificarPerfil.fxml");
+        if (fxmlLocation == null) {
+            System.out.println("Archivo FXML no encontrado en la ruta especificada.");
+            throw new RuntimeException("No se encontró el archivo FXML en la ruta: " + "/poiupv/FXMLModificarPerfil.fxml");
+        } else {
+            System.out.println("Archivo FXML encontrado en la ruta: " + fxmlLocation);
+        }
 
+        FXMLLoader loader = new FXMLLoader(fxmlLocation);
+        Parent root = loader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Modificar Perfil");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(root, 300, 250));
+        stage.showAndWait();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("No se pudo cargar la ventana de " + "Modificar Perfil");
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+    }
+    }
+    @FXML
     public void handleMostrarResultados(ActionEvent event) {
         abrirVentanaModal("/poiupv/MostrarResultados.fxml", "Mostrar resultados");
     }
-
+    @FXML
     public void handleCerrarSesion(ActionEvent event) {
         abrirVentanaModal("/poiupv/Login.fxml", "Cerrar sesión");
     }
