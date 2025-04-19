@@ -234,6 +234,9 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
+    
+    
+    
     /*//METODOS MENU
     private void abrirVentanaModal(String rutaFXML, String titulo) {
         try {

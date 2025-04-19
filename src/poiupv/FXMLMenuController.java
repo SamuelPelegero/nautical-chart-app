@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class FXMLMenuController {
@@ -39,8 +40,10 @@ public class FXMLMenuController {
         try {
             Parent modificarPerfilRoot = FXMLLoader.load(getClass().getResource("FXMLModificarPerfil.fxml"));
             Scene modificarPerfilScene = new Scene(modificarPerfilRoot);
+            
 
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
             window.setScene(modificarPerfilScene);
             window.setTitle("Modificar Perfil");
 
