@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.YEARS;
 import java.util.ResourceBundle;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -85,6 +86,10 @@ public class FXMLModificarPerfilController implements Initializable {
     private Tooltip tooltip2;
     @FXML
     private ComboBox<String> imageAvatar;
+    @FXML
+    private TextField userField;
+    @FXML
+    private Label userError;
 
   
     
@@ -160,11 +165,13 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
         // Abrir la interfaz principal (FXMLDocumentController)
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLDocument.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Interfaz Principal");
+            stage.setTitle("Menú Principal");
+            stage.setMinWidth(600);
+            stage.setMinHeight(600);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -341,8 +348,34 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
         bAccept.disableProperty().bind(Bindings.not(validFields));
 
-        bCancel.setOnAction(event -> bCancel.getScene().getWindow().hide());
     }
+
+  @FXML
+    private void handleBCancelOnAction(ActionEvent event) {
+        
+         try {
+        // Cargar el archivo FXML del registro
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
+        Parent root = loader.load();
+
+        // Obtener el Stage actual y cerrarlo (si es necesario)
+        Stage currentStage = (Stage) bAccept.getScene().getWindow();
+        currentStage.close(); // Cerrar ventana de login
+
+        // Crear el nuevo Stage para la ventana de registro
+        Stage newStage = new Stage();
+        newStage.setScene(new Scene(root));
+        newStage.setMinWidth(600);
+        newStage.setMinHeight(600);
+        newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        newStage.setTitle("Menú Principal");
+        newStage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+        
+    }
+
 
    
         

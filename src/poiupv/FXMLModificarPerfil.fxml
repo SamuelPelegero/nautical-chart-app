@@ -168,7 +168,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="bCancel" alignment="CENTER" mnemonicParsing="false" prefHeight="3.0" prefWidth="105.0" style="-fx-background-color: #0685BC;" text="Cancelar" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="8">
+            <Button fx:id="bCancel" alignment="CENTER" mnemonicParsing="false" onAction="#handleBCancelOnAction" prefHeight="3.0" prefWidth="105.0" style="-fx-background-color: #0685BC;" text="Cancelar" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="8">
                <GridPane.margin>
                   <Insets left="180.0" />
                </GridPane.margin>
