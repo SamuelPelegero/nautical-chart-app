@@ -14,6 +14,7 @@
     -fx-effect:  dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);
     -fx-cursor: hand;
     -fx-transition: all 0.3s ease;
+   
 }
     
 
@@ -69,5 +70,4 @@
     -fx-border-style: solid;
     -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);
     -fx-background-color: #0a9ddf; /* un poco más claro */
-    -fx-translate-y: -2px;
 }
