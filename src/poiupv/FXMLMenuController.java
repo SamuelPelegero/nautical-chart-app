@@ -46,6 +46,8 @@ public class FXMLMenuController {
             window.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
             window.setScene(modificarPerfilScene);
             window.setTitle("Modificar Perfil");
+            window.setMinWidth(700);
+            window.setMinHeight(500);
 
         } catch (IOException e) {
             e.printStackTrace();

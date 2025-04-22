@@ -9,17 +9,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER"
-      spacing="30"
-      style="-fx-background-color: white;"
-      xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="poiupv.FXMLMenuController"
-      prefWidth="800" prefHeight="600"
-      minWidth="700" minHeight="500">
+<VBox alignment="TOP_CENTER" minHeight="500" minWidth="700" prefHeight="600" prefWidth="800" spacing="30" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poiupv.FXMLMenuController">
    
    <!-- Encabezado -->
-   <HBox alignment="CENTER" style="-fx-background-color: #0685BC;" HBox.hgrow="ALWAYS">
+   <HBox alignment="CENTER" style="-fx-background-color: #0685BC;" styleClass="menu" stylesheets="@../resources/menu%20estilos.css" HBox.hgrow="ALWAYS">
       <children>
          <Text fill="WHITE" text="Menú Principal">
             <font>
@@ -42,11 +35,7 @@
                <Image url="@../resources/OIP.jpg" />
             </image>
          </ImageView>
-         <Button onAction="#handleRealizarProblema"
-                 prefHeight="60" prefWidth="300"
-                 style="-fx-background-color: #0685BC;"
-                 text="Realizar Problema"
-                 textFill="WHITE">
+         <Button onAction="#handleRealizarProblema" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="realiz" stylesheets="@../resources/menu%20estilos.css" text="Realizar Problema" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
@@ -60,11 +49,7 @@
                <Image url="@../resources/modperfil.jpg" />
             </image>
          </ImageView>
-         <Button onAction="#handleModificarPerfil"
-                 prefHeight="60" prefWidth="300"
-                 style="-fx-background-color: #0685BC;"
-                 text="Modificar Perfil"
-                 textFill="WHITE">
+         <Button onAction="#handleModificarPerfil" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="modif" stylesheets="@../resources/menu%20estilos.css" text="Modificar Perfil" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
@@ -78,11 +63,7 @@
                <Image url="@../resources/resultado.png" />
             </image>
          </ImageView>
-         <Button onAction="#handleMostrarResultados"
-                 prefHeight="60" prefWidth="300"
-                 style="-fx-background-color: #0685BC;"
-                 text="Mostrar Resultados"
-                 textFill="WHITE">
+         <Button onAction="#handleMostrarResultados" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Mostrar Resultados" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
@@ -96,11 +77,7 @@
                <Image url="@../resources/cerrarsesion.png" />
             </image>
          </ImageView>
-         <Button onAction="#handleCerrarSesion"
-                 prefHeight="60" prefWidth="300"
-                 style="-fx-background-color: #d09901;"
-                 text="Cerrar Sesión"
-                 textFill="WHITE">
+         <Button onAction="#handleCerrarSesion" prefHeight="60" prefWidth="300" style="-fx-background-color: #d09901; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="cerrar" stylesheets="@../resources/menu%20estilos.css" text="Cerrar Sesión" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
