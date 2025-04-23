@@ -41,6 +41,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -96,7 +97,17 @@ public class FXMLDocumentController implements Initializable {
     private ToggleButton toggleBotonBorrar;
     @FXML
     private ToggleGroup grupo;
+    @FXML
+    private ToggleButton botonTransportador;
     
+    private ImageView imageTransportador;
+    
+    private double originalImageWidth;
+    private double originalImageHeight;
+    @FXML
+    private ImageView imageview;
+
+  
     
 
     @FXML
@@ -363,4 +374,64 @@ public class FXMLDocumentController implements Initializable {
 
 
     }
+
+@FXML
+private void handleBotonTransportadorOnAction(ActionEvent event) {
+    if (botonTransportador.isSelected()) {
+        if (imageTransportador == null) {
+            // Cargar la imagen del transportador solo una vez
+            Image imagen = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
+
+            // Guardar las dimensiones originales de la imagen del transportador
+            originalImageWidth = imagen.getWidth();
+            originalImageHeight = imagen.getHeight();
+
+            imageTransportador = new ImageView(imagen);
+            imageTransportador.setFitWidth(200); // Tamaño inicial ajustable
+            imageTransportador.setPreserveRatio(true);
+
+            // Hacerla arrastrable
+            imageTransportador.setOnMousePressed(e -> {
+                imageTransportador.setUserData(new double[]{e.getSceneX(), e.getSceneY(), imageTransportador.getLayoutX(), imageTransportador.getLayoutY()});
+            });
+
+            imageTransportador.setOnMouseDragged(e -> {
+                double[] datos = (double[]) imageTransportador.getUserData();
+                double deltaX = e.getSceneX() - datos[0];
+                double deltaY = e.getSceneY() - datos[1];
+                imageTransportador.setLayoutX(datos[2] + deltaX);
+                imageTransportador.setLayoutY(datos[3] + deltaY);
+            });
+        }
+
+        // Añadir el transportador al pane si no está presente ya
+        if (!paneImagen.getChildren().contains(imageTransportador)) {
+            paneImagen.getChildren().add(imageTransportador);
+            imageTransportador.setLayoutX(100); // Posición inicial
+            imageTransportador.setLayoutY(100);
+        }
+
+        // Ajustar el tamaño del transportador al hacer zoom en la imagen
+        // Suponiendo que la imagen está en un ImageView llamado "imageView"
+        imageview.fitWidthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double scaleFactor = newWidth.doubleValue() / originalImageWidth;  // Factor de escala para el ancho
+            imageTransportador.setScaleX(scaleFactor);
+            imageTransportador.setScaleY(scaleFactor);
+        });
+
+        imageview.fitHeightProperty().addListener((obs, oldHeight, newHeight) -> {
+            double scaleFactor = newHeight.doubleValue() / originalImageHeight;  // Factor de escala para la altura
+            imageTransportador.setScaleX(scaleFactor);
+            imageTransportador.setScaleY(scaleFactor);
+        });
+
+    } else {
+        // Eliminar el transportador del pane si se desactiva el toggle
+        paneImagen.getChildren().remove(imageTransportador);
+    }
 }
+
+
+}
+
+   

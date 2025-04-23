@@ -69,6 +69,15 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
+                  <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction" toggleGroup="$grupo">
+                     <graphic>
+                        <ImageView fitHeight="65.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/transportador.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
                   <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="494.0" prefWidth="164.0" />
                </children>
             </VBox>
@@ -76,7 +85,7 @@
                <content>
                   <Pane fx:id="paneImagen">
                      <children>
-                        <ImageView layoutY="72.0" pickOnBounds="true">
+                        <ImageView fx:id="imageview" layoutY="72.0" pickOnBounds="true">
                            <image>
                               <Image url="@../resources/carta_nautica.jpg" />
                            </image>
