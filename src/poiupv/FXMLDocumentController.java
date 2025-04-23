@@ -38,9 +38,13 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -77,7 +81,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label mousePosition;
     @FXML
-    private ListView<String> menu_listview;
+    private ToggleButton botonTexto;
     /*@FXML
     private Button btnRealizarProblema;
     @FXML
@@ -86,6 +90,14 @@ public class FXMLDocumentController implements Initializable {
     private Button btnMostrarResultados;
     @FXML
     private Button btnCerrarSesion;*/
+    @FXML
+    private Pane paneImagen;
+    @FXML
+    private ToggleButton toggleBotonBorrar;
+    @FXML
+    private ToggleGroup grupo;
+    
+    
 
     @FXML
     void zoomIn(ActionEvent event) {
@@ -294,5 +306,61 @@ public class FXMLDocumentController implements Initializable {
         abrirVentanaModal("/poiupv/Login.fxml", "Cerrar sesión");
     }*/
 
+    @FXML
+    private void handleBotonTextoOnAction(ActionEvent event) {  
 
+     if (botonTexto.isSelected()) {
+        // Activar modo escritura
+        paneImagen.setOnMouseClicked(e -> {
+            TextField textField = new TextField();
+            textField.setLayoutX(e.getX());
+            textField.setLayoutY(e.getY());
+
+            textField.setOnAction(evt -> {
+                Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
+                paneImagen.getChildren().remove(textField);
+                paneImagen.getChildren().add(text);
+            });
+
+            textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+                if (!isNowFocused) {
+                    Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
+                    paneImagen.getChildren().remove(textField);
+                    paneImagen.getChildren().add(text);
+                }
+            });
+
+            paneImagen.getChildren().add(textField);
+            textField.requestFocus();
+        });
+    } else {
+        // Desactivar modo escritura
+        paneImagen.setOnMouseClicked(null);
+    }
+    }
+
+    @FXML
+    private void handleToggleBotonBorrar(ActionEvent event) {
+           if (toggleBotonBorrar.isSelected()) {
+        // Activar modo borrar
+        paneImagen.setOnMouseClicked(e -> {
+            // Verifica si se hace clic en un texto y lo elimina con un solo clic
+            for (Node node : paneImagen.getChildren()) {
+                if (node instanceof Text) {
+                    Text text = (Text) node;
+                    // Si el clic está dentro de las coordenadas del texto, se elimina
+                    if (text.getBoundsInParent().contains(e.getX(), e.getY())) {
+                        paneImagen.getChildren().remove(text); // Elimina el texto
+                        break; // Sale del bucle después de eliminar el primer texto encontrado
+                    }
+                }
+            }
+        });
+    } else {
+        // Desactivar modo borrar
+        paneImagen.setOnMouseClicked(null);
+    }
+
+
+    }
 }
