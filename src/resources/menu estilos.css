@@ -65,7 +65,7 @@
 }
 
 .button:hover {
-    -fx-border-color: white;
+    -fx-border-color: pink;
     -fx-border-width: 2px;
     -fx-border-style: solid;
     -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);

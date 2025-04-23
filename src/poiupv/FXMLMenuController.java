@@ -17,17 +17,6 @@ import javafx.stage.Stage;
 
 public class FXMLMenuController {
 
-    @FXML
-    private Button handleRealizarProblema;
-
-    @FXML
-    private Button handleModificarPerfil;
-
-    @FXML
-    private Button handleMostrarResultados;
-
-    @FXML
-    private Button handleCerrarSesion;
 
     @FXML
     private void handleRealizarProblema(ActionEvent event) {
