@@ -38,7 +38,7 @@
                <Insets />
             </HBox.margin>
          </ImageView>
-         <Button onAction="#handleRealizarProblema" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="realiz" stylesheets="@../resources/menu%20estilos.css" text="Realizar Problema" textFill="WHITE">
+         <Button fx:id="botprobl" onAction="#handleRealizarProblema" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="realiz" stylesheets="@../resources/menu%20estilos.css" text="Realizar Problema" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>

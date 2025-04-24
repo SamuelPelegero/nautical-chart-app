@@ -40,6 +40,9 @@ import javafx.util.Duration;
 
 public class FXMLpreguntasController implements Initializable {
 
+    @FXML
+    private Button A;
+
 
 
     

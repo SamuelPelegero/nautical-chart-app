@@ -17,11 +17,31 @@ import javafx.stage.Stage;
 
 public class FXMLMenuController {
 
+    @FXML
+    private Button botprobl;
+
 
     @FXML
     private void handleRealizarProblema(ActionEvent event) {
         System.out.println("Realizar Problema seleccionado");
+        Stage currentStage = (Stage) botprobl.getScene().getWindow();
+        currentStage.close();
         // Lógica para cambiar de escena o mostrar la vista correspondiente
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("FXMLproblemas.fxml"));
+            Scene problemascene = new Scene(root);
+            
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+            stage.setScene(problemascene);
+            stage.setTitle("Preguntas");
+            stage.setMinWidth(600);
+            stage.setMinHeight(600);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
