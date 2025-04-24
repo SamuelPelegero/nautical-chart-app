@@ -69,7 +69,16 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction" toggleGroup="$grupo">
+                  <ToggleButton fx:id="botonLinea" mnemonicParsing="false" onAction="#handleBotonLineaOnAction" toggleGroup="$grupo">
+                     <graphic>
+                        <ImageView fitHeight="87.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/recta.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+                  <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction">
                      <graphic>
                         <ImageView fitHeight="65.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -85,7 +94,7 @@
                <content>
                   <Pane fx:id="paneImagen">
                      <children>
-                        <ImageView fx:id="imageview" layoutY="72.0" pickOnBounds="true">
+                        <ImageView fx:id="imageview" layoutX="33.0" layoutY="30.0" pickOnBounds="true">
                            <image>
                               <Image url="@../resources/carta_nautica.jpg" />
                            </image>

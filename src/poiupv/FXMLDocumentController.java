@@ -5,6 +5,8 @@
  */
 package poiupv;
 
+import javafx.scene.paint.Color;
+import static java.awt.PageAttributes.ColorType.COLOR;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -45,6 +48,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -106,6 +110,11 @@ public class FXMLDocumentController implements Initializable {
     private double originalImageHeight;
     @FXML
     private ImageView imageview;
+    @FXML
+    private ToggleButton botonLinea;
+            
+    private double startX, startY;
+    
 
   
     
@@ -192,6 +201,54 @@ public class FXMLDocumentController implements Initializable {
         contentGroup.getChildren().add(zoomGroup);
         zoomGroup.getChildren().add(map_scrollpane.getContent());
         map_scrollpane.setContent(contentGroup);
+
+        
+        
+        // Escuchamos el cambio de herramienta
+        grupo.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
+    // Desactiva todos los eventos previos
+    paneImagen.setOnMousePressed(null);
+    paneImagen.setOnMouseReleased(null);
+    paneImagen.setOnMouseClicked(null);
+
+    // Activamos según la herramienta seleccionada
+    if (newToggle == botonLinea) {
+        paneImagen.setOnMousePressed(pressedHandler);
+        paneImagen.setOnMouseReleased(releasedHandler);
+    } else if (newToggle == botonTexto) {
+        paneImagen.setOnMouseClicked(e -> {
+            TextField textField = new TextField();
+            textField.setLayoutX(e.getX());
+            textField.setLayoutY(e.getY());
+
+            textField.setOnAction(evt -> {
+                Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
+                paneImagen.getChildren().remove(textField);
+                paneImagen.getChildren().add(text);
+            });
+
+            textField.focusedProperty().addListener((focusObs, wasFocused, isNowFocused) -> {
+                if (!isNowFocused) {
+                    Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
+                    paneImagen.getChildren().remove(textField);
+                    paneImagen.getChildren().add(text);
+                }
+            });
+
+            paneImagen.getChildren().add(textField);
+            textField.requestFocus();
+        });
+    } else if (newToggle == toggleBotonBorrar) {
+        paneImagen.setOnMouseClicked(e -> {
+            for (Node node : paneImagen.getChildren()) {
+                if (node instanceof Text text && text.getBoundsInParent().contains(e.getX(), e.getY())) {
+                    paneImagen.getChildren().remove(text);
+                    break;
+                }
+            }
+        });
+    }
+});
 
     }
 
@@ -353,22 +410,17 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleToggleBotonBorrar(ActionEvent event) {
            if (toggleBotonBorrar.isSelected()) {
-        // Activar modo borrar
         paneImagen.setOnMouseClicked(e -> {
-            // Verifica si se hace clic en un texto y lo elimina con un solo clic
-            for (Node node : paneImagen.getChildren()) {
-                if (node instanceof Text) {
-                    Text text = (Text) node;
-                    // Si el clic está dentro de las coordenadas del texto, se elimina
-                    if (text.getBoundsInParent().contains(e.getX(), e.getY())) {
-                        paneImagen.getChildren().remove(text); // Elimina el texto
-                        break; // Sale del bucle después de eliminar el primer texto encontrado
+            for (Node node : new ArrayList<>(paneImagen.getChildren())) {
+                if (node instanceof Text || node instanceof Line) {
+                    if (node.getBoundsInParent().contains(e.getX(), e.getY())) {
+                        paneImagen.getChildren().remove(node);
+                        break;
                     }
                 }
             }
         });
     } else {
-        // Desactivar modo borrar
         paneImagen.setOnMouseClicked(null);
     }
 
@@ -431,7 +483,33 @@ private void handleBotonTransportadorOnAction(ActionEvent event) {
     }
 }
 
+    // Manejadores de eventos (para añadir/retirar fácilmente)
+private EventHandler<MouseEvent> pressedHandler = e -> {
+    startX = e.getX();
+    startY = e.getY();
+    // Eliminar la creación de la línea de vista previa
+};
 
+private EventHandler<MouseEvent> draggedHandler = e -> {
+    // Eliminar el manejo del arrastre de la línea de vista previa
+};
+
+private EventHandler<MouseEvent> releasedHandler = e -> {
+    // Crear la línea final directamente sin previsualizarla
+    Line finalLine = new Line(startX, startY, e.getX(), e.getY());
+    finalLine.setStroke(Color.BLACK);  // O el color que desees
+    paneImagen.getChildren().add(finalLine);
+};
+
+@FXML
+private void handleBotonLineaOnAction(ActionEvent event) {
+    // Aquí se activa/desactiva la herramienta de línea
+    if (botonLinea.isSelected()) {
+        paneImagen.setOnMousePressed(pressedHandler);
+        paneImagen.setOnMouseReleased(releasedHandler);
+    } else {
+        paneImagen.setOnMousePressed(null);
+        paneImagen.setOnMouseReleased(null);
+    }
 }
-
-   
+}
