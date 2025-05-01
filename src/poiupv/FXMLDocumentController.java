@@ -27,22 +27,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -55,75 +40,36 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import poiupv.Poi;
 
-/**
- *
- * @author jsoler
- */
 public class FXMLDocumentController implements Initializable {
-
-    //=======================================
-    // hashmap para guardar los puntos de interes POI
     private final HashMap<String, Poi> hm = new HashMap<>();
     private ObservableList<Poi> data;
-    // ======================================
-    // la variable zoomGroup se utiliza para dar soporte al zoom
-    // el escalado se realiza sobre este nodo, al escalar el Group no mueve sus nodos
     private Group zoomGroup;
 
-    @FXML
-    private ListView<Poi> map_listview;
-    @FXML
-    private ScrollPane map_scrollpane;
-    @FXML
-    private Slider zoom_slider;
-    @FXML
-    private MenuButton map_pin;
-    @FXML
-    private MenuItem pin_info;
+    @FXML private ListView<Poi> map_listview;
+    @FXML private ScrollPane map_scrollpane;
+    @FXML private Slider zoom_slider;
+    @FXML private MenuButton map_pin;
+    @FXML private MenuItem pin_info;
     private Label mousePosistion;
-    @FXML
-    private SplitPane splitPane;
-    @FXML
-    private Label mousePosition;
-    @FXML
-    private ToggleButton botonTexto;
-    /*@FXML
-    private Button btnRealizarProblema;
-    @FXML
-    private Button btnModificarPerfil;
-    @FXML
-    private Button btnMostrarResultados;
-    @FXML
-    private Button btnCerrarSesion;*/
-    @FXML
-    private Pane paneImagen;
-    @FXML
-    private ToggleButton toggleBotonBorrar;
-    @FXML
-    private ToggleGroup grupo;
-    @FXML
-    private ToggleButton botonTransportador;
-    
+    @FXML private SplitPane splitPane;
+    @FXML private Label mousePosition;
+    @FXML private ToggleButton botonTexto;
+    @FXML private Pane paneImagen;
+    @FXML private ToggleButton toggleBotonBorrar;
+    @FXML private ToggleGroup grupo;
+    @FXML private ToggleButton botonTransportador;
     private ImageView imageTransportador;
-    
     private double originalImageWidth;
     private double originalImageHeight;
-    @FXML
-    private ImageView imageview;
-    @FXML
-    private ToggleButton botonLinea;
-            
+    @FXML private ImageView imageview;
+    @FXML private ToggleButton botonLinea;
     private double startX, startY;
-    
-
-  
-    
+    @FXML private ColorPicker colorPicker;
+    @FXML private Spinner<Integer> spinnerTamanoTexto;
+    @FXML private Slider sliderGrosorLinea;
 
     @FXML
     void zoomIn(ActionEvent event) {
-        //================================================
-        // el incremento del zoom dependerá de los parametros del 
-        // slider y del resultado esperado
         double sliderVal = zoom_slider.getValue();
         zoom_slider.setValue(sliderVal += 0.1);
     }
@@ -133,28 +79,19 @@ public class FXMLDocumentController implements Initializable {
         double sliderVal = zoom_slider.getValue();
         zoom_slider.setValue(sliderVal + -0.1);
     }
-    
-    // esta funcion es invocada al cambiar el value del slider zoom_slider
+
     private void zoom(double scaleValue) {
-        //===================================================
-        //guardamos los valores del scroll antes del escalado
         double scrollH = map_scrollpane.getHvalue();
         double scrollV = map_scrollpane.getVvalue();
-        //===================================================
-        // escalamos el zoomGroup en X e Y con el valor de entrada
         zoomGroup.setScaleX(scaleValue);
         zoomGroup.setScaleY(scaleValue);
-        //===================================================
-        // recuperamos el valor del scroll antes del escalado
         map_scrollpane.setHvalue(scrollH);
         map_scrollpane.setVvalue(scrollV);
     }
-//IPCFVOVPFEB
+
     @FXML
     void listClicked(MouseEvent event) {
         Poi itemSelected = map_listview.getSelectionModel().getSelectedItem();
-
-        // Animación del scroll hasta la mousePosistion del item seleccionado
         double mapWidth = zoomGroup.getBoundsInLocal().getWidth();
         double mapHeight = zoomGroup.getBoundsInLocal().getHeight();
         double scrollH = itemSelected.getPosition().getX() / mapWidth;
@@ -165,10 +102,6 @@ public class FXMLDocumentController implements Initializable {
         final KeyFrame kf = new KeyFrame(Duration.millis(500), kv1, kv2);
         timeline.getKeyFrames().add(kf);
         timeline.play();
-
-        // movemos el objto map_pin hasta la mousePosistion del POI
-//        double pinW = map_pin.getBoundsInLocal().getWidth();
-//        double pinH = map_pin.getBoundsInLocal().getHeight();
         map_pin.setLayoutX(itemSelected.getPosition().getX());
         map_pin.setLayoutY(itemSelected.getPosition().getY());
         pin_info.setText(itemSelected.getDescription());
@@ -176,80 +109,38 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void initData() {
-        data=map_listview.getItems();
+        data = map_listview.getItems();
         data.add(new Poi("1F", "Edificion del DSIC", 275, 250));
-        data.add( new Poi("Agora", "Agora", 575, 350));
-        data.add( new Poi("Pista", "Pista de atletismo y campo de futbol", 950, 350));
+        data.add(new Poi("Agora", "Agora", 575, 350));
+        data.add(new Poi("Pista", "Pista de atletismo y campo de futbol", 950, 350));
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        spinnerTamanoTexto.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 72, 14)); // min=10, max=72, default=14
+sliderGrosorLinea.setMin(1);
+sliderGrosorLinea.setMax(10); // grosor máximo para líneas
+sliderGrosorLinea.setValue(2); // valor por defecto
+sliderGrosorLinea.setMaxWidth(160);
+colorPicker.setValue(Color.BLACK); // valor por defecto
+
+        
+        
         initData();
-        //==========================================================
-        // inicializamos el slider y enlazamos con el zoom
         zoom_slider.setMin(0.2);
         zoom_slider.setMax(1.2);
         zoom_slider.setValue(0.7);
         zoom_slider.valueProperty().addListener((o, oldVal, newVal) -> zoom((Double) newVal));
-
-        //=========================================================================
-        //Envuelva el contenido de scrollpane en un grupo para que 
-        //ScrollPane vuelva a calcular las barras de desplazamiento tras el escalado
         Group contentGroup = new Group();
         zoomGroup = new Group();
         contentGroup.getChildren().add(zoomGroup);
         zoomGroup.getChildren().add(map_scrollpane.getContent());
         map_scrollpane.setContent(contentGroup);
-
-        
-        
-        // Escuchamos el cambio de herramienta
         grupo.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-    // Desactiva todos los eventos previos
-    paneImagen.setOnMousePressed(null);
-    paneImagen.setOnMouseReleased(null);
-    paneImagen.setOnMouseClicked(null);
-
-    // Activamos según la herramienta seleccionada
-    if (newToggle == botonLinea) {
-        paneImagen.setOnMousePressed(pressedHandler);
-        paneImagen.setOnMouseReleased(releasedHandler);
-    } else if (newToggle == botonTexto) {
-        paneImagen.setOnMouseClicked(e -> {
-            TextField textField = new TextField();
-            textField.setLayoutX(e.getX());
-            textField.setLayoutY(e.getY());
-
-            textField.setOnAction(evt -> {
-                Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
-                paneImagen.getChildren().remove(textField);
-                paneImagen.getChildren().add(text);
-            });
-
-            textField.focusedProperty().addListener((focusObs, wasFocused, isNowFocused) -> {
-                if (!isNowFocused) {
-                    Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
-                    paneImagen.getChildren().remove(textField);
-                    paneImagen.getChildren().add(text);
-                }
-            });
-
-            paneImagen.getChildren().add(textField);
-            textField.requestFocus();
+            paneImagen.setOnMousePressed(null);
+            paneImagen.setOnMouseReleased(null);
+            paneImagen.setOnMouseClicked(null);
         });
-    } else if (newToggle == toggleBotonBorrar) {
-        paneImagen.setOnMouseClicked(e -> {
-            for (Node node : paneImagen.getChildren()) {
-                if (node instanceof Text text && text.getBoundsInParent().contains(e.getX(), e.getY())) {
-                    paneImagen.getChildren().remove(text);
-                    break;
-                }
-            }
-        });
-    }
-});
-
     }
 
     @FXML
@@ -265,7 +156,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void about(ActionEvent event) {
         Alert mensaje = new Alert(Alert.AlertType.INFORMATION);
-        // Acceder al Stage del Dialog y cambiar el icono
         Stage dialogStage = (Stage) mensaje.getDialogPane().getScene().getWindow();
         dialogStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         mensaje.setTitle("Acerca de");
@@ -275,29 +165,22 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void addPoi(MouseEvent event) {
-
         if (event.isControlDown()) {
             Dialog<Poi> poiDialog = new Dialog<>();
             poiDialog.setTitle("Nuevo POI");
             poiDialog.setHeaderText("Introduce un nuevo POI");
-            // Acceder al Stage del Dialog y cambiar el icono
             Stage dialogStage = (Stage) poiDialog.getDialogPane().getScene().getWindow();
             dialogStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-
             ButtonType okButton = new ButtonType("Aceptar", ButtonBar.ButtonData.OK_DONE);
             poiDialog.getDialogPane().getButtonTypes().addAll(okButton, ButtonType.CANCEL);
-
             TextField nameField = new TextField();
             nameField.setPromptText("Nombre del POI");
-
             TextArea descArea = new TextArea();
             descArea.setPromptText("Descripción...");
             descArea.setWrapText(true);
             descArea.setPrefRowCount(5);
-
             VBox vbox = new VBox(10, new Label("Nombre:"), nameField, new Label("Descripción:"), descArea);
             poiDialog.getDialogPane().setContent(vbox);
-
             poiDialog.setResultConverter(dialogButton -> {
                 if (dialogButton == okButton) {
                     return new Poi(nameField.getText().trim(), descArea.getText().trim(), 0, 0);
@@ -305,87 +188,29 @@ public class FXMLDocumentController implements Initializable {
                 return null;
             });
             Optional<Poi> result = poiDialog.showAndWait();
-
-            if(result.isPresent()) {
+            if (result.isPresent()) {
                 Point2D localPoint = zoomGroup.sceneToLocal(event.getSceneX(), event.getSceneY());
-                Poi poi=result.get();
+                Poi poi = result.get();
                 poi.setPosition(localPoint);
                 map_listview.getItems().add(poi);
             }
         }
     }
-    
-    
-    
-    /*//METODOS MENU
-    private void abrirVentanaModal(String rutaFXML, String titulo) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle(titulo);
-            stage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana principal
-            stage.setScene(new Scene(root,300, 250));
-            stage.showAndWait(); // Espera a que se cierre
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @FXML
-    public void handleRealizarProblema(ActionEvent event) {
-        abrirVentanaModal("/poiupv/RealizarProblema.fxml", "Realizar problema");
-    }
-    @FXML
-    public void handleModificarPerfil(ActionEvent event) {
-         try {
-        URL fxmlLocation = getClass().getResource("/poiupv/FXMLModificarPerfil.fxml");
-        if (fxmlLocation == null) {
-            System.out.println("Archivo FXML no encontrado en la ruta especificada.");
-            throw new RuntimeException("No se encontró el archivo FXML en la ruta: " + "/poiupv/FXMLModificarPerfil.fxml");
-        } else {
-            System.out.println("Archivo FXML encontrado en la ruta: " + fxmlLocation);
-        }
-
-        FXMLLoader loader = new FXMLLoader(fxmlLocation);
-        Parent root = loader.load();
-
-        Stage stage = new Stage();
-        stage.setTitle("Modificar Perfil");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(root, 300, 250));
-        stage.showAndWait();
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("No se pudo cargar la ventana de " + "Modificar Perfil");
-        alert.setContentText(e.getMessage());
-        alert.showAndWait();
-    }
-    }
-    @FXML
-    public void handleMostrarResultados(ActionEvent event) {
-        abrirVentanaModal("/poiupv/MostrarResultados.fxml", "Mostrar resultados");
-    }
-    @FXML
-    public void handleCerrarSesion(ActionEvent event) {
-        abrirVentanaModal("/poiupv/Login.fxml", "Cerrar sesión");
-    }*/
 
     @FXML
-    private void handleBotonTextoOnAction(ActionEvent event) {  
-
-     if (botonTexto.isSelected()) {
-        // Activar modo escritura
+private void handleBotonTextoOnAction(ActionEvent event) {
+    if (botonTexto.isSelected()) {
         paneImagen.setOnMouseClicked(e -> {
             TextField textField = new TextField();
             textField.setLayoutX(e.getX());
             textField.setLayoutY(e.getY());
+            paneImagen.getChildren().add(textField);
+            textField.requestFocus();
 
             textField.setOnAction(evt -> {
                 Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
+                text.setFill(colorPicker.getValue()); // color
+                text.setStyle("-fx-font-size: " + spinnerTamanoTexto.getValue() + "px;");
                 paneImagen.getChildren().remove(textField);
                 paneImagen.getChildren().add(text);
             });
@@ -393,123 +218,99 @@ public class FXMLDocumentController implements Initializable {
             textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                 if (!isNowFocused) {
                     Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
+                    text.setFill(colorPicker.getValue()); // color
+                    text.setStyle("-fx-font-size: " + spinnerTamanoTexto.getValue() + "px;");
                     paneImagen.getChildren().remove(textField);
                     paneImagen.getChildren().add(text);
                 }
             });
-
-            paneImagen.getChildren().add(textField);
-            textField.requestFocus();
         });
     } else {
-        // Desactivar modo escritura
         paneImagen.setOnMouseClicked(null);
     }
-    }
+}
+
+    
 
     @FXML
     private void handleToggleBotonBorrar(ActionEvent event) {
-           if (toggleBotonBorrar.isSelected()) {
-        paneImagen.setOnMouseClicked(e -> {
-            for (Node node : new ArrayList<>(paneImagen.getChildren())) {
-                if (node instanceof Text || node instanceof Line) {
-                    if (node.getBoundsInParent().contains(e.getX(), e.getY())) {
-                        paneImagen.getChildren().remove(node);
-                        break;
+        if (toggleBotonBorrar.isSelected()) {
+            paneImagen.setOnMouseClicked(e -> {
+                for (Node node : new ArrayList<>(paneImagen.getChildren())) {
+                    if (node instanceof Text || node instanceof Line) {
+                        if (node.getBoundsInParent().contains(e.getX(), e.getY())) {
+                            paneImagen.getChildren().remove(node);
+                            break;
+                        }
                     }
                 }
+            });
+        } else {
+            paneImagen.setOnMouseClicked(null);
+        }
+    }
+
+    @FXML
+    private void handleBotonTransportadorOnAction(ActionEvent event) {
+        if (botonTransportador.isSelected()) {
+            if (imageTransportador == null) {
+                Image imagen = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
+                originalImageWidth = imagen.getWidth();
+                originalImageHeight = imagen.getHeight();
+                imageTransportador = new ImageView(imagen);
+                imageTransportador.setFitWidth(200);
+                imageTransportador.setPreserveRatio(true);
+                imageTransportador.setOnMousePressed(e -> {
+                    imageTransportador.setUserData(new double[]{e.getSceneX(), e.getSceneY(), imageTransportador.getLayoutX(), imageTransportador.getLayoutY()});
+                });
+                imageTransportador.setOnMouseDragged(e -> {
+                    double[] datos = (double[]) imageTransportador.getUserData();
+                    double deltaX = e.getSceneX() - datos[0];
+                    double deltaY = e.getSceneY() - datos[1];
+                    imageTransportador.setLayoutX(datos[2] + deltaX);
+                    imageTransportador.setLayoutY(datos[3] + deltaY);
+                });
             }
-        });
-    } else {
-        paneImagen.setOnMouseClicked(null);
-    }
-
-
-    }
-
-@FXML
-private void handleBotonTransportadorOnAction(ActionEvent event) {
-    if (botonTransportador.isSelected()) {
-        if (imageTransportador == null) {
-            // Cargar la imagen del transportador solo una vez
-            Image imagen = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
-
-            // Guardar las dimensiones originales de la imagen del transportador
-            originalImageWidth = imagen.getWidth();
-            originalImageHeight = imagen.getHeight();
-
-            imageTransportador = new ImageView(imagen);
-            imageTransportador.setFitWidth(200); // Tamaño inicial ajustable
-            imageTransportador.setPreserveRatio(true);
-
-            // Hacerla arrastrable
-            imageTransportador.setOnMousePressed(e -> {
-                imageTransportador.setUserData(new double[]{e.getSceneX(), e.getSceneY(), imageTransportador.getLayoutX(), imageTransportador.getLayoutY()});
+            if (!paneImagen.getChildren().contains(imageTransportador)) {
+                paneImagen.getChildren().add(imageTransportador);
+                imageTransportador.setLayoutX(100);
+                imageTransportador.setLayoutY(100);
+            }
+            imageview.fitWidthProperty().addListener((obs, oldWidth, newWidth) -> {
+                double scaleFactor = newWidth.doubleValue() / originalImageWidth;
+                imageTransportador.setScaleX(scaleFactor);
+                imageTransportador.setScaleY(scaleFactor);
             });
-
-            imageTransportador.setOnMouseDragged(e -> {
-                double[] datos = (double[]) imageTransportador.getUserData();
-                double deltaX = e.getSceneX() - datos[0];
-                double deltaY = e.getSceneY() - datos[1];
-                imageTransportador.setLayoutX(datos[2] + deltaX);
-                imageTransportador.setLayoutY(datos[3] + deltaY);
+            imageview.fitHeightProperty().addListener((obs, oldHeight, newHeight) -> {
+                double scaleFactor = newHeight.doubleValue() / originalImageHeight;
+                imageTransportador.setScaleX(scaleFactor);
+                imageTransportador.setScaleY(scaleFactor);
             });
+        } else {
+            paneImagen.getChildren().remove(imageTransportador);
         }
-
-        // Añadir el transportador al pane si no está presente ya
-        if (!paneImagen.getChildren().contains(imageTransportador)) {
-            paneImagen.getChildren().add(imageTransportador);
-            imageTransportador.setLayoutX(100); // Posición inicial
-            imageTransportador.setLayoutY(100);
-        }
-
-        // Ajustar el tamaño del transportador al hacer zoom en la imagen
-        // Suponiendo que la imagen está en un ImageView llamado "imageView"
-        imageview.fitWidthProperty().addListener((obs, oldWidth, newWidth) -> {
-            double scaleFactor = newWidth.doubleValue() / originalImageWidth;  // Factor de escala para el ancho
-            imageTransportador.setScaleX(scaleFactor);
-            imageTransportador.setScaleY(scaleFactor);
-        });
-
-        imageview.fitHeightProperty().addListener((obs, oldHeight, newHeight) -> {
-            double scaleFactor = newHeight.doubleValue() / originalImageHeight;  // Factor de escala para la altura
-            imageTransportador.setScaleX(scaleFactor);
-            imageTransportador.setScaleY(scaleFactor);
-        });
-
-    } else {
-        // Eliminar el transportador del pane si se desactiva el toggle
-        paneImagen.getChildren().remove(imageTransportador);
     }
-}
 
-    // Manejadores de eventos (para añadir/retirar fácilmente)
-private EventHandler<MouseEvent> pressedHandler = e -> {
-    startX = e.getX();
-    startY = e.getY();
-    // Eliminar la creación de la línea de vista previa
-};
+    private EventHandler<MouseEvent> pressedHandler = e -> {
+        startX = e.getX();
+        startY = e.getY();
+    };
 
-private EventHandler<MouseEvent> draggedHandler = e -> {
-    // Eliminar el manejo del arrastre de la línea de vista previa
-};
-
-private EventHandler<MouseEvent> releasedHandler = e -> {
-    // Crear la línea final directamente sin previsualizarla
+    private EventHandler<MouseEvent> releasedHandler = e -> {
     Line finalLine = new Line(startX, startY, e.getX(), e.getY());
-    finalLine.setStroke(Color.BLACK);  // O el color que desees
+    finalLine.setStroke(colorPicker.getValue());
+    finalLine.setStrokeWidth(sliderGrosorLinea.getValue());
     paneImagen.getChildren().add(finalLine);
 };
 
-@FXML
-private void handleBotonLineaOnAction(ActionEvent event) {
-    // Aquí se activa/desactiva la herramienta de línea
-    if (botonLinea.isSelected()) {
-        paneImagen.setOnMousePressed(pressedHandler);
-        paneImagen.setOnMouseReleased(releasedHandler);
-    } else {
-        paneImagen.setOnMousePressed(null);
-        paneImagen.setOnMouseReleased(null);
+    @FXML
+    private void handleBotonLineaOnAction(ActionEvent event) {
+        if (botonLinea.isSelected()) {
+            paneImagen.setOnMousePressed(pressedHandler);
+            paneImagen.setOnMouseReleased(releasedHandler);
+        } else {
+            paneImagen.setOnMousePressed(null);
+            paneImagen.setOnMouseReleased(null);
+        }
     }
-}
 }
