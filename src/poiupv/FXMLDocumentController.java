@@ -234,7 +234,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
-    /*//METODOS MENU
+    //METODOS MENU
     private void abrirVentanaModal(String rutaFXML, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
@@ -289,7 +289,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     public void handleCerrarSesion(ActionEvent event) {
         abrirVentanaModal("/poiupv/Login.fxml", "Cerrar sesión");
-    }*/
+    }
 
 
 }
