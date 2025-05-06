@@ -110,9 +110,7 @@ public class FXMLDocumentController implements Initializable {
 
     private void initData() {
         data = map_listview.getItems();
-        data.add(new Poi("1F", "Edificion del DSIC", 275, 250));
-        data.add(new Poi("Agora", "Agora", 575, 350));
-        data.add(new Poi("Pista", "Pista de atletismo y campo de futbol", 950, 350));
+        
     }
 
     @Override

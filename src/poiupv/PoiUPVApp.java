@@ -27,7 +27,8 @@ public class PoiUPVApp extends Application {
     
     // Deshabilitar el cambio de tamaño
     stage.setResizable(true);
-
+    stage.setMinWidth(600);
+    stage.setMinHeight(600);
     stage.setTitle("Iniciar sesión");
     stage.setScene(scene);
     stage.show();
