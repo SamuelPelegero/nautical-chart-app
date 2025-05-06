@@ -10,6 +10,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.YEARS;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -37,6 +39,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.NavDAOException;
+import model.Navigation;
+import model.User;
 
 public class FXMLRegisterController implements Initializable {
     
@@ -115,9 +120,10 @@ public class FXMLRegisterController implements Initializable {
         showError(isValid, emailField, emailError);
     }
     
-    private void checkUser() {
+    private void checkUser() throws NavDAOException {
+        Navigation navegacion = Navigation.getInstance();
         String user = userField.getText();
-        boolean isValid = user.matches("^[a-zA-Z0-9 _-]{6,15}$") && !user.contains(" "); //TODO: Se debe comprobar que el usuario no existe
+        boolean isValid = user.matches("^[a-zA-Z0-9 _-]{6,15}$") && !user.contains(" ") && !navegacion.exitsNickName(userField.getText()); //TODO: Se debe comprobar que el usuario no existe
         validUser.set(isValid); //actualiza la property asociada
         showError(isValid, userField, userError); //muestra o esconde el mensaje de error
     }
@@ -139,12 +145,13 @@ public class FXMLRegisterController implements Initializable {
     }
     
     @FXML
-private void handleBAcceptOnAction(ActionEvent event) {
+private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
     // Verificar que todos los campos sean válidos
-    if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get() && validUser.get()) {
+    Navigation navegacion = Navigation.getInstance();
+    if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get() && validUser.get() && !navegacion.exitsNickName(userField.getText())) {
         System.out.println("✅ Registro exitoso!");
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
-
+        User user = Navigation.getInstance().authenticate(userField.getText(), passwordField.getText());
         // Opcional: Mostrar un mensaje en una etiqueta
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Registro Exitoso");
@@ -312,7 +319,11 @@ private void handleBAcceptOnAction(ActionEvent event) {
         userField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) { // cuando pierde el foco
             userTouched = true;
-            checkUser();
+                try {
+                    checkUser();
+                } catch (NavDAOException ex) {
+                    Logger.getLogger(FXMLRegisterController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
             showError(true, userField, userError); // ocultamos el error al entrar
     }
@@ -320,7 +331,11 @@ private void handleBAcceptOnAction(ActionEvent event) {
         
         userField.textProperty().addListener((obs, oldVal, newVal) -> {
         if (userTouched) {
-        checkUser();
+            try {
+                checkUser();
+            } catch (NavDAOException ex) {
+                Logger.getLogger(FXMLRegisterController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         });
 
@@ -357,6 +372,18 @@ private void handleBAcceptOnAction(ActionEvent event) {
     }
             
         });
+        
+        ((TextField) dateField.getEditor()).textProperty().addListener((obs, oldText, newText) -> {
+    dateTouched = true;
+    try {
+        LocalDate parsedDate = dateField.getConverter().fromString(newText);
+        dateField.setValue(parsedDate); // actualiza el valor para que los bindings funcionen
+    } catch (Exception e) {
+        // no hacer nada, el texto aún no es una fecha válida
+        validDate.set(false);
+        showError(false, dateField, dateError);
+    }
+});
         
 
        dateField.focusedProperty().addListener((obs, oldVal, newVal) -> {

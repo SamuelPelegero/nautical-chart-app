@@ -73,7 +73,25 @@ public class FXMLMenuController {
 
     @FXML
     private void handleCerrarSesion(ActionEvent event) {
-        System.out.println("Cerrar Sesión seleccionado");
-        // Lógica para cerrar sesión (volver a login, limpiar sesión, etc.)
+        try {
+        // Cargar la pantalla de inicio de sesión
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLLogIn.fxml"));
+        Parent root = loader.load();
+        
+        // Obtener la ventana actual y cerrarla (si es necesario)
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close(); // Cerrar ventana de registro
+        
+        // Crear el nuevo Stage para la ventana de inicio de sesión
+        Stage newStage = new Stage();
+        newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        newStage.setScene(new Scene(root));
+        newStage.setResizable(false);
+        newStage.setTitle("Iniciar Sesión");
+        newStage.show();
+        
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 }

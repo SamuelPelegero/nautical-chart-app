@@ -38,6 +38,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Navigation;
+import model.User;
 
 public class FXMLModificarPerfilController implements Initializable {
     
@@ -77,8 +79,8 @@ public class FXMLModificarPerfilController implements Initializable {
     private ChangeListener<String> listenerPassword;
     private ChangeListener<String> listenerPassword2;
     private ChangeListener<String> listenerDate;
-
-
+    
+    
     @FXML
     private Button interrogante2;
 

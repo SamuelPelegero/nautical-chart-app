@@ -20,6 +20,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.NavDAOException;
+import model.Navigation;
+import model.User;
 
 public class FXMLLogInController {
 
@@ -38,25 +41,27 @@ public class FXMLLogInController {
     @FXML
     private Label error;
     
-    private final String validUsername = "usuario123";
-    private final String validPassword = "Contraseña123!";
+    private User user;
+    
     @FXML
     private Button bRegistrarse;
     
    
     
     @FXML
-    void handleBAcceptOnAction(ActionEvent event) {
+    void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
          // Obtener los valores ingresados por el usuario
         String username = userField.getText();
         String password = passwordField.getText();
-
+         Navigation navegacion = Navigation.getInstance();
         // Verificar si las credenciales son correctas
-        if (username.equals(validUsername) && password.equals(validPassword)) { //TODO: Verificar el usuario y la contraseña
+        if (navegacion.authenticate(username, password) != null) { //TODO: Verificar el usuario y la contraseña
             // Si son correctas, procedemos a abrir la interfaz principal
+            User user = Navigation.getInstance().authenticate(userField.getText(), passwordField.getText());
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
                 Parent root = loader.load();
+                
                 
                 // Obtener el Stage actual y cerrarlo (si es necesario)
                 Stage currentStage = (Stage) bAccept.getScene().getWindow();
@@ -111,6 +116,10 @@ public class FXMLLogInController {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    }
+    
+    public void setUser(User user) {
+    this.user = user;
     }
     
     @FXML
