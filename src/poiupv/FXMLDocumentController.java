@@ -313,5 +313,5 @@ private void handleBotonTextoOnAction(ActionEvent event) {
             paneImagen.setOnMouseReleased(null);
         }
     }
-    //joaquin
+    
 }
