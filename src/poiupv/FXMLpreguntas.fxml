@@ -2,6 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -25,42 +28,58 @@
 
    <!-- Contenedor de opciones -->
    <VBox alignment="CENTER" spacing="20" VBox.vgrow="ALWAYS">
+      <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="60.0" prefWidth="760.0">
+         <children>
+            <Label fx:id="labelPregunta" alignment="TOP_RIGHT" text="Pregunta">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
 
       <!-- Realizar Problema -->
       <HBox alignment="CENTER" spacing="15" HBox.hgrow="ALWAYS">
-         <Button fx:id="A" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="realiz" stylesheets="@../resources/menu%20estilos.css" text="A." textFill="WHITE">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
+         <children>
+            <RadioButton fx:id="opcionA" focusTraversable="false" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" text="Opcion A" />
+         </children>
       </HBox>
 
       <!-- Modificar Perfil -->
       <HBox alignment="CENTER" spacing="15" HBox.hgrow="ALWAYS">
-         <Button prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="modif" stylesheets="@../resources/menu%20estilos.css" text="B." textFill="WHITE">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
+         <children>
+            <RadioButton fx:id="opcionB" focusTraversable="false" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" text="Opcion B" />
+         </children>
       </HBox>
 
       <!-- Mostrar Resultados -->
       <HBox alignment="CENTER" spacing="15" HBox.hgrow="ALWAYS">
-         <Button prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="C." textFill="WHITE">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
+         <children>
+            <RadioButton fx:id="opcionC" focusTraversable="false" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" text="Opcion C" />
+         </children>
       </HBox>
 
       <!-- Cerrar Sesión -->
       <HBox alignment="CENTER" spacing="15" HBox.hgrow="ALWAYS">
-         <Button prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="cerrar" stylesheets="@../resources/menu%20estilos.css" text="D." textFill="WHITE">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
+         <children>
+            <RadioButton fx:id="opcionD" focusTraversable="false" mnemonicParsing="false" scaleX="2.0" scaleY="2.0" text="Opcion D" />
+         </children>
       </HBox>
+      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="botoncarta" alignment="TOP_CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#abrircarta" style="-fx-background-color: #0685BC;" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Abrir Carta nautica">
+               <HBox.margin>
+                  <Insets top="25.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+            <Button fx:id="botonAnterior" focusTraversable="false" mnemonicParsing="false" onAction="#handleAnteriorPregunta" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Anterior pregunta" />
+          <Button fx:id="botonSiguiente" focusTraversable="false" mnemonicParsing="false" onAction="#handleSiguientePregunta" style="-fx-background-color: #0685BC;" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Siguiente Pregunta" />
+        </buttons>
+      </ButtonBar>
 
    </VBox>
 

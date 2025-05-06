@@ -26,9 +26,10 @@ public class FXMLMenuController {
         System.out.println("Realizar Problema seleccionado");
         Stage currentStage = (Stage) botprobl.getScene().getWindow();
         currentStage.close();
+        System.out.println(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
         // Lógica para cambiar de escena o mostrar la vista correspondiente
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("FXMLproblemas.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
             Scene problemascene = new Scene(root);
             
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

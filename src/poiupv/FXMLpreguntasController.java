@@ -3,12 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package poiupv;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -45,7 +41,9 @@ import javafx.util.Duration;
 import java.util.*;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
+
 public class FXMLpreguntasController implements Initializable {
+
     @FXML
     private Label labelPregunta;
     @FXML
@@ -56,6 +54,7 @@ public class FXMLpreguntasController implements Initializable {
     private RadioButton opcionC;
     @FXML
     private RadioButton opcionD;
+
 private List<Pregunta> todasLasPreguntas;
     private List<Pregunta> preguntasPendientes;
     private int preguntasMostradas = 0;
@@ -67,7 +66,7 @@ private List<Pregunta> todasLasPreguntas;
     @FXML
     private Button botonSiguiente;
 
-
+   
 
     private void cargarPreguntas() {
         todasLasPreguntas = Arrays.asList(
@@ -82,6 +81,7 @@ private List<Pregunta> todasLasPreguntas;
             new Pregunta("¿Qué carta usarías para navegación costera?",
                 "A) General", "B) De recalada", "C) De aproximación", "D) Costera")
         );
+
         preguntasPendientes = new ArrayList<>(todasLasPreguntas);
     }
     private void mostrarPregunta(int indice) {
@@ -91,6 +91,7 @@ private List<Pregunta> todasLasPreguntas;
     opcionB.setText(pregunta.getOpcionB());
     opcionC.setText(pregunta.getOpcionC());
     opcionD.setText(pregunta.getOpcionD());
+
     // Deseleccionar todo
     opcionA.setSelected(false);
     opcionB.setSelected(false);
@@ -123,6 +124,7 @@ private List<Pregunta> todasLasPreguntas;
             opcionC.setSelected(false);
         });
     }
+
     @FXML
     private void handleSiguientePregunta() {
     if (indicePreguntaActual < preguntasPendientes.size() - 1 && preguntasMostradas < 4) {
@@ -133,20 +135,24 @@ private List<Pregunta> todasLasPreguntas;
         mostrarFin();
     }
     }
+
     private void mostrarSiguientePregunta() {
         Pregunta pregunta = preguntasPendientes.remove(0);
         preguntasMostradas++;
+
         labelPregunta.setText(pregunta.getTexto());
         opcionA.setText(pregunta.getOpcionA());
         opcionB.setText(pregunta.getOpcionB());
         opcionC.setText(pregunta.getOpcionC());
         opcionD.setText(pregunta.getOpcionD());
+
         // Desseleccionar todas las opciones
         opcionA.setSelected(false);
         opcionB.setSelected(false);
         opcionC.setSelected(false);
         opcionD.setSelected(false);
     }
+
     private void mostrarFin() {
         labelPregunta.setText("Has completado las 4 preguntas.");
         opcionA.setVisible(false);
@@ -203,9 +209,10 @@ private List<Pregunta> todasLasPreguntas;
         mostrarPregunta(indicePreguntaActual);
     }
     }
+
     private static class Pregunta {
         private final String texto, opcionA, opcionB, opcionC, opcionD;
-
+        
         private String respuestaSeleccionada = null;
 
         public String getRespuestaSeleccionada() {
@@ -224,6 +231,7 @@ private List<Pregunta> todasLasPreguntas;
             this.opcionC = c;
             this.opcionD = d;
         }
+
         public String getTexto() { return texto; }
         public String getOpcionA() { return opcionA; }
         public String getOpcionB() { return opcionB; }
@@ -231,3 +239,4 @@ private List<Pregunta> todasLasPreguntas;
         public String getOpcionD() { return opcionD; }
     }
 }
+
