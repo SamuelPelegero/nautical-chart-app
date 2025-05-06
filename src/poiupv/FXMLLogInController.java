@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -64,8 +65,10 @@ public class FXMLLogInController {
                 // Crear el nuevo Stage para la interfaz principal
                 Stage newStage = new Stage();
                 newStage.setScene(new Scene(root));
+                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
                 newStage.setTitle("Menú Principal");
-                newStage.setResizable(false);
+                newStage.setMinWidth(600);
+                newStage.setMinHeight(600);
                 newStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -100,6 +103,7 @@ public class FXMLLogInController {
 
         // Crear el nuevo Stage para la ventana de registro
         Stage newStage = new Stage();
+        newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         newStage.setScene(new Scene(root));
         newStage.setResizable(false);
         newStage.setTitle("Registrarse");

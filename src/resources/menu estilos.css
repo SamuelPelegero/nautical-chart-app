@@ -1,0 +1,73 @@
+/* menu.css */
+
+
+
+/* Encabezado del menú */
+.menu {
+    -fx-background-color: #0685BC;
+    -fx-padding: 20px;
+}
+
+.button {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect:  dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+   
+}
+    
+
+/* Texto del encabezado */
+.menu Text {
+    -fx-fill: white;
+    -fx-font-size: 36px;
+}
+
+/* Botón: Realizar Problema */
+.button.realiz {
+    -fx-background-color: #0685BC;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-background-radius: 10;
+}
+
+/* Botón: Modificar Perfil */
+.button.modif {
+    -fx-background-color: #0685BC;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-background-radius: 10;
+}
+
+/* Botón: Mostrar Resultados */
+.button.mostar {
+    -fx-background-color: #0685BC;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-background-radius: 10;
+}
+
+/* Botón: Cerrar Sesión */
+.button.cerrar {
+    -fx-font-size: 18px;
+    -fx-background-radius: 10;
+}
+
+.button:focused {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+}
+.button:pressed {
+    -fx-effect: none; /* Quita la sombra para dar efecto de hundimiento */
+    -fx-translate-y: 2px; /* Mueve el botón hacia abajo */
+}
+
+.button:hover {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);
+    -fx-background-color: #0a9ddf; /* un poco más claro */
+}

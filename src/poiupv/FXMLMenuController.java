@@ -12,26 +12,36 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class FXMLMenuController {
 
     @FXML
-    private Button handleRealizarProblema;
+    private Button botprobl;
 
-    @FXML
-    private Button handleModificarPerfil;
-
-    @FXML
-    private Button handleMostrarResultados;
-
-    @FXML
-    private Button handleCerrarSesion;
 
     @FXML
     private void handleRealizarProblema(ActionEvent event) {
         System.out.println("Realizar Problema seleccionado");
+        Stage currentStage = (Stage) botprobl.getScene().getWindow();
+        currentStage.close();
         // Lógica para cambiar de escena o mostrar la vista correspondiente
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("FXMLproblemas.fxml"));
+            Scene problemascene = new Scene(root);
+            
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+            stage.setScene(problemascene);
+            stage.setTitle("Preguntas");
+            stage.setMinWidth(600);
+            stage.setMinHeight(600);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -39,10 +49,14 @@ public class FXMLMenuController {
         try {
             Parent modificarPerfilRoot = FXMLLoader.load(getClass().getResource("FXMLModificarPerfil.fxml"));
             Scene modificarPerfilScene = new Scene(modificarPerfilRoot);
+            
 
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
             window.setScene(modificarPerfilScene);
             window.setTitle("Modificar Perfil");
+            window.setMinWidth(700);
+            window.setMinHeight(500);
 
         } catch (IOException e) {
             e.printStackTrace();

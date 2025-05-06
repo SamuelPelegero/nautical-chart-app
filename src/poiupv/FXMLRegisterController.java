@@ -175,8 +175,10 @@ private void handleBAcceptOnAction(ActionEvent event) {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
             stage.setTitle("Menú Principal");
-            stage.setResizable(false);
+            stage.setMinWidth(600);
+            stage.setMinHeight(600);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -395,6 +397,7 @@ dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
         
         // Crear el nuevo Stage para la ventana de inicio de sesión
         Stage newStage = new Stage();
+        newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         newStage.setScene(new Scene(root));
         newStage.setResizable(false);
         newStage.setTitle("Iniciar Sesión");
