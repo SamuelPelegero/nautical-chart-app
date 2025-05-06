@@ -81,7 +81,7 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction">
+                  <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction" toggleGroup="$grupo">
                      <graphic>
                         <ImageView fitHeight="65.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
                            <image>
