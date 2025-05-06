@@ -41,6 +41,8 @@ import javafx.util.Duration;
 import java.util.*;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
+import model.Problem;
+import model.Answer;
 
 public class FXMLpreguntasController implements Initializable {
 
@@ -55,8 +57,8 @@ public class FXMLpreguntasController implements Initializable {
     @FXML
     private RadioButton opcionD;
 
-private List<Pregunta> todasLasPreguntas;
-    private List<Pregunta> preguntasPendientes;
+private List<Problem> todasLasPreguntas;
+    private List<Problem> preguntasPendientes;
     private int preguntasMostradas = 0;
     private int indicePreguntaActual = 0;
     @FXML
@@ -70,27 +72,19 @@ private List<Pregunta> todasLasPreguntas;
 
     private void cargarPreguntas() {
         todasLasPreguntas = Arrays.asList(
-            new Pregunta("¿Cuál es la posición del barco?",
-                "A) 41°N 2°E", "B) 42°N 3°E", "C) 43°N 4°E", "D) 40°N 1°E"),
-            new Pregunta("¿Qué significa esta boya?",
-                "A) Peligro aislado", "B) Canal principal", "C) Aguas seguras", "D) Prohibido el paso"),
-            new Pregunta("¿Qué indica una luz blanca intermitente?",
-                "A) Faro", "B) Boya cardinal norte", "C) Canal este", "D) Punto de recalada"),
-            new Pregunta("¿Cuál es la escala habitual de una carta náutica?",
-                "A) 1:50000", "B) 1:25000", "C) 1:10000", "D) 1:200000"),
-            new Pregunta("¿Qué carta usarías para navegación costera?",
-                "A) General", "B) De recalada", "C) De aproximación", "D) Costera")
-        );
+            new Problem("¿Cuál es la posición del barco?",
+                new Answer("A) 41°N 2°E", true), new Answer("B) 42°N 3°E",false), new Answer("C) 43°N 4°E", false), new Answer("D) 40°N 1°E",false)));
 
         preguntasPendientes = new ArrayList<>(todasLasPreguntas);
     }
-    private void mostrarPregunta(int indice) {
-    Pregunta pregunta = preguntasPendientes.get(indice);
-    labelPregunta.setText(pregunta.getTexto());
-    opcionA.setText(pregunta.getOpcionA());
-    opcionB.setText(pregunta.getOpcionB());
-    opcionC.setText(pregunta.getOpcionC());
-    opcionD.setText(pregunta.getOpcionD());
+    private void mostrarPregunta() {
+    Problem pregunta = todasLasPreguntas.get(0);
+    List<Answer> respuestas = pregunta.getAnswers();
+    labelPregunta.setText(pregunta.getText());
+    opcionA.setText(respuestas.get(0).getText());
+    opcionB.setText(respuestas.get(1).getText());
+    opcionC.setText(respuestas.get(2).getText());
+    opcionD.setText(respuestas.get(3).getText());
 
     // Deseleccionar todo
     opcionA.setSelected(false);
@@ -130,21 +124,14 @@ private List<Pregunta> todasLasPreguntas;
     if (indicePreguntaActual < preguntasPendientes.size() - 1 && preguntasMostradas < 4) {
         indicePreguntaActual++;
         preguntasMostradas++;
-        mostrarPregunta(indicePreguntaActual);
+        mostrarPregunta();
     } else {
         mostrarFin();
     }
     }
 
     private void mostrarSiguientePregunta() {
-        Pregunta pregunta = preguntasPendientes.remove(0);
-        preguntasMostradas++;
-
-        labelPregunta.setText(pregunta.getTexto());
-        opcionA.setText(pregunta.getOpcionA());
-        opcionB.setText(pregunta.getOpcionB());
-        opcionC.setText(pregunta.getOpcionC());
-        opcionD.setText(pregunta.getOpcionD());
+       
 
         // Desseleccionar todas las opciones
         opcionA.setSelected(false);
@@ -166,7 +153,7 @@ private List<Pregunta> todasLasPreguntas;
         cargarPreguntas();
         configurarRadioButtons();
         Collections.shuffle(preguntasPendientes);
-        mostrarPregunta(indicePreguntaActual);
+        mostrarPregunta();
     }
 
     @FXML
@@ -186,18 +173,7 @@ private List<Pregunta> todasLasPreguntas;
         }
     }
     private void guardarRespuestaSeleccionada() {
-    Pregunta pregunta = preguntasPendientes.get(indicePreguntaActual);
-    if (opcionA.isSelected()) {
-        pregunta.setRespuestaSeleccionada("A");
-    } else if (opcionB.isSelected()) {
-        pregunta.setRespuestaSeleccionada("B");
-    } else if (opcionC.isSelected()) {
-        pregunta.setRespuestaSeleccionada("C");
-    } else if (opcionD.isSelected()) {
-        pregunta.setRespuestaSeleccionada("D");
-    } else {
-        pregunta.setRespuestaSeleccionada(null);
-    }
+    
 }
 
     @FXML
@@ -206,37 +182,10 @@ private List<Pregunta> todasLasPreguntas;
     if (indicePreguntaActual > 0) {
         indicePreguntaActual--;
         preguntasMostradas--;
-        mostrarPregunta(indicePreguntaActual);
+        mostrarPregunta();
     }
     }
 
-    private static class Pregunta {
-        private final String texto, opcionA, opcionB, opcionC, opcionD;
-        
-        private String respuestaSeleccionada = null;
-
-        public String getRespuestaSeleccionada() {
-            return respuestaSeleccionada;
-        }
-
-        public void setRespuestaSeleccionada(String respuestaSeleccionada) {
-            this.respuestaSeleccionada = respuestaSeleccionada;
-        }
-
-
-        public Pregunta(String texto, String a, String b, String c, String d) {
-            this.texto = texto;
-            this.opcionA = a;
-            this.opcionB = b;
-            this.opcionC = c;
-            this.opcionD = d;
-        }
-
-        public String getTexto() { return texto; }
-        public String getOpcionA() { return opcionA; }
-        public String getOpcionB() { return opcionB; }
-        public String getOpcionC() { return opcionC; }
-        public String getOpcionD() { return opcionD; }
-    }
+    
 }
 
