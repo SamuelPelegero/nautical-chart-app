@@ -63,7 +63,8 @@ public class FXMLLogInController {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
                 Parent root = loader.load();
-                
+                FXMLMenuController controller = loader.getController();
+                controller.setUser(user);
                 
                 // Obtener el Stage actual y cerrarlo (si es necesario)
                 Stage currentStage = (Stage) bAccept.getScene().getWindow();

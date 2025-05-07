@@ -14,6 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import model.Navigation;
+import model.User;
 
 public class FXMLMenuController {
 
@@ -21,7 +23,11 @@ public class FXMLMenuController {
     private Button botprobl;
     private int hits;
     private int faults;
+    private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
     @FXML
     private void handleRealizarProblema(ActionEvent event) {
         System.out.println("Realizar Problema seleccionado");
@@ -30,19 +36,29 @@ public class FXMLMenuController {
         System.out.println(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
         // Lógica para cambiar de escena o mostrar la vista correspondiente
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
-            Scene problemascene = new Scene(root);
-            FXMLpreguntasController preguntasController = new FXMLLoader(getClass().getResource("/poiupv/FXMLpreguntas.fxml")).getController();
+            // Cargar FXML y obtener el loader
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
+        Parent root = loader.load();
+
+        // Obtener el controlador del FXML ya cargado
+        FXMLpreguntasController preguntasController = loader.getController();
 
         // Pasar referencia del controlador actual
-            preguntasController.setMenuController(this);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-            stage.setScene(problemascene);
-            stage.setTitle("Preguntas");
-            stage.setMinWidth(600);
-            stage.setMinHeight(600);
-            stage.show();
+        preguntasController.setMenuController(this);
+
+        // Crear nueva escena
+        Scene problemascene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(problemascene);
+        stage.setTitle("Preguntas");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        stage.setMinWidth(600);
+        stage.setMinHeight(600);
+        stage.show();
+
+        // Cerrar ventana actual si es necesario
+
+        currentStage.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,6 +93,7 @@ public class FXMLMenuController {
 
     @FXML
     private void handleCerrarSesion(ActionEvent event) {
+        
         try {
         // Cargar la pantalla de inicio de sesión
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLLogIn.fxml"));

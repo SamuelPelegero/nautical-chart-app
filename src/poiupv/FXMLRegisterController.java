@@ -42,6 +42,7 @@ import javafx.util.Duration;
 import model.NavDAOException;
 import model.Navigation;
 import model.User;
+import poiupv.FXMLMenuController;
 import poiupv.Persona;
 
 public class FXMLRegisterController implements Initializable {
@@ -185,6 +186,8 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
             Parent root = loader.load();
+            FXMLMenuController controller = loader.getController();
+            controller.setUser(user);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
