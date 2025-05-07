@@ -44,6 +44,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -67,6 +68,7 @@ public class FXMLpreguntasController implements Initializable {
 
     private List<Problem> todasLasPreguntas;
     private List<Problem> preguntasPendientes;
+    private List<Answer> respuestasAleatorias;
     private int preguntasMostradas = 0;
     private int indicePreguntaActual = 0;
     @FXML
@@ -88,13 +90,16 @@ public class FXMLpreguntasController implements Initializable {
     private void mostrarPregunta() {
     Random rand = new Random();
     int numero = rand.nextInt(18);
+    indicePreguntaActual = numero;
     Problem pregunta = todasLasPreguntas.get(numero);
     List<Answer> respuestas = pregunta.getAnswers();
+    respuestasAleatorias = new ArrayList<>(respuestas);
+    Collections.shuffle(respuestasAleatorias); // Aleatoriza el orden
     labelPregunta.setText(pregunta.getText());
-    opcionA.setText(respuestas.get(0).getText());
-    opcionB.setText(respuestas.get(1).getText());
-    opcionC.setText(respuestas.get(2).getText());
-    opcionD.setText(respuestas.get(3).getText());
+    opcionA.setText(respuestasAleatorias.get(0).getText());
+    opcionB.setText(respuestasAleatorias.get(1).getText());
+    opcionC.setText(respuestasAleatorias.get(2).getText());
+    opcionD.setText(respuestasAleatorias.get(3).getText());
 
     // Deseleccionar todo
     opcionA.setSelected(false);
@@ -127,15 +132,6 @@ public class FXMLpreguntasController implements Initializable {
             opcionB.setSelected(false);
             opcionC.setSelected(false);
         });
-    }
-
-
-    private void mostrarFin() {
-        labelPregunta.setText("Has completado las 4 preguntas.");
-        opcionA.setVisible(false);
-        opcionB.setVisible(false);
-        opcionC.setVisible(false);
-        opcionD.setVisible(false);
     }
 
         @Override
@@ -180,25 +176,112 @@ public class FXMLpreguntasController implements Initializable {
             e.printStackTrace();
         }
     }
-    private void guardarRespuestaSeleccionada() {
-    
-}
+   
 
-    private void handleAnteriorPregunta(ActionEvent event) {
-        guardarRespuestaSeleccionada();
-    if (indicePreguntaActual > 0) {
-        indicePreguntaActual--;
-        preguntasMostradas--;
-        mostrarPregunta();
-    }
-    }
+
+
 
     @FXML
     private void salirmenu(ActionEvent event) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText("¿Seguro que deseas salir al menu?");
+        alert.setContentText("La repuesta no se guardará.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            try {
+                System.out.println("¡Acción Confirmada!");
+                Stage currentStage = (Stage) botonmenu.getScene().getWindow();
+                currentStage.close();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
+                Parent root = loader.load();
+                Stage newStage = new Stage();
+                newStage.setScene(new Scene(root));
+                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+                newStage.setTitle("Menú Principal");
+                newStage.setMinWidth(600);
+                newStage.setMinHeight(600);
+                newStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Acción Cancelada");
+        }
     }
 
     @FXML
     private void verificarrespuesta(ActionEvent event) {
+        Answer respuestaSeleccionada = null;
+
+    // Verificamos cuál opción ha sido seleccionada
+    if (opcionA.isSelected()) {
+        respuestaSeleccionada = respuestasAleatorias.get(0);
+    } else if (opcionB.isSelected()) {
+        respuestaSeleccionada = respuestasAleatorias.get(1);
+    } else if (opcionC.isSelected()) {
+        respuestaSeleccionada = respuestasAleatorias.get(2);
+    } else if (opcionD.isSelected()) {
+        respuestaSeleccionada = respuestasAleatorias.get(3);
+    }
+
+    // Si hay una respuesta seleccionada, la verificamos
+    if (respuestaSeleccionada != null) {
+        // Comprobamos si la respuesta seleccionada es correcta
+        if (respuestaSeleccionada.getValidity()) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Respuesta Correcta");
+            alert.setHeaderText(null);
+            alert.setContentText("¡La respuesta es correcta!");
+            alert.showAndWait();
+            Stage currentStage = (Stage) botonmenu.getScene().getWindow();
+                currentStage.close();
+                try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
+                Parent root;
+                root = loader.load();
+                Stage newStage = new Stage();
+                newStage.setScene(new Scene(root));
+                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+                newStage.setTitle("Menú Principal");
+                newStage.setMinWidth(600);
+                newStage.setMinHeight(600);
+                newStage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLpreguntasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Respuesta Incorrecta");
+            alert.setHeaderText(null);
+            alert.setContentText("La respuesta es incorrecta.");
+            alert.showAndWait();
+            Stage currentStage = (Stage) botonmenu.getScene().getWindow();
+                currentStage.close();
+                try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
+                Parent root;
+                root = loader.load();
+                Stage newStage = new Stage();
+                newStage.setScene(new Scene(root));
+                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+                newStage.setTitle("Menú Principal");
+                newStage.setMinWidth(600);
+                newStage.setMinHeight(600);
+                newStage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLpreguntasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+        }
+    } else {
+        // Si no se ha seleccionado ninguna respuesta, mostramos una alerta de error
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Sin respuesta seleccionada");
+        alert.setHeaderText(null);
+        alert.setContentText("Por favor, selecciona una respuesta.");
+        alert.showAndWait();
+    }
     }
 
     
