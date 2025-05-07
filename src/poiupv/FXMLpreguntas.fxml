@@ -28,11 +28,11 @@
 
    <!-- Contenedor de opciones -->
    <VBox alignment="CENTER" spacing="20" VBox.vgrow="ALWAYS">
-      <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="60.0" prefWidth="760.0">
+      <HBox fx:id="hboxPregunta" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="97.0" prefWidth="760.0">
          <children>
-            <Label fx:id="labelPregunta" alignment="TOP_RIGHT" text="Pregunta">
+            <Label fx:id="labelPregunta" alignment="CENTER" lineSpacing="2.0" prefHeight="97.0" prefWidth="781.0" text="pregunta" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
                <font>
-                  <Font size="24.0" />
+                  <Font size="19.0" />
                </font>
             </Label>
          </children>
@@ -76,8 +76,8 @@
       </HBox>
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
         <buttons>
-            <Button fx:id="botonAnterior" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleAnteriorPregunta" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Salir al Menú" />
-          <Button fx:id="botonSiguiente" focusTraversable="false" mnemonicParsing="false" onAction="#handleSiguientePregunta" style="-fx-background-color: #0685BC;" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="verificar respuesta" />
+            <Button fx:id="botonmenu" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#salirmenu" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Salir al Menú" />
+          <Button fx:id="botonverif" focusTraversable="false" mnemonicParsing="false" onAction="#verificarrespuesta" style="-fx-background-color: #0685BC;" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Verificar respuesta" />
         </buttons>
       </ButtonBar>
 

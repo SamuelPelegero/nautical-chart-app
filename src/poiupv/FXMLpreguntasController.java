@@ -5,6 +5,7 @@
  */
 package poiupv;
 
+import javafx.scene.text.Font;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -39,10 +40,17 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import model.Problem;
 import model.Answer;
+import model.NavDAOException;
+import model.Navigation;
 
 public class FXMLpreguntasController implements Initializable {
 
@@ -57,24 +65,24 @@ public class FXMLpreguntasController implements Initializable {
     @FXML
     private RadioButton opcionD;
 
-private List<Problem> todasLasPreguntas;
+    private List<Problem> todasLasPreguntas;
     private List<Problem> preguntasPendientes;
     private int preguntasMostradas = 0;
     private int indicePreguntaActual = 0;
     @FXML
     private Button botoncarta;
     @FXML
-    private Button botonAnterior;
+    private Button botonmenu;
     @FXML
-    private Button botonSiguiente;
+    private Button botonverif;
+    @FXML
+    private HBox hboxPregunta;
 
    
 
-    private void cargarPreguntas() {
-        todasLasPreguntas = Arrays.asList(
-            new Problem("¿Cuál es la posición del barco?",
-                new Answer("A) 41°N 2°E", true), new Answer("B) 42°N 3°E",false), new Answer("C) 43°N 4°E", false), new Answer("D) 40°N 1°E",false)));
-
+    private void cargarPreguntas() throws NavDAOException{
+        Navigation navegacion = Navigation.getInstance();
+        todasLasPreguntas = navegacion.getProblems();
         preguntasPendientes = new ArrayList<>(todasLasPreguntas);
     }
     private void mostrarPregunta() {
@@ -119,7 +127,6 @@ private List<Problem> todasLasPreguntas;
         });
     }
 
-    @FXML
     private void handleSiguientePregunta() {
     if (indicePreguntaActual < preguntasPendientes.size() - 1 && preguntasMostradas < 4) {
         indicePreguntaActual++;
@@ -149,8 +156,26 @@ private List<Problem> todasLasPreguntas;
     }
 
         @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        cargarPreguntas();
+    public void initialize(URL url, ResourceBundle rb){
+        VBox.setVgrow(hboxPregunta, Priority.ALWAYS);
+        HBox.setHgrow(labelPregunta, Priority.ALWAYS);
+        labelPregunta.setMaxWidth(Double.MAX_VALUE);
+        labelPregunta.setMaxHeight(Double.MAX_VALUE);
+        labelPregunta.sceneProperty().addListener((obs, oldScene, scene) -> {
+        if (scene != null) {
+            scene.widthProperty().addListener((obsWidth, oldWidth, newWidth) -> {
+                double fontSize = newWidth.doubleValue() / 75; // Ajusta el divisor a tu gusto
+                labelPregunta.setFont(new Font("Arial", fontSize));
+            });
+        }
+        });
+    
+
+        try {
+            cargarPreguntas();
+        } catch (NavDAOException ex) {
+            Logger.getLogger(FXMLpreguntasController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         configurarRadioButtons();
         Collections.shuffle(preguntasPendientes);
         mostrarPregunta();
@@ -176,7 +201,6 @@ private List<Problem> todasLasPreguntas;
     
 }
 
-    @FXML
     private void handleAnteriorPregunta(ActionEvent event) {
         guardarRespuestaSeleccionada();
     if (indicePreguntaActual > 0) {
@@ -184,6 +208,14 @@ private List<Problem> todasLasPreguntas;
         preguntasMostradas--;
         mostrarPregunta();
     }
+    }
+
+    @FXML
+    private void salirmenu(ActionEvent event) {
+    }
+
+    @FXML
+    private void verificarrespuesta(ActionEvent event) {
     }
 
     
