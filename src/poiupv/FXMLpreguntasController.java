@@ -86,7 +86,9 @@ public class FXMLpreguntasController implements Initializable {
         preguntasPendientes = new ArrayList<>(todasLasPreguntas);
     }
     private void mostrarPregunta() {
-    Problem pregunta = todasLasPreguntas.get(0);
+    Random rand = new Random();
+    int numero = rand.nextInt(18);
+    Problem pregunta = todasLasPreguntas.get(numero);
     List<Answer> respuestas = pregunta.getAnswers();
     labelPregunta.setText(pregunta.getText());
     opcionA.setText(respuestas.get(0).getText());
@@ -127,25 +129,6 @@ public class FXMLpreguntasController implements Initializable {
         });
     }
 
-    private void handleSiguientePregunta() {
-    if (indicePreguntaActual < preguntasPendientes.size() - 1 && preguntasMostradas < 4) {
-        indicePreguntaActual++;
-        preguntasMostradas++;
-        mostrarPregunta();
-    } else {
-        mostrarFin();
-    }
-    }
-
-    private void mostrarSiguientePregunta() {
-       
-
-        // Desseleccionar todas las opciones
-        opcionA.setSelected(false);
-        opcionB.setSelected(false);
-        opcionC.setSelected(false);
-        opcionD.setSelected(false);
-    }
 
     private void mostrarFin() {
         labelPregunta.setText("Has completado las 4 preguntas.");
