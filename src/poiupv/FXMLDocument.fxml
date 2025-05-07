@@ -53,7 +53,7 @@
                <children>
                   <ToggleButton fx:id="botonTexto" mnemonicParsing="false" onAction="#handleBotonTextoOnAction">
                      <graphic>
-                        <ImageView fitHeight="56.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="59.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/Texto.png" />
                            </image>
@@ -65,7 +65,7 @@
                   </ToggleButton>
                   <ToggleButton fx:id="toggleBotonBorrar" mnemonicParsing="false" onAction="#handleToggleBotonBorrar" toggleGroup="$grupo">
                      <graphic>
-                        <ImageView fitHeight="51.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="63.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/borrar.png" />
                            </image>
@@ -74,7 +74,7 @@
                   </ToggleButton>
                   <ToggleButton fx:id="botonLinea" mnemonicParsing="false" onAction="#handleBotonLineaOnAction" toggleGroup="$grupo">
                      <graphic>
-                        <ImageView fitHeight="36.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="49.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/recta.png" />
                            </image>
@@ -83,7 +83,7 @@
                   </ToggleButton>
                   <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction" toggleGroup="$grupo">
                      <graphic>
-                        <ImageView fitHeight="53.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="54.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/transportador.png" />
                            </image>
@@ -93,7 +93,7 @@
                   <ToggleButton fx:id="botonCirculo" onAction="#handleBotonCirculoOnAction" prefHeight="24.0" prefWidth="69.0" toggleGroup="$grupo">
                     <!-- Añadir la imagen al botón -->
                         <graphic>
-                            <ImageView fitHeight="48.0" fitWidth="53.0">
+                            <ImageView fitHeight="51.0" fitWidth="54.0">
                                 <image>
                                     <!-- Ruta a la imagen del círculo -->
                                     <Image url="@../resources/circle-icon.png" />
@@ -101,6 +101,15 @@
                             </ImageView>
                         </graphic>
                    </ToggleButton>
+                   <ToggleButton fx:id="botonMarcarX" onAction="#handleBotonMarcarXOnAction" toggleGroup="$grupo">
+                        <graphic>
+                            <ImageView fitHeight="56.0" fitWidth="53.0" preserveRatio="true">
+                                <image>
+                                <Image url="@../resources/x.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
                   <Label text="Seleccionar color:" />
                   <ColorPicker fx:id="colorPicker" minHeight="30.0" minWidth="140.0" prefHeight="33.0" prefWidth="138.0">
                      <value>
@@ -111,7 +120,7 @@
                   <Spinner fx:id="spinnerTamanoTexto" editable="true" />
                   <Label text="Grosor lineas:" />
                   <Slider fx:id="sliderGrosorLinea" />
-                  <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="494.0" prefWidth="164.0" />
+                  <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="0.0" prefWidth="164.0" />
                </children>
             </VBox>
             <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" onMousePressed="#addPoi" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">
