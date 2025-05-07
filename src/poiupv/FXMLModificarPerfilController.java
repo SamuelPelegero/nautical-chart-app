@@ -141,7 +141,19 @@ private void handleBAcceptOnAction(ActionEvent event) {
 
     if ( validEmail.get() && validPassword.get() && confirmPasswords.get() &&  validDate.get() ) {
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
+        User user = Persona.getInstance().getUser();
+        
+        user.setEmail(emailField.getText());
+        user.setPassword(passwordField.getText());
+        
 
+        //user.setBirthdate(dateField.getValue());
+        
+        
+        
+        String selectedImagePath = imageAvatar.getSelectionModel().getSelectedItem();
+        Image avatar = new Image("/resources/" + selectedImagePath);
+        user.setAvatar(avatar);
         // Opcional: Mostrar un mensaje en una etiqueta
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Modificación Exitosa");
@@ -155,10 +167,10 @@ private void handleBAcceptOnAction(ActionEvent event) {
         passwordConfirmField.clear();
         dateField.setValue(null);
 
-        validEmail.set(false);
-        validPassword.set(false);
-        confirmPasswords.set(false);
-        validDate.set(false);
+        validEmail.set(true);
+        validPassword.set(true);
+        confirmPasswords.set(true);
+        validDate.set(true);
 
         
         // Cerrar la ventana de registro
@@ -221,6 +233,29 @@ private void handleBAcceptOnAction(ActionEvent event) {
         }
     });
         
+        User user = Persona.getInstance().getUser();
+        userField.setText(user.getNickName());
+        emailField.setText(user.getEmail());
+        passwordField.setText(user.getPassword());
+        passwordConfirmField.setText(user.getPassword()); // opcional
+     
+        
+        //dateField.setValue(user.getBirthdate());
+        
+        
+        
+        if (user.getAvatar() != null && user.getAvatar().getUrl() != null) {
+        String avatarUrl = user.getAvatar().getUrl();
+
+        // Buscar en el ComboBox el item cuyo final coincida con el final de la URL de la imagen
+        for (String item : imageAvatar.getItems()) {
+        if (avatarUrl.endsWith(item)) {
+            imageAvatar.getSelectionModel().select(item);
+            break;
+        }
+        }
+        }
+        
         
         // Imagen también en el botón principal del ComboBox
     imageAvatar.setButtonCell(new ListCell<>() {
@@ -276,10 +311,10 @@ private void handleBAcceptOnAction(ActionEvent event) {
         
         
         // Inicializar propiedades antes de usarlas
-        validEmail = new SimpleBooleanProperty(false);
-        validPassword = new SimpleBooleanProperty(false);
-        confirmPasswords = new SimpleBooleanProperty(false);
-        validDate = new SimpleBooleanProperty(false);
+        validEmail = new SimpleBooleanProperty(true);
+        validPassword = new SimpleBooleanProperty(true);
+        confirmPasswords = new SimpleBooleanProperty(true);
+        validDate = new SimpleBooleanProperty(true);
         
         
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
@@ -290,6 +325,7 @@ private void handleBAcceptOnAction(ActionEvent event) {
             showError(true, emailField, emailError); // ocultamos el error al entrar
             }
         });
+        
         
      
         
@@ -383,5 +419,4 @@ private void handleBAcceptOnAction(ActionEvent event) {
         
 }
  
-
 

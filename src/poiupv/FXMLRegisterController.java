@@ -42,6 +42,7 @@ import javafx.util.Duration;
 import model.NavDAOException;
 import model.Navigation;
 import model.User;
+import poiupv.Persona;
 
 public class FXMLRegisterController implements Initializable {
     
@@ -154,6 +155,8 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
         navegacion.registerUser(userField.getText(),emailField.getText(), passwordField.getText(), img, dateField.getValue());
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
         User user = Navigation.getInstance().authenticate(userField.getText(), passwordField.getText());
+        Persona.getInstance().setUser(user);
+        
         // Opcional: Mostrar un mensaje en una etiqueta
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Registro Exitoso");
@@ -438,5 +441,4 @@ dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
         
     }
  }
-
 

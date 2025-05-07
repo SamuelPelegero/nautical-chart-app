@@ -58,6 +58,8 @@ public class FXMLLogInController {
         if (navegacion.authenticate(username, password) != null) { //TODO: Verificar el usuario y la contraseña
             // Si son correctas, procedemos a abrir la interfaz principal
             User user = Navigation.getInstance().authenticate(userField.getText(), passwordField.getText());
+            Persona.getInstance().setUser(user);
+           
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
                 Parent root = loader.load();
