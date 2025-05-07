@@ -61,6 +61,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML private ToggleButton botonTransportador;
     @FXML
     private ToggleButton botonCirculo;
+    @FXML
+    private ToggleButton botonMarcarX;
     private ImageView imageTransportador;
     private double originalImageWidth;
     private double originalImageHeight;
@@ -438,6 +440,32 @@ private void handleBotonCirculoOnAction(ActionEvent event) {
         paneImagen.setOnMousePressed(null);
         paneImagen.setOnMouseDragged(null);
         paneImagen.setOnMouseReleased(null);
+    }
+}
+    @FXML
+private void handleBotonMarcarXOnAction(ActionEvent event) {
+    if (botonMarcarX.isSelected()) {
+        paneImagen.setOnMouseClicked(e -> {
+            // Crear dos líneas cruzadas formando una X
+            double size = 10; // tamaño de la X
+            Line line1 = new Line(e.getX() - size, e.getY() - size, e.getX() + size, e.getY() + size);
+            Line line2 = new Line(e.getX() - size, e.getY() + size, e.getX() + size, e.getY() - size);
+
+            // Aplicar color desde ColorPicker
+            Color colorSeleccionado = colorPicker.getValue();
+            line1.setStroke(colorSeleccionado);
+            line2.setStroke(colorSeleccionado);
+            line1.setStrokeWidth(2);
+            line2.setStrokeWidth(2);
+
+            // Agrupar las dos líneas en un solo grupo (para borrar fácilmente)
+            Group cruzX = new Group(line1, line2);
+            cruzX.getProperties().put("tipo", "cruzX"); // Etiqueta para borrado
+
+            paneImagen.getChildren().addAll(line1, line2);
+        });
+    } else {
+        paneImagen.setOnMouseClicked(null);
     }
 }
 }
