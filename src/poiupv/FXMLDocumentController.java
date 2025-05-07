@@ -33,6 +33,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -58,6 +59,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML private ToggleButton toggleBotonBorrar;
     @FXML private ToggleGroup grupo;
     @FXML private ToggleButton botonTransportador;
+    @FXML
+    private ToggleButton botonCirculo;
     private ImageView imageTransportador;
     private double originalImageWidth;
     private double originalImageHeight;
@@ -67,7 +70,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML private ColorPicker colorPicker;
     @FXML private Spinner<Integer> spinnerTamanoTexto;
     @FXML private Slider sliderGrosorLinea;
-
+    private Line linePainting;
+    private Circle circlePainting;
+    private double inicioXArc;
+    private Line lineaDesdeTransportador;
+    private double centroXTransportador, centroYTransportador;
     @FXML
     void zoomIn(ActionEvent event) {
         double sliderVal = zoom_slider.getValue();
@@ -205,21 +212,23 @@ private void handleBotonTextoOnAction(ActionEvent event) {
             paneImagen.getChildren().add(textField);
             textField.requestFocus();
 
-            textField.setOnAction(evt -> {
-                Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
-                text.setFill(colorPicker.getValue()); // color
-                text.setStyle("-fx-font-size: " + spinnerTamanoTexto.getValue() + "px;");
+             // Método para crear y reemplazar con un nodo Text
+            EventHandler<ActionEvent> commitText = evt -> {
+                String input = textField.getText().trim();
+                if (!input.isEmpty()) {
+                    Text text = new Text(e.getX(), e.getY() + 15, input);
+                    text.setFill(colorPicker.getValue());
+                    text.setStyle("-fx-font-size: " + spinnerTamanoTexto.getValue() + "px;");
+                    paneImagen.getChildren().add(text);
+                }
                 paneImagen.getChildren().remove(textField);
-                paneImagen.getChildren().add(text);
-            });
+            };
+
+            textField.setOnAction(commitText);
 
             textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                 if (!isNowFocused) {
-                    Text text = new Text(e.getX(), e.getY() + 15, textField.getText());
-                    text.setFill(colorPicker.getValue()); // color
-                    text.setStyle("-fx-font-size: " + spinnerTamanoTexto.getValue() + "px;");
-                    paneImagen.getChildren().remove(textField);
-                    paneImagen.getChildren().add(text);
+                    commitText.handle(null);
                 }
             });
         });
@@ -235,7 +244,7 @@ private void handleBotonTextoOnAction(ActionEvent event) {
         if (toggleBotonBorrar.isSelected()) {
             paneImagen.setOnMouseClicked(e -> {
                 for (Node node : new ArrayList<>(paneImagen.getChildren())) {
-                    if (node instanceof Text || node instanceof Line) {
+                    if (node instanceof Text || node instanceof Line || node instanceof Circle) {
                         if (node.getBoundsInParent().contains(e.getX(), e.getY())) {
                             paneImagen.getChildren().remove(node);
                             break;
@@ -249,67 +258,186 @@ private void handleBotonTextoOnAction(ActionEvent event) {
     }
 
     @FXML
-    private void handleBotonTransportadorOnAction(ActionEvent event) {
-        if (botonTransportador.isSelected()) {
-            if (imageTransportador == null) {
-                Image imagen = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
-                originalImageWidth = imagen.getWidth();
-                originalImageHeight = imagen.getHeight();
-                imageTransportador = new ImageView(imagen);
-                imageTransportador.setFitWidth(200);
-                imageTransportador.setPreserveRatio(true);
-                imageTransportador.setOnMousePressed(e -> {
-                    imageTransportador.setUserData(new double[]{e.getSceneX(), e.getSceneY(), imageTransportador.getLayoutX(), imageTransportador.getLayoutY()});
-                });
-                imageTransportador.setOnMouseDragged(e -> {
-                    double[] datos = (double[]) imageTransportador.getUserData();
-                    double deltaX = e.getSceneX() - datos[0];
-                    double deltaY = e.getSceneY() - datos[1];
-                    imageTransportador.setLayoutX(datos[2] + deltaX);
-                    imageTransportador.setLayoutY(datos[3] + deltaY);
-                });
-            }
-            if (!paneImagen.getChildren().contains(imageTransportador)) {
-                paneImagen.getChildren().add(imageTransportador);
-                imageTransportador.setLayoutX(100);
-                imageTransportador.setLayoutY(100);
-            }
-            imageview.fitWidthProperty().addListener((obs, oldWidth, newWidth) -> {
-                double scaleFactor = newWidth.doubleValue() / originalImageWidth;
-                imageTransportador.setScaleX(scaleFactor);
-                imageTransportador.setScaleY(scaleFactor);
+private void handleBotonTransportadorOnAction(ActionEvent event) {
+    if (botonTransportador.isSelected()) {
+        if (imageTransportador == null) {
+            Image imagen = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
+            originalImageWidth = imagen.getWidth();
+            originalImageHeight = imagen.getHeight();
+            imageTransportador = new ImageView(imagen);
+            imageTransportador.setFitWidth(200);
+            imageTransportador.setPreserveRatio(true);
+
+            // Solo mover el transportador
+            imageTransportador.setOnMousePressed(e -> {
+                imageTransportador.setUserData(new double[]{e.getSceneX(), e.getSceneY(), imageTransportador.getLayoutX(), imageTransportador.getLayoutY()});
             });
-            imageview.fitHeightProperty().addListener((obs, oldHeight, newHeight) -> {
-                double scaleFactor = newHeight.doubleValue() / originalImageHeight;
-                imageTransportador.setScaleX(scaleFactor);
-                imageTransportador.setScaleY(scaleFactor);
+            imageTransportador.setOnMouseDragged(e -> {
+                double[] datos = (double[]) imageTransportador.getUserData();
+                double deltaX = e.getSceneX() - datos[0];
+                double deltaY = e.getSceneY() - datos[1];
+                imageTransportador.setLayoutX(datos[2] + deltaX);
+                imageTransportador.setLayoutY(datos[3] + deltaY);
             });
-        } else {
-            paneImagen.getChildren().remove(imageTransportador);
         }
+
+        if (!paneImagen.getChildren().contains(imageTransportador)) {
+            paneImagen.getChildren().add(imageTransportador);
+            imageTransportador.setLayoutX(100);
+            imageTransportador.setLayoutY(100);
+        }
+
+        // Escala proporcional al zoom de la carta
+        imageview.fitWidthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double scaleFactor = newWidth.doubleValue() / originalImageWidth;
+            imageTransportador.setScaleX(scaleFactor);
+            imageTransportador.setScaleY(scaleFactor);
+        });
+        imageview.fitHeightProperty().addListener((obs, oldHeight, newHeight) -> {
+            double scaleFactor = newHeight.doubleValue() / originalImageHeight;
+            imageTransportador.setScaleX(scaleFactor);
+            imageTransportador.setScaleY(scaleFactor);
+        });
+
+        // Sin dibujo ni líneas
+        paneImagen.setOnMousePressed(null);
+        paneImagen.setOnMouseDragged(null);
+
+    } else {
+        paneImagen.getChildren().remove(imageTransportador);
+        imageTransportador = null;
+
+        // Limpiar eventos si estaban presentes
+        paneImagen.setOnMousePressed(null);
+        paneImagen.setOnMouseDragged(null);
     }
-
-    private EventHandler<MouseEvent> pressedHandler = e -> {
-        startX = e.getX();
-        startY = e.getY();
-    };
-
-    private EventHandler<MouseEvent> releasedHandler = e -> {
-    Line finalLine = new Line(startX, startY, e.getX(), e.getY());
-    finalLine.setStroke(colorPicker.getValue());
-    finalLine.setStrokeWidth(sliderGrosorLinea.getValue());
-    paneImagen.getChildren().add(finalLine);
-};
+}
 
     @FXML
-    private void handleBotonLineaOnAction(ActionEvent event) {
-        if (botonLinea.isSelected()) {
-            paneImagen.setOnMousePressed(pressedHandler);
-            paneImagen.setOnMouseReleased(releasedHandler);
-        } else {
-            paneImagen.setOnMousePressed(null);
-            paneImagen.setOnMouseReleased(null);
-        }
+private void handleBotonLineaOnAction(ActionEvent event) {
+    // Verificamos si el botón de "Línea" está seleccionado en el ToggleGroup
+    if (botonLinea.isSelected()) {
+        // Manejador de MousePressed para crear la línea cuando el ratón es presionado
+        paneImagen.setOnMousePressed(e -> {
+            startX = e.getX();
+            startY = e.getY();
+            
+            // Creamos la línea y la añadimos al paneImagen
+            linePainting = new Line(startX, startY, startX, startY);
+            linePainting.setStroke(colorPicker.getValue());  // Usamos el color seleccionado en el ColorPicker
+            linePainting.setStrokeWidth(sliderGrosorLinea.getValue());  // Usamos el grosor seleccionado en el slider
+            paneImagen.getChildren().add(linePainting);  // Añadimos la línea al contenedor
+            
+            // Configuración del menú contextual para eliminar la línea
+            linePainting.setOnContextMenuRequested(ctx -> {
+                ContextMenu menuContext = new ContextMenu();
+                MenuItem borrarItem = new MenuItem("Eliminar");
+                menuContext.getItems().add(borrarItem);
+                
+                // Acción para eliminar la línea
+                borrarItem.setOnAction(ev -> {
+                    paneImagen.getChildren().remove(linePainting);
+                    ev.consume();
+                });
+                
+                // Mostrar el menú contextual en la posición del ratón
+                menuContext.show(linePainting, ctx.getScreenX(), ctx.getScreenY());
+                ctx.consume();
+            });
+            
+            e.consume();  // Consumimos el evento para evitar otros manejadores
+        });
+
+        // Manejador de MouseDragged para actualizar el punto final de la línea mientras se arrastra el ratón
+        paneImagen.setOnMouseDragged(e -> {
+            if (linePainting != null) {
+                linePainting.setEndX(e.getX());
+                linePainting.setEndY(e.getY());
+            }
+            e.consume();  // Consumimos el evento para evitar otros manejadores
+        });
+
+        // Manejador de MouseReleased para fijar la línea al soltar el ratón
+        paneImagen.setOnMouseReleased(e -> {
+            if (linePainting != null) {
+                linePainting.setEndX(e.getX());
+                linePainting.setEndY(e.getY());
+            }
+            e.consume();  // Consumimos el evento para evitar otros manejadores
+        });
+
+    } else {
+        // Si el ToggleButton "Línea" está desactivado, eliminamos los manejadores de eventos
+        paneImagen.setOnMousePressed(null);
+        paneImagen.setOnMouseDragged(null);
+        paneImagen.setOnMouseReleased(null);
     }
-    
+}
+    // Manejador de eventos para el botón de Círculo
+@FXML
+private void handleBotonCirculoOnAction(ActionEvent event) {
+    // Verificamos si el botón de "Círculo" está seleccionado en el ToggleGroup
+    if (botonCirculo.isSelected()) {
+        // Manejador de MousePressed para crear el círculo cuando el ratón es presionado
+        paneImagen.setOnMousePressed(e -> {
+            // Creamos un círculo transparente con radio 1 (mínimo visible)
+            circlePainting = new Circle(1);
+            circlePainting.setStroke(Color.RED);  // Usamos el color rojo para el borde
+            circlePainting.setFill(Color.TRANSPARENT);  // Lo hacemos transparente por dentro
+            paneImagen.getChildren().add(circlePainting);  // Añadimos el círculo al contenedor
+
+            // Colocamos el centro del círculo en la posición del ratón
+            circlePainting.setCenterX(e.getX());
+            circlePainting.setCenterY(e.getY());
+
+            // Guardamos la posición inicial para calcular el radio
+            inicioXArc = e.getX();
+
+            // Añadimos un menú contextual para eliminar el círculo
+            circlePainting.setOnContextMenuRequested(ctx -> {
+                ContextMenu menuContext = new ContextMenu();
+                MenuItem borrarItem = new MenuItem("Eliminar");
+                menuContext.getItems().add(borrarItem);
+                
+                // Acción para eliminar el círculo
+                borrarItem.setOnAction(ev -> {
+                    paneImagen.getChildren().remove(circlePainting);
+                    ev.consume();
+                });
+                
+                // Mostrar el menú contextual
+                menuContext.show(circlePainting, ctx.getScreenX(), ctx.getScreenY());
+                ctx.consume();
+            });
+
+            e.consume();  // Consumimos el evento para evitar otros manejadores
+        });
+
+        // Manejador de MouseDragged para modificar el radio del círculo mientras se arrastra el ratón
+        paneImagen.setOnMouseDragged(e -> {
+            if (circlePainting != null) {
+                // Calculamos el radio como la distancia entre el centro y la posición del ratón
+                double radio = Math.abs(e.getX() - inicioXArc);
+                circlePainting.setRadius(radio);  // Establecemos el nuevo radio
+            }
+            e.consume();  // Consumimos el evento para evitar otros manejadores
+        });
+
+        // Manejador de MouseReleased para fijar el radio del círculo al soltar el ratón
+        paneImagen.setOnMouseReleased(e -> {
+            if (circlePainting != null) {
+                // Calculamos y fijamos el radio definitivo al soltar el ratón
+                double radio = Math.abs(e.getX() - inicioXArc);
+                circlePainting.setRadius(radio);
+            }
+            e.consume();  // Consumimos el evento para evitar otros manejadores
+        });
+
+    } else {
+        // Si el ToggleButton "Círculo" está desactivado, eliminamos los manejadores de eventos
+        paneImagen.setOnMousePressed(null);
+        paneImagen.setOnMouseDragged(null);
+        paneImagen.setOnMouseReleased(null);
+    }
+}
 }
