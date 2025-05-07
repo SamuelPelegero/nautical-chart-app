@@ -71,6 +71,7 @@ public class FXMLpreguntasController implements Initializable {
     private List<Answer> respuestasAleatorias;
     private int preguntasMostradas = 0;
     private int indicePreguntaActual = 0;
+    private FXMLMenuController menuController;
     @FXML
     private Button botoncarta;
     @FXML
@@ -80,7 +81,9 @@ public class FXMLpreguntasController implements Initializable {
     @FXML
     private HBox hboxPregunta;
 
-   
+    public void setMenuController(FXMLMenuController controller) {
+        this.menuController = controller;
+    }
 
     private void cargarPreguntas() throws NavDAOException{
         Navigation navegacion = Navigation.getInstance();
@@ -234,6 +237,9 @@ public class FXMLpreguntasController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("¡La respuesta es correcta!");
             alert.showAndWait();
+            if (menuController != null) {
+            menuController.acertar();
+            }
             Stage currentStage = (Stage) botonmenu.getScene().getWindow();
                 currentStage.close();
                 try {
@@ -256,6 +262,9 @@ public class FXMLpreguntasController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("La respuesta es incorrecta.");
             alert.showAndWait();
+            if (menuController != null) {
+            menuController.fallar();
+            }
             Stage currentStage = (Stage) botonmenu.getScene().getWindow();
                 currentStage.close();
                 try {

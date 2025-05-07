@@ -19,7 +19,8 @@ public class FXMLMenuController {
 
     @FXML
     private Button botprobl;
-
+    private int hits;
+    private int faults;
 
     @FXML
     private void handleRealizarProblema(ActionEvent event) {
@@ -31,7 +32,10 @@ public class FXMLMenuController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
             Scene problemascene = new Scene(root);
-            
+            FXMLpreguntasController preguntasController = new FXMLLoader(getClass().getResource("/poiupv/FXMLpreguntas.fxml")).getController();
+
+        // Pasar referencia del controlador actual
+            preguntasController.setMenuController(this);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
             stage.setScene(problemascene);
@@ -93,5 +97,11 @@ public class FXMLMenuController {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    }
+    public void acertar() {
+        hits++;
+    }
+    public void fallar() {
+        faults++;
     }
 }
