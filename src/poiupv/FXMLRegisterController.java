@@ -150,6 +150,8 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
     Navigation navegacion = Navigation.getInstance();
     if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get() && validUser.get() && !navegacion.exitsNickName(userField.getText())) {
         System.out.println("✅ Registro exitoso!");
+        Image img = new Image(getClass().getResourceAsStream("/resources/" + imageAvatar.getValue()));
+        navegacion.registerUser(userField.getText(),emailField.getText(), passwordField.getText(), img, dateField.getValue());
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
         User user = Navigation.getInstance().authenticate(userField.getText(), passwordField.getText());
         // Opcional: Mostrar un mensaje en una etiqueta
