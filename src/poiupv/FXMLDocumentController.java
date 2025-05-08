@@ -378,70 +378,50 @@ private void handleBotonLineaOnAction(ActionEvent event) {
     // Manejador de eventos para el botón de Círculo
 @FXML
 private void handleBotonCirculoOnAction(ActionEvent event) {
-    // Verificamos si el botón de "Círculo" está seleccionado en el ToggleGroup
     if (botonCirculo.isSelected()) {
-        // Manejador de MousePressed para crear el círculo cuando el ratón es presionado
         paneImagen.setOnMousePressed(e -> {
-            // Creamos un círculo transparente con radio 1 (mínimo visible)
             circlePainting = new Circle(1);
-            circlePainting.setStroke(Color.RED);  // Usamos el color rojo para el borde
-            circlePainting.setFill(Color.TRANSPARENT);  // Lo hacemos transparente por dentro
-            paneImagen.getChildren().add(circlePainting);  // Añadimos el círculo al contenedor
 
-            // Colocamos el centro del círculo en la posición del ratón
+            // Aplicar color y grosor
+            circlePainting.setStroke(colorPicker.getValue());
+            circlePainting.setStrokeWidth(sliderGrosorLinea.getValue());
+
+            // El relleno lo dejamos transparente
+            circlePainting.setFill(Color.TRANSPARENT);
+
             circlePainting.setCenterX(e.getX());
             circlePainting.setCenterY(e.getY());
+            inicioXArc = e.getX(); // para calcular radio
 
-            // Guardamos la posición inicial para calcular el radio
-            inicioXArc = e.getX();
+            paneImagen.getChildren().add(circlePainting);
 
-            // Añadimos un menú contextual para eliminar el círculo
+            // Menú contextual para borrar
             circlePainting.setOnContextMenuRequested(ctx -> {
                 ContextMenu menuContext = new ContextMenu();
                 MenuItem borrarItem = new MenuItem("Eliminar");
-                menuContext.getItems().add(borrarItem);
-                
-                // Acción para eliminar el círculo
                 borrarItem.setOnAction(ev -> {
                     paneImagen.getChildren().remove(circlePainting);
                     ev.consume();
                 });
-                
-                // Mostrar el menú contextual
+                menuContext.getItems().add(borrarItem);
                 menuContext.show(circlePainting, ctx.getScreenX(), ctx.getScreenY());
                 ctx.consume();
             });
-
-            e.consume();  // Consumimos el evento para evitar otros manejadores
         });
 
-        // Manejador de MouseDragged para modificar el radio del círculo mientras se arrastra el ratón
         paneImagen.setOnMouseDragged(e -> {
             if (circlePainting != null) {
-                // Calculamos el radio como la distancia entre el centro y la posición del ratón
-                double radio = Math.abs(e.getX() - inicioXArc);
-                circlePainting.setRadius(radio);  // Establecemos el nuevo radio
-            }
-            e.consume();  // Consumimos el evento para evitar otros manejadores
-        });
-
-        // Manejador de MouseReleased para fijar el radio del círculo al soltar el ratón
-        paneImagen.setOnMouseReleased(e -> {
-            if (circlePainting != null) {
-                // Calculamos y fijamos el radio definitivo al soltar el ratón
                 double radio = Math.abs(e.getX() - inicioXArc);
                 circlePainting.setRadius(radio);
+                e.consume();
             }
-            e.consume();  // Consumimos el evento para evitar otros manejadores
         });
-
     } else {
-        // Si el ToggleButton "Círculo" está desactivado, eliminamos los manejadores de eventos
         paneImagen.setOnMousePressed(null);
         paneImagen.setOnMouseDragged(null);
-        paneImagen.setOnMouseReleased(null);
     }
 }
+
     @FXML
 private void handleBotonMarcarXOnAction(ActionEvent event) {
     if (botonMarcarX.isSelected()) {
