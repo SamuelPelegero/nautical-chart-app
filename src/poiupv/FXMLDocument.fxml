@@ -118,7 +118,7 @@
                   </ColorPicker>
                   <Label text="Tamaño texto:" />
                   <Spinner fx:id="spinnerTamanoTexto" editable="true" />
-                  <Label text="Grosor lineas:" />
+                  <Label text="Grosor línea/circunfererencia:" />
                   <Slider fx:id="sliderGrosorLinea" />
                   <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="0.0" prefWidth="164.0" />
                </children>
