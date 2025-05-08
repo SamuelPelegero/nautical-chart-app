@@ -24,6 +24,7 @@ public class FXMLMenuController {
     private int hits;
     private int faults;
     private User user;
+    
 
     public void setUser(User user) {
         this.user = user;
@@ -33,15 +34,15 @@ public class FXMLMenuController {
         System.out.println("Realizar Problema seleccionado");
         Stage currentStage = (Stage) botprobl.getScene().getWindow();
         currentStage.close();
-        System.out.println(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
+        System.out.println(getClass().getResource("/poiupv/FXMLlistapreguntas.fxml"));
         // Lógica para cambiar de escena o mostrar la vista correspondiente
         try {
             // Cargar FXML y obtener el loader
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLlistapreguntas.fxml"));
         Parent root = loader.load();
 
         // Obtener el controlador del FXML ya cargado
-        FXMLpreguntasController preguntasController = loader.getController();
+        FXMLlistapreguntasController preguntasController = loader.getController();
 
         // Pasar referencia del controlador actual
         preguntasController.setMenuController(this);
