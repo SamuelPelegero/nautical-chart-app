@@ -51,7 +51,7 @@
          <items>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <ToggleButton fx:id="botonTexto" mnemonicParsing="false" onAction="#handleBotonTextoOnAction">
+                  <ToggleButton fx:id="botonTexto" mnemonicParsing="false" onAction="#handleBotonTextoOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css">
                      <graphic>
                         <ImageView fitHeight="59.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -63,7 +63,7 @@
                         <ToggleGroup fx:id="grupo" />
                      </toggleGroup>
                   </ToggleButton>
-                  <ToggleButton fx:id="toggleBotonBorrar" mnemonicParsing="false" onAction="#handleToggleBotonBorrar" toggleGroup="$grupo">
+                  <ToggleButton fx:id="toggleBotonBorrar" mnemonicParsing="false" onAction="#handleToggleBotonBorrar" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                      <graphic>
                         <ImageView fitHeight="63.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -72,7 +72,7 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="botonLinea" mnemonicParsing="false" onAction="#handleBotonLineaOnAction" toggleGroup="$grupo">
+                  <ToggleButton fx:id="botonLinea" mnemonicParsing="false" onAction="#handleBotonLineaOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                      <graphic>
                         <ImageView fitHeight="49.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -81,7 +81,7 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction" toggleGroup="$grupo">
+                  <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                      <graphic>
                         <ImageView fitHeight="54.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -90,7 +90,7 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="botonCirculo" onAction="#handleBotonCirculoOnAction" prefHeight="24.0" prefWidth="69.0" toggleGroup="$grupo">
+                  <ToggleButton fx:id="botonCirculo" onAction="#handleBotonCirculoOnAction" prefHeight="24.0" prefWidth="69.0" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                     <!-- Añadir la imagen al botón -->
                         <graphic>
                             <ImageView fitHeight="51.0" fitWidth="54.0">
@@ -101,7 +101,7 @@
                             </ImageView>
                         </graphic>
                    </ToggleButton>
-                   <ToggleButton fx:id="botonMarcarX" onAction="#handleBotonMarcarXOnAction" toggleGroup="$grupo">
+                   <ToggleButton fx:id="botonMarcarX" onAction="#handleBotonMarcarXOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                         <graphic>
                             <ImageView fitHeight="56.0" fitWidth="53.0" preserveRatio="true">
                                 <image>
