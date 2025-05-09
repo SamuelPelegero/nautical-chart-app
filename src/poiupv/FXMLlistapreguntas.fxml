@@ -24,25 +24,23 @@
             </Text>
          </children>
       </HBox>
-      <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+      <SplitPane dividerPositions="0.7" VBox.vgrow="ALWAYS">
+   <items>
+      <ListView fx:id="listaview" prefWidth="400.0" VBox.vgrow="ALWAYS" />
+      <ToolBar orientation="VERTICAL" prefWidth="200.0">
          <items>
-            <ListView fx:id="listaview" />
-            <ToolBar orientation="VERTICAL" prefHeight="40.0" prefWidth="200.0">
-               <items>
-                  <Button fx:id="elegirpre" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#handleelegirpregunta" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Elegir Pregunta" textAlignment="CENTER">
+            <Button fx:id="elegirpre" alignment="CENTER" onAction="#handleelegirpregunta" styleClass="realiz" stylesheets="@../resources/menu%20estilos.css" text="Elegir Pregunta">
                      <padding>
-                        <Insets bottom="6.0" left="24.0" right="26.0" top="6.0" />
-                     </padding>
-                  </Button>
-                  <Button fx:id="aleatoria" focusTraversable="false" mnemonicParsing="false" onAction="#handlepreguntaaleatoria" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Pregunta Aleatoria" />
-                  <Button fx:id="botonmenu" alignment="BOTTOM_CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#salirmenu" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Salir al Menú">
+                        <Insets bottom="6.0" left="25.1" right="25.1" top="6.0" />
+                     </padding></Button>
+            <Button fx:id="aleatoria" onAction="#handlepreguntaaleatoria" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Pregunta Aleatoria" />
+            <Button fx:id="botonmenu" onAction="#salirmenu" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Salir al Menú">
                      <padding>
                         <Insets bottom="6.0" left="34.0" right="34.0" top="6.0" />
-                     </padding>
-                  </Button>
-               </items>
-            </ToolBar>
+                     </padding></Button>
          </items>
-      </SplitPane>
+      </ToolBar>
+   </items>
+</SplitPane>
    </children>
 </VBox>

@@ -14,7 +14,7 @@ import model.User;
 public class Persona {
     private static Persona instance;
     private User personaAct;
-
+    
     private Persona() {} // constructor privado
 
     public static Persona getInstance() {

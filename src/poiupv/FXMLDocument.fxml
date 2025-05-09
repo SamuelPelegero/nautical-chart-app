@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuButton?>
@@ -74,7 +73,7 @@
                   </ToggleButton>
                   <ToggleButton fx:id="botonLinea" mnemonicParsing="false" onAction="#handleBotonLineaOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                      <graphic>
-                        <ImageView fitHeight="49.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="57.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/recta.png" />
                            </image>
@@ -93,7 +92,7 @@
                   <ToggleButton fx:id="botonCirculo" onAction="#handleBotonCirculoOnAction" prefHeight="24.0" prefWidth="69.0" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                     <!-- Añadir la imagen al botón -->
                         <graphic>
-                            <ImageView fitHeight="51.0" fitWidth="54.0">
+                            <ImageView fitHeight="55.0" fitWidth="55.0">
                                 <image>
                                     <!-- Ruta a la imagen del círculo -->
                                     <Image url="@../resources/circle-icon.png" />
@@ -103,9 +102,18 @@
                    </ToggleButton>
                    <ToggleButton fx:id="botonMarcarX" onAction="#handleBotonMarcarXOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                         <graphic>
-                            <ImageView fitHeight="56.0" fitWidth="53.0" preserveRatio="true">
+                            <ImageView fitHeight="51.0" fitWidth="54.0" preserveRatio="true">
                                 <image>
                                 <Image url="@../resources/x.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+                    <ToggleButton fx:id="botonBorrarTodo" onAction="#handleBotonBorrarTodo" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
+                        <graphic>
+                            <ImageView fitHeight="51.0" fitWidth="52.0">
+                                <image>
+                                    <Image url="@../resources/delete-all.png" />
                                 </image>
                             </ImageView>
                         </graphic>
@@ -120,7 +128,6 @@
                   <Spinner fx:id="spinnerTamanoTexto" editable="true" />
                   <Label text="Grosor línea/circunfererencia:" />
                   <Slider fx:id="sliderGrosorLinea" />
-                  <ListView fx:id="map_listview" onMouseClicked="#listClicked" prefHeight="0.0" prefWidth="164.0" />
                </children>
             </VBox>
             <ScrollPane fx:id="map_scrollpane" hbarPolicy="ALWAYS" onMouseMoved="#showPosition" onMousePressed="#addPoi" pannable="true" prefHeight="398.0" prefWidth="358.0" vbarPolicy="ALWAYS">

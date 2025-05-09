@@ -1,4 +1,4 @@
-/*
+/* REGISTER
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -34,9 +34,12 @@ import javafx.util.converter.LocalDateStringConverter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.NavDAOException;
@@ -98,10 +101,29 @@ public class FXMLRegisterController implements Initializable {
     private Tooltip tooltip1;
     @FXML
     private Tooltip tooltip2;
-    @FXML
-    private ComboBox<String> imageAvatar;
+    
     @FXML
     private Button bIniciarSesion;
+    @FXML
+    private ToggleButton userDefault;
+    @FXML
+    private ToggleButton user1;
+    @FXML
+    private ToggleButton user2;
+    @FXML
+    private ToggleButton user3;
+  
+    @FXML
+    private ToggleGroup grupito;
+    @FXML
+    private ImageView ImageViewUserDefault;
+    @FXML
+    private ImageView ImageViewUser1;
+    @FXML
+    private ImageView ImageViewUser2;
+    @FXML
+    private ImageView imageViewUser3;
+    private Image image;
 
     private void checkPassword() {
         String password = passwordField.getText();
@@ -152,11 +174,14 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
     Navigation navegacion = Navigation.getInstance();
     if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get() && validUser.get() && !navegacion.exitsNickName(userField.getText())) {
         System.out.println("✅ Registro exitoso!");
-        Image img = new Image(getClass().getResourceAsStream("/resources/" + imageAvatar.getValue()));
-        navegacion.registerUser(userField.getText(),emailField.getText(), passwordField.getText(), img, dateField.getValue());
+        
+        navegacion.registerUser(userField.getText(),emailField.getText(), passwordField.getText(), image, dateField.getValue());
+        
+        
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
         User user = Navigation.getInstance().authenticate(userField.getText(), passwordField.getText());
         Persona.getInstance().setUser(user);
+        
         
         // Opcional: Mostrar un mensaje en una etiqueta
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -212,67 +237,16 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
     
     //=========================================================
     // you must initialize here all related with the object 
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        // Lista de nombres de imágenes
-        String[] avatarNames = { "user.png", "woman.png", "gamer.png", "hacker.png" };
-
-        // Añadir nombres de archivo al ComboBox
-        imageAvatar.getItems().addAll(avatarNames);
-
-         // Cell factory para mostrar imágenes en el desplegable
-        imageAvatar.setCellFactory(listView -> new ListCell<>() {
-        private final ImageView imageView = new ImageView();
-        
-        
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty || item == null) {
-                setGraphic(null);
-            } else {
-                Image image = new Image(getClass().getResourceAsStream("/resources/" + item));
-                imageView.setImage(image);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                setGraphic(imageView);
-            }
-        }
-    });
-        
-        
-        // Imagen también en el botón principal del ComboBox
-    imageAvatar.setButtonCell(new ListCell<>() {
-        private final ImageView imageView = new ImageView();
-
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty || item == null) {
-                setGraphic(null);
-            } else {
-                Image image = new Image(getClass().getResourceAsStream("/resources/" + item));
-                imageView.setImage(image);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                setGraphic(imageView);
-            }
-        }
-    });
-        
-        
-    
-        // Seleccionar por defecto el primero
-        if (!imageAvatar.getItems().isEmpty()) {
-        imageAvatar.getSelectionModel().selectFirst();
-        }
+        image = ImageViewUserDefault.getImage();
         
         
         
-        
-        
-        
+      
         
         tooltip1.install(interrogante1, tooltip1);
         tooltip2.install(interrogante2, tooltip2);
@@ -280,25 +254,33 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
         interrogante2.setFocusTraversable(false);
         
         // Evento al presionar el botón para mostrar el Tooltip
-        interrogante1.setOnAction(event -> {
-        // Mostrar el tooltip manualmente cuando se presione el botón
-        tooltip1.show(interrogante1, 860, 290);
+        interrogante1.setOnMouseClicked(event -> {
+            // Obtener las coordenadas del mouse donde se hizo clic
+            double mouseX = event.getScreenX();
+            double mouseY = event.getScreenY();
 
-        // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
-        pause.setOnFinished(e -> tooltip1.hide());
-        pause.play();
+            // Mostrar el tooltip manualmente donde el usuario hizo clic
+            tooltip1.show(interrogante1, mouseX + 10, mouseY + 10); // Agregamos un pequeño offset para que no esté justo en el punto de clic
+
+            // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
+            PauseTransition pause = new PauseTransition(Duration.seconds(3));
+            pause.setOnFinished(e -> tooltip1.hide());
+            pause.play();
          });
         
         // Evento al presionar el botón para mostrar el Tooltip
-        interrogante2.setOnAction(event -> {
-        // Mostrar el tooltip manualmente cuando se presione el botón
-        tooltip2.show(interrogante2, 720, 405);
+        interrogante2.setOnMouseClicked(event -> {
+            // Obtener las coordenadas del mouse donde se hizo clic
+            double mouseX = event.getScreenX();
+            double mouseY = event.getScreenY();
 
-        // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
-        pause.setOnFinished(e -> tooltip2.hide());
-        pause.play();
+            // Mostrar el tooltip manualmente donde el usuario hizo clic
+            tooltip2.show(interrogante2, mouseX + 10, mouseY + 10); // Agregamos un pequeño offset para que no esté justo en el punto de clic
+
+            // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
+            PauseTransition pause = new PauseTransition(Duration.seconds(3));
+            pause.setOnFinished(e -> tooltip2.hide());
+            pause.play();
          });
         
         
@@ -311,7 +293,9 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
         confirmPasswords = new SimpleBooleanProperty(false);
         validDate = new SimpleBooleanProperty(false);
         validUser = new SimpleBooleanProperty(false);
-        
+       
+
+         
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) { // cuando pierde el foco
             emailTouched = true;
@@ -320,7 +304,13 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
             showError(true, emailField, emailError); // ocultamos el error al entrar
             }
         });
-     
+        
+        emailField.textProperty().addListener((obs, oldVal, newVal) -> {
+    if (emailTouched) {
+        checkEmail(); // Valida cada vez que cambia el texto si el campo ya fue tocado
+    }
+});
+    
      
         
         
@@ -347,29 +337,37 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
         }
         });
 
-        passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // cuando pierde el foco
+                passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+        if (!newVal) { // cuando pierde el foco
             passwordTouched = true;
             checkPassword();
-             } else {
-            showError(true, passwordField, passwordError); // ocultamos el error al entrar
-    }
-        });
-        
-        passwordField.textProperty().addListener((obs, oldVal, newVal) -> {
-        if (passwordTouched) {
-        checkPassword();
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas al perder el foco de passwordField
+        } else {
+            showError(true, passwordField, passwordError); // ocultar el error al entrar
         }
-        });
+    });
+        
+         passwordField.textProperty().addListener((obs, oldVal, newVal) -> {
+        if (passwordTouched) {
+            checkPassword();
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas cuando se modifica passwordField
+        }
+    });
 
+        passwordConfirmField.textProperty().addListener((obs, oldVal, newVal) -> {
+        if (passwordConfirmTouched) {
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas cuando se modifica passwordConfirmField
+        }
+    });
+        
         passwordConfirmField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-             if (!newVal) { // cuando pierde el foco
-            passwordConfirmTouched  = true;
-            checkPasswordsMatch();
-            } else {
-            showError(true, passwordConfirmField, passwordConfirmError); // ocultamos el error al entrar
-    }
-        });
+        if (!newVal) { // cuando pierde el foco
+            passwordConfirmTouched = true;
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas al perder el foco de passwordConfirmField
+        } else {
+            showError(true, passwordConfirmField, passwordConfirmError); // ocultar el error al entrar
+        }
+    });
 
         dateField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) { // cuando pierde el foco
@@ -394,14 +392,7 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
 });
         
 
-       dateField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-    if (!newVal) { // cuando pierde el foco
-        dateTouched = true;
-        checkDate();
-    } else {
-        showError(true, dateField, dateError); // ocultamos el error al entrar
-    }
-});
+    
 
 // Escuchar cambios en la fecha para validar sin necesidad de perder el foco
 dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -443,5 +434,25 @@ dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
     }
         
     }
- }
 
+    @FXML
+    private void userDefaultOnAction(ActionEvent event) {
+        image = ImageViewUserDefault.getImage();
+        
+    }
+
+    @FXML
+    private void user1OnAction(ActionEvent event) {
+        image = ImageViewUser1.getImage();
+    }
+
+    @FXML
+    private void user3OnAction(ActionEvent event) {
+        image = imageViewUser3.getImage();
+    }
+
+    @FXML
+    private void user2OnAction(ActionEvent event) {
+        image = ImageViewUser2.getImage();
+    }
+ }

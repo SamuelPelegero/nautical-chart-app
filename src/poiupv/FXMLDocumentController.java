@@ -35,6 +35,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -63,6 +64,8 @@ public class FXMLDocumentController implements Initializable {
     private ToggleButton botonCirculo;
     @FXML
     private ToggleButton botonMarcarX;
+    @FXML
+    private ToggleButton botonBorrarTodo;
     private ImageView imageTransportador;
     private double originalImageWidth;
     private double originalImageHeight;
@@ -98,7 +101,7 @@ public class FXMLDocumentController implements Initializable {
         map_scrollpane.setVvalue(scrollV);
     }
 
-    @FXML
+    /*@FXML
     void listClicked(MouseEvent event) {
         Poi itemSelected = map_listview.getSelectionModel().getSelectedItem();
         double mapWidth = zoomGroup.getBoundsInLocal().getWidth();
@@ -120,7 +123,7 @@ public class FXMLDocumentController implements Initializable {
     private void initData() {
         data = map_listview.getItems();
         
-    }
+    }*/
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -133,7 +136,7 @@ colorPicker.setValue(Color.BLACK); // valor por defecto
 
         
         
-        initData();
+        //initData();
         zoom_slider.setMin(0.2);
         zoom_slider.setMax(1.2);
         zoom_slider.setValue(0.7);
@@ -447,5 +450,16 @@ private void handleBotonMarcarXOnAction(ActionEvent event) {
     } else {
         paneImagen.setOnMouseClicked(null);
     }
+}
+    @FXML
+private void handleBotonBorrarTodo(ActionEvent event) {
+    // Eliminamos todos los nodos añadidos dinámicamente (excepto la imagen base)
+    paneImagen.getChildren().removeIf(node ->
+        node instanceof Line ||
+        node instanceof Circle ||
+        node instanceof Text ||
+        (node instanceof ImageView && node != imageview) || // conserva solo la carta náutica
+        (node instanceof Shape && node != imageview)        // incluye X, etc.
+    );
 }
 }
