@@ -221,41 +221,59 @@ private void handleBAcceptOnAction(ActionEvent event) {
         alert.showAndWait();
     }
 }
-    
-    
-private boolean imagenesIguales(Image img1, Image img2) {
+   // Método para comparar imágenes basado en sus píxeles
+public boolean imagenesIguales(Image img1, Image img2) {
     if (img1 == null || img2 == null) return false;
-    return Objects.equals(img1.getUrl(), img2.getUrl());
-}
-
-    //=========================================================
-    // you must initialize here all related with the object 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
-       
-        
-        User user = Persona.getInstance().getUser();
-        userField.setText(user.getNickName());
-        emailField.setText(user.getEmail());
-        passwordField.setText(user.getPassword());
-        passwordConfirmField.setText(user.getPassword()); // opcional
-        dateField.setValue(user.getBirthdate());
-        
-        Platform.runLater(() -> {
-         Image img = user.getAvatar();
-        List<ToggleButton> toggleButtons = List.of(userDefault, user1, user2, user3);
-        System.out.println("Avatar del usuario: " + (img != null ? img.getUrl() : "null"));
-
-        for (ToggleButton tb : toggleButtons) {
-        ImageView iv = (ImageView) tb.getGraphic();
-        if (iv != null && iv.getImage() != null && imagenesIguales(img, iv.getImage())) {
-            tb.setSelected(true);
-            image = iv.getImage(); // guarda también la imagen
-            break;
+    
+    // Compara las dimensiones primero
+    if ((int)img1.getWidth() != (int)img2.getWidth() || 
+        (int)img1.getHeight() != (int)img2.getHeight()) {
+        return false;
+    }
+    
+    // Compara los píxeles (esto es más preciso pero requiere más procesamiento)
+    for (int y = 0; y < img1.getHeight(); y++) {
+        for (int x = 0; x < img1.getWidth(); x++) {
+            if (img1.getPixelReader().getArgb(x, y) != img2.getPixelReader().getArgb(x, y)) {
+                return false;
+            }
         }
     }
-});
+    return true;
+}
+
+@Override
+public void initialize(URL url, ResourceBundle rb) {
+    User user = Persona.getInstance().getUser();
+    System.out.println("Avatar del usuario: " + user.getAvatar());
+    
+    userField.setText(user.getNickName());
+    emailField.setText(user.getEmail());
+    passwordField.setText(user.getPassword());
+    passwordConfirmField.setText(user.getPassword());
+    dateField.setValue(user.getBirthdate());
+    
+    Platform.runLater(() -> {
+        Image userAvatar = user.getAvatar();
+        List<ToggleButton> toggleButtons = List.of(userDefault, user1, user2, user3);
+        
+        if (userAvatar != null) {
+            for (ToggleButton tb : toggleButtons) {
+                ImageView iv = (ImageView) tb.getGraphic();
+                if (iv != null && iv.getImage() != null) {
+                    // Comparación simplificada (puedes usar el método más preciso si es necesario)
+                    if (imagenesIguales(userAvatar, iv.getImage())) {
+                        tb.setSelected(true);
+                        image = iv.getImage();
+                        break;
+                    }
+                }
+            }
+        }
+    });
+
+
+
         
      
        

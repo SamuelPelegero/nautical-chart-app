@@ -1,4 +1,4 @@
-/*
+/* REGISTER
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -181,7 +181,7 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
         User user = Navigation.getInstance().authenticate(userField.getText(), passwordField.getText());
         Persona.getInstance().setUser(user);
-        user.setAvatar(image);
+        
         
         // Opcional: Mostrar un mensaje en una etiqueta
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -242,15 +242,11 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        image = ImageViewUserDefault.getImage();
         
-    
         
-               
-       
-userField.setTooltip(new Tooltip("Este campo es obligatorio"));
-passwordField.setTooltip(new Tooltip("Este campo es obligatorio"));
-passwordConfirmField.setTooltip(new Tooltip("Este campo es obligatorio"));
-dateField.setTooltip(new Tooltip("Este campo es obligatorio"));
+        
+      
         
         tooltip1.install(interrogante1, tooltip1);
         tooltip2.install(interrogante2, tooltip2);
@@ -297,7 +293,7 @@ dateField.setTooltip(new Tooltip("Este campo es obligatorio"));
         confirmPasswords = new SimpleBooleanProperty(false);
         validDate = new SimpleBooleanProperty(false);
         validUser = new SimpleBooleanProperty(false);
-        image = ImageViewUserDefault.getImage();
+       
 
          
         emailField.focusedProperty().addListener((obs, oldVal, newVal) -> {
@@ -460,4 +456,3 @@ dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
         image = ImageViewUser2.getImage();
     }
  }
-
