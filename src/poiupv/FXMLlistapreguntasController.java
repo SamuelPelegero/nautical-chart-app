@@ -77,6 +77,30 @@ public class FXMLlistapreguntasController implements Initializable {
 
     @FXML
     private void handleelegirpregunta(ActionEvent event) {
+        Stage currentStage = (Stage) elegirpre.getScene().getWindow();
+        currentStage.close();
+        try {
+            // Cargar FXML y obtener el loader
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLpreguntas2.fxml"));
+        Parent root = loader.load();
+        FXMLpreguntas2Controller controller = loader.getController();
+
+
+        Scene problemascene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(problemascene);
+        stage.setTitle("Preguntas");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        stage.setMinWidth(600);
+        stage.setMinHeight(600);
+        stage.show();
+
+        // Cerrar ventana actual si es necesario
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     }
 
     @FXML
@@ -99,10 +123,8 @@ public class FXMLlistapreguntasController implements Initializable {
         stage.setMinWidth(600);
         stage.setMinHeight(600);
         stage.show();
-
-        // Cerrar ventana actual si es necesario
-
-        currentStage.close();
+        
+        
 
         } catch (IOException e) {
             e.printStackTrace();
