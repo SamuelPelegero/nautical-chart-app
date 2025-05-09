@@ -88,8 +88,22 @@ public class FXMLMenuController {
 
     @FXML
     private void handleMostrarResultados(ActionEvent event) {
-        System.out.println("Mostrar Resultados seleccionado");
-        // Lógica para mostrar los resultados del usuario
+        try {
+            Parent modificarPerfilRoot = FXMLLoader.load(getClass().getResource("FXMLMostrarResultados.fxml"));
+            Scene modificarPerfilScene = new Scene(modificarPerfilRoot);
+            
+
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+            window.setScene(modificarPerfilScene);
+            window.setTitle("Mostrar Resultados");
+            window.setMinWidth(700);
+            window.setMinHeight(500);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("No se pudo cargar FXMLModificarPerfil.fxml");
+        }
     }
 
     @FXML
