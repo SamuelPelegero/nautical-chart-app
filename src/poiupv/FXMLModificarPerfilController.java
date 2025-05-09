@@ -6,10 +6,15 @@
 package poiupv;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import static java.time.temporal.ChronoUnit.YEARS;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -33,6 +38,8 @@ import javafx.util.converter.LocalDateStringConverter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -86,13 +93,31 @@ public class FXMLModificarPerfilController implements Initializable {
 
     @FXML
     private Tooltip tooltip2;
-    @FXML
-    private ComboBox<String> imageAvatar;
+   
     @FXML
     private TextField userField;
     @FXML
     private Label userError;
+    @FXML
+    private ToggleButton userDefault;
+    @FXML
+    private ToggleGroup grupito;
+    @FXML
+    private ImageView ImageViewUserDefault;
+    @FXML
+    private ToggleButton user1;
+    @FXML
+    private ImageView ImageViewUser1;
+    @FXML
+    private ToggleButton user2;
+    @FXML
+    private ImageView ImageViewUser2;
+    @FXML
+    private ToggleButton user3;
+    @FXML
+    private ImageView imageViewUser3;
 
+    private Image image;
   
     
     
@@ -111,7 +136,7 @@ public class FXMLModificarPerfilController implements Initializable {
     private void checkEmail() {
         String email = emailField.getText();
 //        boolean isValid = email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
-        boolean isValid = email.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
+        boolean isValid = email.matches("^[\\w!#$%&'*+/=?{|}~^-]+(?:\\.[\\w!#$%&'*+/=?{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
         validEmail.set(isValid); //actualiza la property asociada
         showError(isValid, emailField, emailError);
     }
@@ -145,15 +170,11 @@ private void handleBAcceptOnAction(ActionEvent event) {
         
         user.setEmail(emailField.getText());
         user.setPassword(passwordField.getText());
-        
-
-        //user.setBirthdate(dateField.getValue());
-        
+        user.setBirthdate(dateField.getValue());
+        user.setAvatar(image);
         
         
-        String selectedImagePath = imageAvatar.getSelectionModel().getSelectedItem();
-        Image avatar = new Image("/resources/" + selectedImagePath);
-        user.setAvatar(avatar);
+        
         // Opcional: Mostrar un mensaje en una etiqueta
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Modificación Exitosa");
@@ -202,93 +223,41 @@ private void handleBAcceptOnAction(ActionEvent event) {
 }
     
     
+private boolean imagenesIguales(Image img1, Image img2) {
+    if (img1 == null || img2 == null) return false;
+    return Objects.equals(img1.getUrl(), img2.getUrl());
+}
+
     //=========================================================
     // you must initialize here all related with the object 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        // Lista de nombres de imágenes
-        String[] avatarNames = { "user.png", "woman.png", "gamer.png", "hacker.png" };
-
-        // Añadir nombres de archivo al ComboBox
-        imageAvatar.getItems().addAll(avatarNames);
-
-         // Cell factory para mostrar imágenes en el desplegable
-        imageAvatar.setCellFactory(listView -> new ListCell<>() {
-        private final ImageView imageView = new ImageView();
-        
-        
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty || item == null) {
-                setGraphic(null);
-            } else {
-                Image image = new Image(getClass().getResourceAsStream("/resources/" + item));
-                imageView.setImage(image);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                setGraphic(imageView);
-            }
-        }
-    });
+       
         
         User user = Persona.getInstance().getUser();
         userField.setText(user.getNickName());
         emailField.setText(user.getEmail());
         passwordField.setText(user.getPassword());
         passwordConfirmField.setText(user.getPassword()); // opcional
-     
+        dateField.setValue(user.getBirthdate());
         
-        //dateField.setValue(user.getBirthdate());
-        
-        
-        
-        if (user.getAvatar() != null && user.getAvatar().getUrl() != null) {
-        String avatarUrl = user.getAvatar().getUrl();
+        Platform.runLater(() -> {
+         Image img = user.getAvatar();
+        List<ToggleButton> toggleButtons = List.of(userDefault, user1, user2, user3);
+        System.out.println("Avatar del usuario: " + (img != null ? img.getUrl() : "null"));
 
-        // Buscar en el ComboBox el item cuyo final coincida con el final de la URL de la imagen
-        for (String item : imageAvatar.getItems()) {
-        if (avatarUrl.endsWith(item)) {
-            imageAvatar.getSelectionModel().select(item);
+        for (ToggleButton tb : toggleButtons) {
+        ImageView iv = (ImageView) tb.getGraphic();
+        if (iv != null && iv.getImage() != null && imagenesIguales(img, iv.getImage())) {
+            tb.setSelected(true);
+            image = iv.getImage(); // guarda también la imagen
             break;
         }
-        }
-        }
+    }
+});
         
-        
-        // Imagen también en el botón principal del ComboBox
-    imageAvatar.setButtonCell(new ListCell<>() {
-        private final ImageView imageView = new ImageView();
-
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            if (empty || item == null) {
-                setGraphic(null);
-            } else {
-                Image image = new Image(getClass().getResourceAsStream("/resources/" + item));
-                imageView.setImage(image);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                setGraphic(imageView);
-            }
-        }
-    });
-        
-        
-    
-        // Seleccionar por defecto el primero
-        if (!imageAvatar.getItems().isEmpty()) {
-        imageAvatar.getSelectionModel().selectFirst();
-        }
-        
-        
-        
-        
-        
-        
-        
+     
        
         tooltip2.install(interrogante2, tooltip2);
         interrogante2.setFocusTraversable(false);
@@ -296,14 +265,18 @@ private void handleBAcceptOnAction(ActionEvent event) {
         
         
         // Evento al presionar el botón para mostrar el Tooltip
-        interrogante2.setOnAction(event -> {
-        // Mostrar el tooltip manualmente cuando se presione el botón
-        tooltip2.show(interrogante2, 720, 405);
+        interrogante2.setOnMouseClicked(event -> {
+            // Obtener las coordenadas del mouse donde se hizo clic
+            double mouseX = event.getScreenX();
+            double mouseY = event.getScreenY();
 
-        // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
-        pause.setOnFinished(e -> tooltip2.hide());
-        pause.play();
+            // Mostrar el tooltip manualmente donde el usuario hizo clic
+            tooltip2.show(interrogante2, mouseX + 10, mouseY + 10); // Agregamos un pequeño offset para que no esté justo en el punto de clic
+
+            // Establecer que el tooltip desaparezca automáticamente después de un tiempo (por ejemplo, 3 segundos)
+            PauseTransition pause = new PauseTransition(Duration.seconds(3));
+            pause.setOnFinished(e -> tooltip2.hide());
+            pause.play();
          });
         
         
@@ -327,34 +300,46 @@ private void handleBAcceptOnAction(ActionEvent event) {
         });
         
         
-     
+        emailField.textProperty().addListener((obs, oldVal, newVal) -> {
+    if (emailTouched) {
+        checkEmail(); // Valida cada vez que cambia el texto si el campo ya fue tocado
+    }
+});
         
         
         
 
         passwordField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // cuando pierde el foco
+        if (!newVal) { // cuando pierde el foco
             passwordTouched = true;
             checkPassword();
-             } else {
-            showError(true, passwordField, passwordError); // ocultamos el error al entrar
-    }
-        });
-        
-        passwordField.textProperty().addListener((obs, oldVal, newVal) -> {
-        if (passwordTouched) {
-        checkPassword();
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas al perder el foco de passwordField
+        } else {
+            showError(true, passwordField, passwordError); // ocultar el error al entrar
         }
-        });
+    });
+        
+         passwordField.textProperty().addListener((obs, oldVal, newVal) -> {
+        if (passwordTouched) {
+            checkPassword();
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas cuando se modifica passwordField
+        }
+    });
 
+        passwordConfirmField.textProperty().addListener((obs, oldVal, newVal) -> {
+        if (passwordConfirmTouched) {
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas cuando se modifica passwordConfirmField
+        }
+    });
+        
         passwordConfirmField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-             if (!newVal) { // cuando pierde el foco
-            passwordConfirmTouched  = true;
-            checkPasswordsMatch();
-            } else {
-            showError(true, passwordConfirmField, passwordConfirmError); // ocultamos el error al entrar
-    }
-        });
+        if (!newVal) { // cuando pierde el foco
+            passwordConfirmTouched = true;
+            checkPasswordsMatch(); // Comprobar si coinciden las contraseñas al perder el foco de passwordConfirmField
+        } else {
+            showError(true, passwordConfirmField, passwordConfirmError); // ocultar el error al entrar
+        }
+    });
 
         dateField.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal) { // cuando pierde el foco
@@ -365,6 +350,12 @@ private void handleBAcceptOnAction(ActionEvent event) {
     }
             
         });
+        
+        dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
+        if (dateTouched) {
+        checkDate(); // Revalidamos en cuanto cambia el valor, si ya se ha tocado el campo
+    }
+});
         
 
         dateField.setConverter(new LocalDateStringConverter() {
@@ -378,6 +369,11 @@ private void handleBAcceptOnAction(ActionEvent event) {
                 }
             }
         });
+        
+        emailTouched = true;
+        passwordTouched = true;
+        passwordConfirmTouched = true;
+        dateTouched = true;
 
         BooleanBinding validFields = validEmail.and(validPassword)
                 .and(confirmPasswords)
@@ -414,9 +410,25 @@ private void handleBAcceptOnAction(ActionEvent event) {
         
     }
 
-
-   
+    @FXML
+    private void userDefaultOnAction(ActionEvent event) {
+        image = ImageViewUserDefault.getImage();
         
-}
- 
+    }
+
+    @FXML
+    private void user1OnAction(ActionEvent event) {
+        image = ImageViewUser1.getImage();
+    }
+
+    @FXML
+    private void user3OnAction(ActionEvent event) {
+        image = imageViewUser3.getImage();
+    }
+
+    @FXML
+    private void user2OnAction(ActionEvent event) {
+        image = ImageViewUser2.getImage();
+    }
+ }
 
