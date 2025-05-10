@@ -78,6 +78,13 @@ public class FXMLlistapreguntasController implements Initializable {
         Preguntas = FXCollections.observableArrayList(todasLasPreguntas);
         listaview.setItems(Preguntas);    
         listaview.setCellFactory(c-> new ProblemListCell());
+        
+        
+        listaview.setOnMouseClicked(event -> {
+    Problem selected = listaview.getSelectionModel().getSelectedItem();
+    System.out.println("Seleccionado: " + selected);
+});
+        
     }    
 
     @FXML
@@ -156,13 +163,18 @@ public class FXMLlistapreguntasController implements Initializable {
             System.out.println("Acción Cancelada");
         }
     }
-        public class ProblemListCell extends ListCell<Problem>{
+       public class ProblemListCell extends ListCell<Problem> {
     @Override
-    protected void updateItem(Problem item, boolean empty)
-    { 
-    if (item==null || empty) setText(null);
-    else setText(item.getText());
+    protected void updateItem(Problem item, boolean empty) {
+        super.updateItem(item, empty); // ← esto es esencial
+        if (item == null || empty) {
+            setText(null);
+        } else {
+            setText(item.getText());
+        }
     }
 }
+        
+        
     
 }
