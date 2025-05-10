@@ -52,7 +52,7 @@
                <Image url="@../resources/modperfil.png" />
             </image>
          </ImageView>
-         <Button onAction="#handleModificarPerfil" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="modif" stylesheets="@../resources/menu%20estilos.css" text="Modificar Perfil" textFill="WHITE">
+         <Button fx:id="modperf" onAction="#handleModificarPerfil" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="modif" stylesheets="@../resources/menu%20estilos.css" text="Modificar Perfil" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
@@ -66,7 +66,7 @@
                <Image url="@../resources/OIP.png" />
             </image>
          </ImageView>
-         <Button onAction="#handleMostrarResultados" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Mostrar Resultados" textFill="WHITE">
+         <Button fx:id="mostarse" onAction="#handleMostrarResultados" prefHeight="60" prefWidth="300" style="-fx-background-color: #0685BC; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Mostrar Resultados" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
@@ -80,7 +80,7 @@
                <Image url="@../resources/cerrarsesion.png" />
             </image>
          </ImageView>
-         <Button onAction="#handleCerrarSesion" prefHeight="60" prefWidth="300" style="-fx-background-color: #d09901; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="cerrar" stylesheets="@../resources/menu%20estilos.css" text="Cerrar Sesión" textFill="WHITE">
+         <Button fx:id="cerrar" onAction="#handleCerrarSesion" prefHeight="60" prefWidth="300" style="-fx-background-color: #d09901; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 2, 2);" styleClass="cerrar" stylesheets="@../resources/menu%20estilos.css" text="Cerrar Sesión" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>

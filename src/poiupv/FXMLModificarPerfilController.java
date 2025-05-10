@@ -199,18 +199,7 @@ private void handleBAcceptOnAction(ActionEvent event) {
         currentStage.close();
 
         // Abrir la interfaz principal (FXMLDocumentController)
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Menú Principal");
-            stage.setMinWidth(600);
-            stage.setMinHeight(600);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
     } else {
         // Si algún campo no es válido, mostrar un mensaje de error
@@ -404,28 +393,11 @@ public void initialize(URL url, ResourceBundle rb) {
 
   @FXML
     private void handleBCancelOnAction(ActionEvent event) {
-        
-         try {
-        // Cargar el archivo FXML del registro
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
-        Parent root = loader.load();
-
+  
         // Obtener el Stage actual y cerrarlo (si es necesario)
         Stage currentStage = (Stage) bAccept.getScene().getWindow();
         currentStage.close(); // Cerrar ventana de login
 
-        // Crear el nuevo Stage para la ventana de registro
-        Stage newStage = new Stage();
-        newStage.setScene(new Scene(root));
-        newStage.setMinWidth(600);
-        newStage.setMinHeight(600);
-        newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-        newStage.setTitle("Menú Principal");
-        newStage.show();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-        
     }
 
     @FXML

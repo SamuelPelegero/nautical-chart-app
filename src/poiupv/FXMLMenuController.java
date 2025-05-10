@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Navigation;
 import model.User;
@@ -24,6 +25,12 @@ public class FXMLMenuController {
     private int hits;
     private int faults;
     private User user;
+    @FXML
+    private Button modperf;
+    @FXML
+    private Button mostarse;
+    @FXML
+    private Button cerrar;
     
 
     public void setUser(User user) {
@@ -68,17 +75,27 @@ public class FXMLMenuController {
 
     @FXML
     private void handleModificarPerfil(ActionEvent event) {
+        botprobl.disableProperty().set(true);
+        mostarse.disableProperty().set(true);
+        modperf.disableProperty().set(true);
+        cerrar.disableProperty().set(true);
+        
         try {
             Parent modificarPerfilRoot = FXMLLoader.load(getClass().getResource("FXMLModificarPerfil.fxml"));
             Scene modificarPerfilScene = new Scene(modificarPerfilRoot);
-            
 
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-            window.setScene(modificarPerfilScene);
-            window.setTitle("Modificar Perfil");
-            window.setMinWidth(700);
-            window.setMinHeight(500);
+        Stage stage = new Stage();
+        stage.setScene(modificarPerfilScene);
+        stage.setTitle("Modificar Perfil");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        stage.setResizable(false);
+        stage.setMinWidth(500);
+        stage.setMinHeight(625);
+        stage.showAndWait();
+        botprobl.disableProperty().set(false);
+        mostarse.disableProperty().set(false);
+        modperf.disableProperty().set(false);
+        cerrar.disableProperty().set(false);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,22 +105,29 @@ public class FXMLMenuController {
 
     @FXML
     private void handleMostrarResultados(ActionEvent event) {
-        try {
-            Parent modificarPerfilRoot = FXMLLoader.load(getClass().getResource("FXMLMostrarResultados.fxml"));
-            Scene modificarPerfilScene = new Scene(modificarPerfilRoot);
-            
+       try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMostrarResultados.fxml"));
+        Parent root = loader.load();
 
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-            window.setScene(modificarPerfilScene);
-            window.setTitle("Mostrar Resultados");
-            window.setMinWidth(700);
-            window.setMinHeight(500);
+        FXMLMostrarResultadosController mostrarController = loader.getController();
+        mostrarController.setStage((Stage) botprobl.getScene().getWindow()); // Pasar el menú para luego mostrarlo
+        mostrarController.setMenuController(this); // opcional, si lo usas
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("No se pudo cargar FXMLModificarPerfil.fxml");
-        }
+        Stage resultadosStage = new Stage();
+        resultadosStage.setScene(new Scene(root));
+        resultadosStage.setTitle("Mostrar Resultados");
+        resultadosStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+        resultadosStage.setMinWidth(700);
+        resultadosStage.setMinHeight(500);
+        resultadosStage.show();
+
+        // Oculta el menú mientras está abierta la ventana de resultados
+        ((Stage) botprobl.getScene().getWindow()).hide();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        System.out.println("No se pudo cargar FXMLMostrarResultados.fxml");
+    }
     }
 
     @FXML
@@ -138,4 +162,5 @@ public class FXMLMenuController {
     public void fallar() {
         faults++;
     }
+
 }

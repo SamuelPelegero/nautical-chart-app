@@ -69,9 +69,19 @@ public class FXMLMostrarResultadosController implements Initializable {
     
     private  List<Session> sesiones;
 
+    private Stage menustage;
+    
+    private FXMLMenuController menuController;
     /**
      * Initializes the controller class.
      */
+    
+    public void setStage(Stage stage){
+        this.menustage = stage;
+    }
+    public void setMenuController(FXMLMenuController controller) {
+        this.menuController = controller;
+    }
     @Override
 public void initialize(URL url, ResourceBundle rb) {
     user = Persona.getInstance().getUser();
@@ -140,23 +150,19 @@ private void handleBfiltrarOnAction(ActionEvent event) {
 
     @FXML
     private void handleBSalirMenuOnAction(ActionEvent event) {
-        
-            try {
-                
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText("¿Seguro que deseas salir al menu?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+                System.out.println("¡Acción Confirmada!");
                 Stage currentStage = (Stage) bSalirMenu.getScene().getWindow();
                 currentStage.close();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
-                Parent root = loader.load();
-                Stage newStage = new Stage();
-                newStage.setScene(new Scene(root));
-                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-                newStage.setTitle("Menú Principal");
-                newStage.setMinWidth(600);
-                newStage.setMinHeight(600);
-                newStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                menustage.show();
+
+        } else {
+            System.out.println("Acción Cancelada");
+        }
        
         
     }
