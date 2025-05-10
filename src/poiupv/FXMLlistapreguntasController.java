@@ -99,6 +99,7 @@ public class FXMLlistapreguntasController implements Initializable {
 
         controller.setMenuController(menuController);
         controller.setStage(menustage);
+        controller.setProblem(listaview.getSelectionModel().getSelectedItem());
         Scene problemascene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(problemascene);

@@ -90,6 +90,11 @@ public class FXMLpreguntas2Controller implements Initializable {
     }
     public void setProblem(Problem a){
         this.problema = a;
+    if (problema != null) {
+        mostrarPregunta();  // ✅ Solo mostramos la pregunta si ya tenemos el problema
+    } else {
+        System.out.println("❌ El problema es null");
+    }
     }
     public void setStage(Stage stage){
         this.menustage = stage;
@@ -145,28 +150,20 @@ public class FXMLpreguntas2Controller implements Initializable {
 
         @Override
     public void initialize(URL url, ResourceBundle rb){
-        VBox.setVgrow(hboxPregunta, Priority.ALWAYS);
-        HBox.setHgrow(labelPregunta, Priority.ALWAYS);
-        labelPregunta.setMaxWidth(Double.MAX_VALUE);
-        labelPregunta.setMaxHeight(Double.MAX_VALUE);
-        labelPregunta.sceneProperty().addListener((obs, oldScene, scene) -> {
+        configurarRadioButtons();
+
+    VBox.setVgrow(hboxPregunta, Priority.ALWAYS);
+    HBox.setHgrow(labelPregunta, Priority.ALWAYS);
+    labelPregunta.setMaxWidth(Double.MAX_VALUE);
+    labelPregunta.setMaxHeight(Double.MAX_VALUE);
+    labelPregunta.sceneProperty().addListener((obs, oldScene, scene) -> {
         if (scene != null) {
             scene.widthProperty().addListener((obsWidth, oldWidth, newWidth) -> {
-                double fontSize = newWidth.doubleValue() / 75; // Ajusta el divisor a tu gusto
+                double fontSize = newWidth.doubleValue() / 75;
                 labelPregunta.setFont(new Font("Arial", fontSize));
             });
         }
-        });
-    
-
-        try {
-            cargarPreguntas();
-        } catch (NavDAOException ex) {
-            Logger.getLogger(FXMLpreguntasController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        configurarRadioButtons();
-        Collections.shuffle(preguntasPendientes);
-        mostrarPregunta();
+    });
     }
 
     @FXML
