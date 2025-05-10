@@ -66,6 +66,10 @@ public class FXMLDocumentController implements Initializable {
     private ToggleButton botonMarcarX;
     @FXML
     private ToggleButton botonBorrarTodo;
+    @FXML
+    private ToggleButton toggleBotonRegla;
+    @FXML
+    private ToggleButton toggleBotonCoordenadas;
     private ImageView imageTransportador;
     private double originalImageWidth;
     private double originalImageHeight;
@@ -80,6 +84,8 @@ public class FXMLDocumentController implements Initializable {
     private double inicioXArc;
     private Line lineaDesdeTransportador;
     private double centroXTransportador, centroYTransportador;
+    private ImageView imageRegla;
+    private Line lineaHorizontal, lineaVertical;
     @FXML
     void zoomIn(ActionEvent event) {
         double sliderVal = zoom_slider.getValue();
@@ -462,4 +468,60 @@ private void handleBotonBorrarTodo(ActionEvent event) {
         (node instanceof Shape && node != imageview)        // incluye X, etc.
     );
 }
+    
+    @FXML
+private void handleBotonReglaOnAction(ActionEvent event) {
+    if (toggleBotonRegla.isSelected()) {
+        if (imageRegla == null) {
+            Image imagen = new Image(getClass().getResource("/resources/regla.png").toExternalForm());
+            imageRegla = new ImageView(imagen);
+            imageRegla.setFitWidth(200);
+            imageRegla.setPreserveRatio(true);
+
+            imageRegla.setOnMousePressed(e -> {
+                imageRegla.setUserData(new double[]{e.getSceneX(), e.getSceneY(), imageRegla.getLayoutX(), imageRegla.getLayoutY()});
+            });
+            imageRegla.setOnMouseDragged(e -> {
+                double[] datos = (double[]) imageRegla.getUserData();
+                double deltaX = e.getSceneX() - datos[0];
+                double deltaY = e.getSceneY() - datos[1];
+                imageRegla.setLayoutX(datos[2] + deltaX);
+                imageRegla.setLayoutY(datos[3] + deltaY);
+            });
+        }
+
+        if (!paneImagen.getChildren().contains(imageRegla)) {
+            paneImagen.getChildren().add(imageRegla);
+            imageRegla.setLayoutX(100);
+            imageRegla.setLayoutY(100);
+        }
+    } else {
+        paneImagen.getChildren().remove(imageRegla);
+    }
+}
+    
+    @FXML
+private void handleBotonCoordenadasOnAction(ActionEvent event) {
+    if (toggleBotonCoordenadas.isSelected()) {
+        paneImagen.setOnMouseClicked(e -> {
+            if (lineaHorizontal != null) paneImagen.getChildren().remove(lineaHorizontal);
+            if (lineaVertical != null) paneImagen.getChildren().remove(lineaVertical);
+
+            lineaHorizontal = new Line(0, e.getY(), paneImagen.getWidth(), e.getY());
+            lineaVertical = new Line(e.getX(), 0, e.getX(), paneImagen.getHeight());
+
+            lineaHorizontal.setStroke(Color.BLUE);
+            lineaVertical.setStroke(Color.BLUE);
+            lineaHorizontal.setStrokeWidth(1);
+            lineaVertical.setStrokeWidth(1);
+
+            paneImagen.getChildren().addAll(lineaHorizontal, lineaVertical);
+        });
+    } else {
+        paneImagen.setOnMouseClicked(null);
+        if (lineaHorizontal != null) paneImagen.getChildren().remove(lineaHorizontal);
+        if (lineaVertical != null) paneImagen.getChildren().remove(lineaVertical);
+    }
+}
+
 }
