@@ -81,6 +81,8 @@ public class FXMLpreguntas2Controller implements Initializable {
     @FXML
     private HBox hboxPregunta;
     
+    private Stage menustage;
+    
     Problem problema = null;
 
     public void setMenuController(FXMLMenuController controller) {
@@ -88,6 +90,9 @@ public class FXMLpreguntas2Controller implements Initializable {
     }
     public void setProblem(Problem a){
         this.problema = a;
+    }
+    public void setStage(Stage stage){
+        this.menustage = stage;
     }
 
     private void cargarPreguntas() throws NavDAOException{
@@ -193,22 +198,11 @@ public class FXMLpreguntas2Controller implements Initializable {
         alert.setContentText("La repuesta no se guardará.");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            try {
                 System.out.println("¡Acción Confirmada!");
                 Stage currentStage = (Stage) botonmenu.getScene().getWindow();
                 currentStage.close();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
-                Parent root = loader.load();
-                Stage newStage = new Stage();
-                newStage.setScene(new Scene(root));
-                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-                newStage.setTitle("Menú Principal");
-                newStage.setMinWidth(600);
-                newStage.setMinHeight(600);
-                newStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                menustage.show();
+
         } else {
             System.out.println("Acción Cancelada");
         }
@@ -243,20 +237,8 @@ public class FXMLpreguntas2Controller implements Initializable {
             }
             Stage currentStage = (Stage) botonmenu.getScene().getWindow();
                 currentStage.close();
-                try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
-                Parent root;
-                root = loader.load();
-                Stage newStage = new Stage();
-                newStage.setScene(new Scene(root));
-                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-                newStage.setTitle("Menú Principal");
-                newStage.setMinWidth(600);
-                newStage.setMinHeight(600);
-                newStage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLpreguntasController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                menustage.show();
+
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Respuesta Incorrecta");
@@ -268,20 +250,7 @@ public class FXMLpreguntas2Controller implements Initializable {
             }
             Stage currentStage = (Stage) botonmenu.getScene().getWindow();
                 currentStage.close();
-                try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
-                Parent root;
-                root = loader.load();
-                Stage newStage = new Stage();
-                newStage.setScene(new Scene(root));
-                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-                newStage.setTitle("Menú Principal");
-                newStage.setMinWidth(600);
-                newStage.setMinHeight(600);
-                newStage.show();
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLpreguntasController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                menustage.show();
                 
         }
     } else {

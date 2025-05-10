@@ -42,6 +42,8 @@ public class FXMLlistapreguntasController implements Initializable {
     private Button elegirpre;
     @FXML
     private Button aleatoria;
+        
+    private Stage menustage;
     
     private FXMLMenuController menuController;
     @FXML
@@ -58,6 +60,9 @@ public class FXMLlistapreguntasController implements Initializable {
      */
     public void setMenuController(FXMLMenuController controller) {
         this.menuController = controller;
+    }
+    public void setStage(Stage stage){
+        this.menustage = stage;
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,7 +90,8 @@ public class FXMLlistapreguntasController implements Initializable {
         Parent root = loader.load();
         FXMLpreguntas2Controller controller = loader.getController();
 
-
+        controller.setMenuController(menuController);
+        controller.setStage(menustage);
         Scene problemascene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(problemascene);
@@ -114,7 +120,10 @@ public class FXMLlistapreguntasController implements Initializable {
             // Cargar FXML y obtener el loader
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLpreguntas.fxml"));
         Parent root = loader.load();
-
+        FXMLpreguntasController preguntasController = loader.getController();
+        
+        preguntasController.setMenuController(menuController);
+        preguntasController.setStage(menustage);
         Scene problemascene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(problemascene);
@@ -136,25 +145,13 @@ public class FXMLlistapreguntasController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmación");
         alert.setHeaderText("¿Seguro que deseas salir al menu?");
-        alert.setContentText("La repuesta no se guardará.");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            try {
                 System.out.println("¡Acción Confirmada!");
                 Stage currentStage = (Stage) botonmenu.getScene().getWindow();
                 currentStage.close();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLMenu.fxml"));
-                Parent root = loader.load();
-                Stage newStage = new Stage();
-                newStage.setScene(new Scene(root));
-                newStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-                newStage.setTitle("Menú Principal");
-                newStage.setMinWidth(600);
-                newStage.setMinHeight(600);
-                newStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                menustage.show();
+
         } else {
             System.out.println("Acción Cancelada");
         }

@@ -33,7 +33,7 @@ public class FXMLMenuController {
     private void handleRealizarProblema(ActionEvent event) {
         System.out.println("Realizar Problema seleccionado");
         Stage currentStage = (Stage) botprobl.getScene().getWindow();
-        currentStage.close();
+        currentStage.hide();
         System.out.println(getClass().getResource("/poiupv/FXMLlistapreguntas.fxml"));
         // Lógica para cambiar de escena o mostrar la vista correspondiente
         try {
@@ -46,6 +46,7 @@ public class FXMLMenuController {
 
         // Pasar referencia del controlador actual
         preguntasController.setMenuController(this);
+        preguntasController.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
 
         // Crear nueva escena
         Scene problemascene = new Scene(root);
@@ -56,10 +57,9 @@ public class FXMLMenuController {
         stage.setMinWidth(600);
         stage.setMinHeight(600);
         stage.show();
+        
 
-        // Cerrar ventana actual si es necesario
 
-        currentStage.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,7 +108,9 @@ public class FXMLMenuController {
 
     @FXML
     private void handleCerrarSesion(ActionEvent event) {
-        
+        System.out.println(hits);
+        System.out.println(faults);
+        user.addSession(hits, faults);
         try {
         // Cargar la pantalla de inicio de sesión
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/poiupv/FXMLLogIn.fxml"));

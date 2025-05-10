@@ -73,3 +73,37 @@
     -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.4), 6, 0, 0, 3);
     -fx-background-color: #0a9ddf; /* un poco más claro */
 }
+.radio-button {
+    -fx-font-size: 12px;
+    -fx-text-fill: #333;
+    -fx-padding: 5 10 5 10;
+    -fx-background-color: transparent;
+}
+
+.radio-button:selected {
+    -fx-text-fill: #1976d2;
+}
+
+.radio-button .radio {
+    -fx-border-color: #ccc;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-border-width: 2px;
+    -fx-padding: 4;
+    -fx-background-color: white;
+}
+
+.radio-button:selected .radio {
+    -fx-border-color: #1976d2;
+    -fx-background-color: #1976d2;
+}
+
+.radio-button .dot {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: white;
+}
+
