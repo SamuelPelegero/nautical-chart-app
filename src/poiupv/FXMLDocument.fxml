@@ -50,27 +50,53 @@
          <items>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <ToggleButton fx:id="botonTexto" mnemonicParsing="false" onAction="#handleBotonTextoOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css">
-                     <graphic>
-                        <ImageView fitHeight="59.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resources/Texto.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="grupo" />
-                     </toggleGroup>
-                  </ToggleButton>
-                  <ToggleButton fx:id="toggleBotonBorrar" mnemonicParsing="false" onAction="#handleToggleBotonBorrar" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
-                     <graphic>
-                        <ImageView fitHeight="63.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resources/borrar.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </ToggleButton>
+                  <HBox prefHeight="25.0" prefWidth="237.0">
+                     <children>
+                        <ToggleButton fx:id="botonTexto" mnemonicParsing="false" onAction="#handleBotonTextoOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css">
+                           <graphic>
+                              <ImageView fitHeight="59.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/Texto.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="grupo" />
+                           </toggleGroup>
+                        </ToggleButton>
+                        <ToggleButton fx:id="toggleBotonRegla" maxHeight="64.0" maxWidth="71.333" minHeight="64.0" minWidth="71.333" mnemonicParsing="false" onAction="#handleBotonReglaOnAction" prefHeight="64.0" prefWidth="71.333" styleClass="button" stylesheets="@../resources/menu%20estilos.css">
+                           <graphic>
+                              <ImageView fitHeight="55.0" fitWidth="71.333" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/reglafoto.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="63.0" prefWidth="141.0">
+                     <children>
+                        <ToggleButton fx:id="toggleBotonCoordenadas" minHeight="62.0" minWidth="71.0" mnemonicParsing="false" onAction="#handleBotonCoordenadasOnAction" prefHeight="63.0" prefWidth="71.0" styleClass="button" stylesheets="@../resources/menu%20estilos.css">
+                           <graphic>
+                              <ImageView fitHeight="55.0" fitWidth="71.333" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/coordenadas.jpg" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
+                        <ToggleButton fx:id="toggleBotonBorrar" mnemonicParsing="false" onAction="#handleToggleBotonBorrar" prefHeight="72.0" prefWidth="66.0" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
+                           <graphic>
+                              <ImageView fitHeight="63.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/borrar.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
+                     </children>
+                  </HBox>
                   <ToggleButton fx:id="botonLinea" mnemonicParsing="false" onAction="#handleBotonLineaOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                      <graphic>
                         <ImageView fitHeight="57.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
