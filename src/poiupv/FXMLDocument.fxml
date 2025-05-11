@@ -66,11 +66,11 @@
                         </ToggleButton>
                         <ToggleButton fx:id="toggleBotonRegla" maxHeight="64.0" maxWidth="71.333" minHeight="64.0" minWidth="71.333" mnemonicParsing="false" onAction="#handleBotonReglaOnAction" prefHeight="64.0" prefWidth="71.333" styleClass="button" stylesheets="@../resources/menu%20estilos.css">
                            <graphic>
-                              <ImageView fitHeight="55.0" fitWidth="71.333" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/reglafoto.png" />
-                                 </image>
-                              </ImageView>
+                              <ImageView fx:id="imageRegla" fitHeight="55.0" fitWidth="71.333" pickOnBounds="true" preserveRatio="true" mouseTransparent="false" opacity="0.5">
+                                <image>
+                                        <Image url="@../resources/reglafoto.png" />
+                                </image>
+                                </ImageView>
                            </graphic>
                         </ToggleButton>
                      </children>
@@ -108,10 +108,10 @@
                   </ToggleButton>
                   <ToggleButton fx:id="botonTransportador" mnemonicParsing="false" onAction="#handleBotonTransportadorOnAction" styleClass="button" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                      <graphic>
-                        <ImageView fitHeight="54.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resources/transportador.png" />
-                           </image>
+                        <ImageView fx:id="imageTransportador" fitHeight="55.0" fitWidth="71.333" pickOnBounds="true" preserveRatio="true" mouseTransparent="false" opacity="0.5">
+                            <image>
+                                <Image url="@../resources/transportador.png" />
+                            </image>
                         </ImageView>
                      </graphic>
                   </ToggleButton>
