@@ -96,12 +96,48 @@ private Node elementoSeleccionado = null;
     void zoomIn(ActionEvent event) {
         double sliderVal = zoom_slider.getValue();
         zoom_slider.setValue(sliderVal += 0.1);
+        if (botonTransportador.isSelected()) {
+            double currentScaleX = imageTransportador.getScaleX();
+            double currentScaleY = imageTransportador.getScaleY();
+            double minScale = 1.5;
+            if (currentScaleX > minScale && currentScaleY > minScale) {
+                imageTransportador.setScaleX(currentScaleX - 0.2);
+                imageTransportador.setScaleY(currentScaleY - 0.2);
+            }
+        }
+        if (toggleBotonRegla.isSelected()) {
+            double currentScaleX = imageRegla.getScaleX();
+            double currentScaleY = imageRegla.getScaleY();
+            double minScale = 1.5;
+            if (currentScaleX > minScale && currentScaleY > minScale) {
+                imageRegla.setScaleX(currentScaleX - 0.2);
+                imageRegla.setScaleY(currentScaleY - 0.2);
+            }
+        }
     }
 
     @FXML
     void zoomOut(ActionEvent event) {
         double sliderVal = zoom_slider.getValue();
         zoom_slider.setValue(sliderVal + -0.1);
+        if (botonTransportador.isSelected()) {
+            double currentScaleX = imageTransportador.getScaleX();
+            double currentScaleY = imageTransportador.getScaleY();
+            double maxScale = 3.0;
+            if (currentScaleX < maxScale && currentScaleY < maxScale) {
+                imageTransportador.setScaleX(currentScaleX + 0.2);
+                imageTransportador.setScaleY(currentScaleY + 0.2);
+            }
+        }
+        if (toggleBotonRegla.isSelected()) {
+            double currentScaleX = imageRegla.getScaleX();
+            double currentScaleY = imageRegla.getScaleY();
+            double maxScale = 3.0;
+            if (currentScaleX < maxScale && currentScaleY < maxScale) {
+                imageRegla.setScaleX(currentScaleX + 0.2);
+                imageRegla.setScaleY(currentScaleY + 0.2);
+            }
+        }
     }
 
     private void zoom(double scaleValue) {
@@ -111,6 +147,20 @@ private Node elementoSeleccionado = null;
         zoomGroup.setScaleY(scaleValue);
         map_scrollpane.setHvalue(scrollH);
         map_scrollpane.setVvalue(scrollV);
+        if (botonTransportador.isSelected()) {
+            double escalaInversa = 1/scaleValue;
+            //Limitar la escala para evitar valores extremos
+            escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
+            imageTransportador.setScaleX(escalaInversa);
+            imageTransportador.setScaleY(escalaInversa);
+        }
+        if (toggleBotonRegla.isSelected()) {
+            double escalaInversa = 1/scaleValue;
+            //Limitar la escala para evitar valores extremos
+            escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
+            imageRegla.setScaleX(escalaInversa);
+            imageRegla.setScaleY(escalaInversa);
+        }
     }
 
     /*@FXML
