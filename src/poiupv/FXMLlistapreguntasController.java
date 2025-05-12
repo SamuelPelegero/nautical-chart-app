@@ -105,8 +105,8 @@ public class FXMLlistapreguntasController implements Initializable {
         stage.setScene(problemascene);
         stage.setTitle("Preguntas");
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-        stage.setMinWidth(600);
-        stage.setMinHeight(600);
+        stage.setMaximized(true);
+        stage.setResizable(false);
         stage.show();
 
         // Cerrar ventana actual si es necesario
@@ -137,8 +137,8 @@ public class FXMLlistapreguntasController implements Initializable {
         stage.setScene(problemascene);
         stage.setTitle("Preguntas");
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
-        stage.setMinWidth(600);
-        stage.setMinHeight(600);
+        stage.setMaximized(true);
+        stage.setResizable(false);
         stage.show();
         
         
@@ -158,6 +158,7 @@ public class FXMLlistapreguntasController implements Initializable {
                 System.out.println("¡Acción Confirmada!");
                 Stage currentStage = (Stage) botonmenu.getScene().getWindow();
                 currentStage.close();
+                menustage.setMaximized(true);
                 menustage.show();
 
         } else {

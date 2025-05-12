@@ -78,6 +78,7 @@ public class FXMLLogInController {
                 newStage.setTitle("Menú Principal");
                 newStage.setMinWidth(600);
                 newStage.setMinHeight(600);
+                newStage.setMaximized(true);
                 newStage.show();
             } catch (IOException e) {
                 e.printStackTrace();

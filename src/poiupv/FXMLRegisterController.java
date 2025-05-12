@@ -219,6 +219,7 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
             stage.setTitle("Menú Principal");
             stage.setMinWidth(600);
             stage.setMinHeight(600);
+            stage.setMaximized(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

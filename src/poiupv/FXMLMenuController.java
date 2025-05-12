@@ -63,6 +63,7 @@ public class FXMLMenuController {
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         stage.setMinWidth(600);
         stage.setMinHeight(600);
+        stage.setMaximized(true);
         stage.show();
         
 
@@ -118,7 +119,8 @@ public class FXMLMenuController {
         resultadosStage.setTitle("Mostrar Resultados");
         resultadosStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         resultadosStage.setMinWidth(700);
-        resultadosStage.setMinHeight(500);
+        resultadosStage.setMinHeight(700);
+        resultadosStage.setMaximized(true);
         resultadosStage.show();
 
         // Oculta el menú mientras está abierta la ventana de resultados

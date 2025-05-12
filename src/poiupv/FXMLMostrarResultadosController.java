@@ -150,19 +150,14 @@ private void handleBfiltrarOnAction(ActionEvent event) {
 
     @FXML
     private void handleBSalirMenuOnAction(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmación");
-        alert.setHeaderText("¿Seguro que deseas salir al menu?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-                System.out.println("¡Acción Confirmada!");
+        
+               
                 Stage currentStage = (Stage) bSalirMenu.getScene().getWindow();
                 currentStage.close();
+                menustage.setMaximized(true);
                 menustage.show();
 
-        } else {
-            System.out.println("Acción Cancelada");
-        }
+        
        
         
     }
