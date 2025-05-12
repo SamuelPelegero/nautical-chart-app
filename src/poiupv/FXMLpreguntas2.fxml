@@ -74,7 +74,7 @@
             </Button>
          </children>
       </HBox>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0">
+      <ButtonBar prefHeight="110.0" prefWidth="760.0">
         <buttons>
             <Button fx:id="botonmenu" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#salirmenu" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Salir al Menú" />
           <Button fx:id="botonverif" focusTraversable="false" mnemonicParsing="false" onAction="#verificarrespuesta" style="-fx-background-color: #0685BC;" styleClass="mostar" stylesheets="@../resources/menu%20estilos.css" text="Verificar respuesta" />
