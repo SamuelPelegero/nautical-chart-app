@@ -48,7 +48,7 @@ public class FXMLDocumentController implements Initializable {
     private ObservableList<Poi> data;
     private Group zoomGroup;
 
-    @FXML private ListView<Poi> map_listview;
+    private ListView<Poi> map_listview;
     @FXML private ScrollPane map_scrollpane;
     @FXML private Slider zoom_slider;
     @FXML private MenuButton map_pin;
@@ -87,6 +87,8 @@ public class FXMLDocumentController implements Initializable {
     private double centroXTransportador, centroYTransportador;
     private ImageView imageRegla;
     private Line lineaHorizontal, lineaVertical;
+    @FXML private Slider sliderTransportador;
+    
     private enum Modo { TEXTO, MARCA_X, NINGUNO, SELECCION }
 private Modo modoActual = Modo.NINGUNO;
 private TextField textFieldActual = null;
@@ -96,48 +98,13 @@ private Node elementoSeleccionado = null;
     void zoomIn(ActionEvent event) {
         double sliderVal = zoom_slider.getValue();
         zoom_slider.setValue(sliderVal += 0.1);
-        if (botonTransportador.isSelected()) {
-            double currentScaleX = imageTransportador.getScaleX();
-            double currentScaleY = imageTransportador.getScaleY();
-            double minScale = 1.5;
-            if (currentScaleX > minScale && currentScaleY > minScale) {
-                imageTransportador.setScaleX(currentScaleX - 0.2);
-                imageTransportador.setScaleY(currentScaleY - 0.2);
-            }
-        }
-        if (toggleBotonRegla.isSelected()) {
-            double currentScaleX = imageRegla.getScaleX();
-            double currentScaleY = imageRegla.getScaleY();
-            double minScale = 1.5;
-            if (currentScaleX > minScale && currentScaleY > minScale) {
-                imageRegla.setScaleX(currentScaleX - 0.2);
-                imageRegla.setScaleY(currentScaleY - 0.2);
-            }
-        }
+       
     }
 
     @FXML
     void zoomOut(ActionEvent event) {
         double sliderVal = zoom_slider.getValue();
-        zoom_slider.setValue(sliderVal + -0.1);
-        if (botonTransportador.isSelected()) {
-            double currentScaleX = imageTransportador.getScaleX();
-            double currentScaleY = imageTransportador.getScaleY();
-            double maxScale = 3.0;
-            if (currentScaleX < maxScale && currentScaleY < maxScale) {
-                imageTransportador.setScaleX(currentScaleX + 0.2);
-                imageTransportador.setScaleY(currentScaleY + 0.2);
-            }
-        }
-        if (toggleBotonRegla.isSelected()) {
-            double currentScaleX = imageRegla.getScaleX();
-            double currentScaleY = imageRegla.getScaleY();
-            double maxScale = 3.0;
-            if (currentScaleX < maxScale && currentScaleY < maxScale) {
-                imageRegla.setScaleX(currentScaleX + 0.2);
-                imageRegla.setScaleY(currentScaleY + 0.2);
-            }
-        }
+        zoom_slider.setValue(sliderVal + -0.1);      
     }
 
     private void zoom(double scaleValue) {
@@ -147,15 +114,20 @@ private Node elementoSeleccionado = null;
         zoomGroup.setScaleY(scaleValue);
         map_scrollpane.setHvalue(scrollH);
         map_scrollpane.setVvalue(scrollV);
+       
+    }
+    
+    private void zoomTransportador(double scaleValue) {
+        
         if (botonTransportador.isSelected()) {
-            double escalaInversa = 1/scaleValue;
+            double escalaInversa = scaleValue;
             //Limitar la escala para evitar valores extremos
             escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
             imageTransportador.setScaleX(escalaInversa);
             imageTransportador.setScaleY(escalaInversa);
         }
         if (toggleBotonRegla.isSelected()) {
-            double escalaInversa = 1/scaleValue;
+            double escalaInversa = scaleValue;
             //Limitar la escala para evitar valores extremos
             escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
             imageRegla.setScaleX(escalaInversa);
@@ -216,6 +188,16 @@ colorPicker.setValue(Color.BLACK); // valor por defecto
         contentGroup.getChildren().add(zoomGroup);
         zoomGroup.getChildren().add(map_scrollpane.getContent());
         map_scrollpane.setContent(contentGroup);
+        
+        
+        sliderTransportador.setMaxWidth(160);
+        sliderTransportador.setMin(1);
+        sliderTransportador.setMax(3);
+        sliderTransportador.setValue(1.5);
+        sliderTransportador.valueProperty().addListener((o, oldVal, newVal) -> zoomTransportador((Double) newVal));
+       
+        
+        
             // Listener para manejar cambios entre modos
     grupo.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
         // Limpiar todos los eventos y estados
@@ -698,7 +680,6 @@ private void handleBotonCoordenadasOnAction(ActionEvent event) {
         if (lineaVertical != null) paneImagen.getChildren().remove(lineaVertical);
     }
 }
-  @FXML
 private void cambiarColorElementoSeleccionado(ActionEvent event) {
     if (elementoSeleccionado != null) {
         Color nuevoColor = colorPicker.getValue();
