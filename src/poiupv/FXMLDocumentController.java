@@ -381,25 +381,31 @@ private void handleBotonTransportadorOnAction(ActionEvent event) {
             imageTransportador.setPreserveRatio(true);
             imageTransportador.setOpacity(0.5); // Transparencia al 50%
             
-            // Hacerlo arrastrable
             imageTransportador.setOnMousePressed(e -> {
-                if (e.isPrimaryButtonDown()) {
-                    imageTransportador.setUserData(new Point2D(e.getSceneX(), e.getSceneY()));
-                    e.consume();
-                }
-            });
-            
+            if (e.isPrimaryButtonDown()) {
+             // Convertir coordenadas de escena a locales dentro del paneImagen
+             Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+             imageTransportador.setUserData(localPoint);
+             e.consume();
+            }
+            }); 
+
             imageTransportador.setOnMouseDragged(e -> {
-                Point2D dragStart = (Point2D) imageTransportador.getUserData();
-                if (dragStart != null) {
-                    double deltaX = e.getSceneX() - dragStart.getX();
-                    double deltaY = e.getSceneY() - dragStart.getY();
-                    imageTransportador.setLayoutX(imageTransportador.getLayoutX() + deltaX);
-                    imageTransportador.setLayoutY(imageTransportador.getLayoutY() + deltaY);
-                    imageTransportador.setUserData(new Point2D(e.getSceneX(), e.getSceneY()));
-                    e.consume();
-                }
-            });
+            Point2D dragStart = (Point2D) imageTransportador.getUserData();
+            if (dragStart != null) {
+            // Coordenadas actuales del ratón, también convertidas
+            Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+
+            double deltaX = currentPoint.getX() - dragStart.getX();
+            double deltaY = currentPoint.getY() - dragStart.getY();
+
+            imageTransportador.setLayoutX(imageTransportador.getLayoutX() + deltaX);
+            imageTransportador.setLayoutY(imageTransportador.getLayoutY() + deltaY);
+
+            imageTransportador.setUserData(currentPoint);
+            e.consume();
+    }
+});
         }
 
         if (!paneImagen.getChildren().contains(imageTransportador)) {
@@ -619,32 +625,37 @@ private void handleBotonBorrarTodo(ActionEvent event) {
     @FXML
 private void handleBotonReglaOnAction(ActionEvent event) {
     if (toggleBotonRegla.isSelected()) {
-        if (imageRegla == null) {
+            if (imageRegla == null) {
             Image imagen = new Image(getClass().getResource("/resources/regla.jpg").toExternalForm());
             imageRegla = new ImageView(imagen);
             imageRegla.setFitWidth(200);
             imageRegla.setPreserveRatio(true);
             imageRegla.setOpacity(0.5); // Transparencia al 50%
             
-            // Hacerlo arrastrable
             imageRegla.setOnMousePressed(e -> {
-                if (e.isPrimaryButtonDown()) {
-                    imageRegla.setUserData(new Point2D(e.getSceneX(), e.getSceneY()));
-                    e.consume();
-                }
-            });
-            
-            imageRegla.setOnMouseDragged(e -> {
-                Point2D dragStart = (Point2D) imageRegla.getUserData();
-                if (dragStart != null) {
-                    double deltaX = e.getSceneX() - dragStart.getX();
-                    double deltaY = e.getSceneY() - dragStart.getY();
-                    imageRegla.setLayoutX(imageRegla.getLayoutX() + deltaX);
-                    imageRegla.setLayoutY(imageRegla.getLayoutY() + deltaY);
-                    imageRegla.setUserData(new Point2D(e.getSceneX(), e.getSceneY()));
-                    e.consume();
-                }
-            });
+            if (e.isPrimaryButtonDown()) {
+            Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+            imageRegla.setUserData(localPoint);
+            e.consume();
+    }
+});
+
+        imageRegla.setOnMouseDragged(e -> {
+        Point2D dragStart = (Point2D) imageRegla.getUserData();
+        if (dragStart != null) {
+        Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+
+        double deltaX = currentPoint.getX() - dragStart.getX();
+        double deltaY = currentPoint.getY() - dragStart.getY();
+
+        imageRegla.setLayoutX(imageRegla.getLayoutX() + deltaX);
+        imageRegla.setLayoutY(imageRegla.getLayoutY() + deltaY);
+
+        imageRegla.setUserData(currentPoint);
+        e.consume();
+    }
+});
+
         }
 
         if (!paneImagen.getChildren().contains(imageRegla)) {
