@@ -145,7 +145,7 @@
       </VBox>
       <SplitPane fx:id="splitPane" dividerPositions="0.19699727024567792" VBox.vgrow="ALWAYS">
          <items>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="200.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                <children>
                   <Label text="Seleccionar color:">
                      <VBox.margin>

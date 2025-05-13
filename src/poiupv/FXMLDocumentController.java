@@ -88,6 +88,8 @@ public class FXMLDocumentController implements Initializable {
     private ImageView imageRegla;
     private Line lineaHorizontal, lineaVertical;
     @FXML private Slider sliderTransportador;
+    private double initialAngleRegla = 0;
+    private double initialMouseAngle = 0;
     
     private enum Modo { TEXTO, MARCA_X, NINGUNO, SELECCION }
 private Modo modoActual = Modo.NINGUNO;
@@ -623,37 +625,60 @@ private void handleBotonBorrarTodo(ActionEvent event) {
     @FXML
 private void handleBotonReglaOnAction(ActionEvent event) {
     if (toggleBotonRegla.isSelected()) {
-            if (imageRegla == null) {
+        if (imageRegla == null) {
             Image imagen = new Image(getClass().getResource("/resources/regla.jpg").toExternalForm());
             imageRegla = new ImageView(imagen);
             imageRegla.setFitWidth(200);
             imageRegla.setPreserveRatio(true);
-            imageRegla.setOpacity(0.5); // Transparencia al 50%
+            imageRegla.setOpacity(0.5);
             
+            // Establecer punto inicial de rotación en el centro
+            imageRegla.setTranslateX(200);
+            imageRegla.setTranslateY(100);
+            imageRegla.setRotate(0);
+
             imageRegla.setOnMousePressed(e -> {
-            if (e.isPrimaryButtonDown()) {
-            Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-            imageRegla.setUserData(localPoint);
-            e.consume();
-    }
-});
+                Point2D center = new Point2D(
+                    imageRegla.getBoundsInParent().getMinX() + imageRegla.getBoundsInParent().getWidth() / 2,
+                    imageRegla.getBoundsInParent().getMinY() + imageRegla.getBoundsInParent().getHeight() / 2
+                );
 
-        imageRegla.setOnMouseDragged(e -> {
-        Point2D dragStart = (Point2D) imageRegla.getUserData();
-        if (dragStart != null) {
-        Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                Point2D mouse = new Point2D(e.getSceneX(), e.getSceneY());
+                initialMouseAngle = Math.atan2(mouse.getY() - center.getY(), mouse.getX() - center.getX());
+                initialAngleRegla = imageRegla.getRotate();
 
-        double deltaX = currentPoint.getX() - dragStart.getX();
-        double deltaY = currentPoint.getY() - dragStart.getY();
+                // Guardamos posición para mover
+                if (e.isPrimaryButtonDown()) {
+                    Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                    imageRegla.setUserData(localPoint);
+                }
+            });
 
-        imageRegla.setLayoutX(imageRegla.getLayoutX() + deltaX);
-        imageRegla.setLayoutY(imageRegla.getLayoutY() + deltaY);
+            imageRegla.setOnMouseDragged(e -> {
+                if (e.isSecondaryButtonDown()) {
+                    Point2D center = new Point2D(
+                        imageRegla.getBoundsInParent().getMinX() + imageRegla.getBoundsInParent().getWidth() / 2,
+                        imageRegla.getBoundsInParent().getMinY() + imageRegla.getBoundsInParent().getHeight() / 2
+                    );
 
-        imageRegla.setUserData(currentPoint);
-        e.consume();
-    }
-});
+                    Point2D mouse = new Point2D(e.getSceneX(), e.getSceneY());
+                    double angle = Math.atan2(mouse.getY() - center.getY(), mouse.getX() - center.getX());
+                    double deltaAngle = Math.toDegrees(angle - initialMouseAngle);
 
+                    imageRegla.setRotate(initialAngleRegla + deltaAngle);
+                } else if (e.isPrimaryButtonDown()) {
+                    Point2D dragStart = (Point2D) imageRegla.getUserData();
+                    if (dragStart != null) {
+                        Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                        double deltaX = currentPoint.getX() - dragStart.getX();
+                        double deltaY = currentPoint.getY() - dragStart.getY();
+                        imageRegla.setLayoutX(imageRegla.getLayoutX() + deltaX);
+                        imageRegla.setLayoutY(imageRegla.getLayoutY() + deltaY);
+                        imageRegla.setUserData(currentPoint);
+                    }
+                }
+                e.consume();
+            });
         }
 
         if (!paneImagen.getChildren().contains(imageRegla)) {
