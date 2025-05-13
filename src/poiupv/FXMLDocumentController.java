@@ -419,68 +419,74 @@ private void handleBotonTransportadorOnAction(ActionEvent event) {
 }
 
     @FXML
-private void handleBotonLineaOnAction(ActionEvent event) {
-    // Verificamos si el botón de "Línea" está seleccionado en el ToggleGroup
+    private void handleBotonLineaOnAction(ActionEvent event) {
     if (botonLinea.isSelected()) {
-        // Limpiar campo de texto si existe
-        if (textFieldActual != null) {
-            paneImagen.getChildren().remove(textFieldActual);
-            textFieldActual = null;
+        modoActual = Modo.NINGUNO;
+        limpiarSeleccion();
+
+        // 🚫 Hacer temporales todos los nodos no interactuables (solo para evitar moverlos)
+        for (Node node : paneImagen.getChildren()) {
+            if (!(node instanceof ImageView)) {
+                node.setMouseTransparent(true);
+            }
         }
-        // Manejador de MousePressed para crear la línea cuando el ratón es presionado
+
         paneImagen.setOnMousePressed(e -> {
             startX = e.getX();
             startY = e.getY();
-            
-            // Creamos la línea y la añadimos al paneImagen
+
             linePainting = new Line(startX, startY, startX, startY);
-            linePainting.setStroke(colorPicker.getValue());  // Usamos el color seleccionado en el ColorPicker
-            linePainting.setStrokeWidth(sliderGrosorLinea.getValue());  // Usamos el grosor seleccionado en el slider
-            paneImagen.getChildren().add(linePainting);  // Añadimos la línea al contenedor
-            
-            // Configuración del menú contextual para eliminar la línea
+            linePainting.setStroke(colorPicker.getValue());
+            linePainting.setStrokeWidth(sliderGrosorLinea.getValue());
+            linePainting.setMouseTransparent(true); // Para que la línea en sí tampoco interfiera
+            paneImagen.getChildren().add(linePainting);
+
             linePainting.setOnContextMenuRequested(ctx -> {
                 ContextMenu menuContext = new ContextMenu();
                 MenuItem borrarItem = new MenuItem("Eliminar");
-                menuContext.getItems().add(borrarItem);
-                
-                // Acción para eliminar la línea
                 borrarItem.setOnAction(ev -> {
                     paneImagen.getChildren().remove(linePainting);
                     ev.consume();
                 });
-                
-                // Mostrar el menú contextual en la posición del ratón
+                menuContext.getItems().add(borrarItem);
                 menuContext.show(linePainting, ctx.getScreenX(), ctx.getScreenY());
                 ctx.consume();
             });
-            
-            e.consume();  // Consumimos el evento para evitar otros manejadores
+
+            e.consume();
         });
 
-        // Manejador de MouseDragged para actualizar el punto final de la línea mientras se arrastra el ratón
         paneImagen.setOnMouseDragged(e -> {
             if (linePainting != null) {
                 linePainting.setEndX(e.getX());
                 linePainting.setEndY(e.getY());
             }
-            e.consume();  // Consumimos el evento para evitar otros manejadores
+            e.consume();
         });
 
-        // Manejador de MouseReleased para fijar la línea al soltar el ratón
         paneImagen.setOnMouseReleased(e -> {
             if (linePainting != null) {
                 linePainting.setEndX(e.getX());
                 linePainting.setEndY(e.getY());
+                linePainting = null;
+
+                // ✅ Restaurar interacción normal al terminar de pintar
+                for (Node node : paneImagen.getChildren()) {
+                    node.setMouseTransparent(false);
+                }
             }
-            e.consume();  // Consumimos el evento para evitar otros manejadores
+            e.consume();
         });
 
     } else {
-        // Si el ToggleButton "Línea" está desactivado, eliminamos los manejadores de eventos
+        // ❌ Modo desactivado, restauramos todo
         paneImagen.setOnMousePressed(null);
         paneImagen.setOnMouseDragged(null);
         paneImagen.setOnMouseReleased(null);
+
+        for (Node node : paneImagen.getChildren()) {
+            node.setMouseTransparent(false);
+        }
     }
 }
     // Manejador de eventos para el botón de Círculo
@@ -584,7 +590,7 @@ private void crearMarcaX(double x, double y) {
         e.consume();
     });
 
-    marcaContainer.setOnMouseDragged(e -> {
+    /*marcaContainer.setOnMouseDragged(e -> {
         Point2D dragStart = (Point2D) marcaContainer.getUserData();
         if (dragStart != null) {
             double deltaX = e.getSceneX() - dragStart.getX();
@@ -594,28 +600,36 @@ private void crearMarcaX(double x, double y) {
             marcaContainer.setUserData(new Point2D(e.getSceneX(), e.getSceneY()));
             e.consume();
         }
-    });
+    });*/
 
     paneImagen.getChildren().add(marcaContainer);
 }
    @FXML
 private void handleBotonBorrarTodo(ActionEvent event) {
-    // Lista temporal para evitar ConcurrentModificationException
-    List<Node> nodosABorrar = new ArrayList<>();
-    
-    for (Node node : paneImagen.getChildren()) {
-        if (node instanceof Shape || 
-            node instanceof Text || 
-            (node instanceof Pane && "marcaX".equals(node.getUserData()))) {
-            nodosABorrar.add(node);
-        }
-    }
-    
-    paneImagen.getChildren().removeAll(nodosABorrar);
+
+    // 1. Elimina las marcas X que tienes en la lista auxiliar
     marcasX.clear();
+
+    /* 2. Elimina del pane todos los nodos que sean:
+          – Line, Circle, Polyline, Rectangle, etc.
+          – Text
+          – Pane con userData == "marcaX"
+       …pero conserva:
+          – imageview          (la carta)
+          – imageRegla         (la regla)
+          – imageTransportador (el transportador)
+          – cualquier otro nodo que quieras mantener                 */
+    paneImagen.getChildren().removeIf(node ->
+            ( node instanceof Shape          // Line, Circle…
+           || node instanceof Text
+           || (node instanceof Pane && "marcaX".equals(node.getUserData())) )
+        && node != imageview
+        && node != imageRegla
+        && node != imageTransportador
+    );
+
+    // 3. Limpia variables de estado si lo necesitas
     elementoSeleccionado = null;
-    
-    // Limpiar el campo de texto si existe
     if (textFieldActual != null) {
         paneImagen.getChildren().remove(textFieldActual);
         textFieldActual = null;

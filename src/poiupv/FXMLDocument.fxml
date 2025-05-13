@@ -205,7 +205,7 @@
             </ScrollPane>
          </items>
       </SplitPane>
-      <HBox alignment="CENTER_RIGHT">
+      <HBox alignment="BOTTOM_RIGHT">
          <children>
             <Label fx:id="mousePosition" minHeight="-Infinity" minWidth="-Infinity" text="SceneX:     ScenY:     " wrapText="true" HBox.hgrow="ALWAYS" />
          </children>
