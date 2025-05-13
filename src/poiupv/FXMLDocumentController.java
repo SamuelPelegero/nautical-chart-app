@@ -118,19 +118,18 @@ private Node elementoSeleccionado = null;
     }
     
     private void zoomTransportador(double scaleValue) {
-        
-        
-            double escalaInversa = scaleValue;
-            //Limitar la escala para evitar valores extremos
-            escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
-            imageTransportador.setScaleX(escalaInversa);
-            imageTransportador.setScaleY(escalaInversa);
-
             
-            //Limitar la escala para evitar valores extremos
-            escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
-            imageRegla.setScaleX(escalaInversa);
-            imageRegla.setScaleY(escalaInversa);
+    double escala = Math.max(0.5, Math.min(scaleValue, 3.0));
+
+    if (imageRegla != null && paneImagen.getChildren().contains(imageRegla)) {
+        imageRegla.setScaleX(escala);
+        imageRegla.setScaleY(escala);
+    }
+
+    if (imageTransportador != null && paneImagen.getChildren().contains(imageTransportador)) {
+        imageTransportador.setScaleX(escala);
+        imageTransportador.setScaleY(escala);
+    }
         
     }
 
