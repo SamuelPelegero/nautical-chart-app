@@ -119,20 +119,19 @@ private Node elementoSeleccionado = null;
     
     private void zoomTransportador(double scaleValue) {
         
-        if (botonTransportador.isSelected()) {
+        
             double escalaInversa = scaleValue;
             //Limitar la escala para evitar valores extremos
             escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
             imageTransportador.setScaleX(escalaInversa);
             imageTransportador.setScaleY(escalaInversa);
-        }
-        if (toggleBotonRegla.isSelected()) {
-            double escalaInversa = scaleValue;
+
+            
             //Limitar la escala para evitar valores extremos
             escalaInversa = Math.max(0.5, Math.min(escalaInversa,3.0));
             imageRegla.setScaleX(escalaInversa);
             imageRegla.setScaleY(escalaInversa);
-        }
+        
     }
 
     /*@FXML
