@@ -94,7 +94,7 @@ public class FXMLDocumentController implements Initializable {
     private enum Modo { TEXTO, MARCA_X, NINGUNO, SELECCION }
 private Modo modoActual = Modo.NINGUNO;
 private TextField textFieldActual = null;
-private List<Pane> marcasX = new ArrayList<>();
+private List<Node> marcasX = new ArrayList<>();
 private Node elementoSeleccionado = null;
     @FXML
     void zoomIn(ActionEvent event) {
@@ -352,24 +352,37 @@ private void finalizarTexto() {
 
 
     
-
-    @FXML
-    private void handleToggleBotonBorrar(ActionEvent event) {
-        if (toggleBotonBorrar.isSelected()) {
-            paneImagen.setOnMouseClicked(e -> {
-                for (Node node : new ArrayList<>(paneImagen.getChildren())) {
-                    if (node instanceof Text || node instanceof Line || node instanceof Circle) {
-                        if (node.getBoundsInParent().contains(e.getX(), e.getY())) {
-                            paneImagen.getChildren().remove(node);
-                            break;
-                        }
+@FXML
+private void handleToggleBotonBorrar(ActionEvent event) {
+    if (toggleBotonBorrar.isSelected()) {
+        // Modo borrar activado
+        paneImagen.setOnMouseClicked(e -> {
+            // Buscar en orden inverso (de arriba hacia abajo)
+            for (int i = paneImagen.getChildren().size() - 1; i >= 0; i--) {
+                Node node = paneImagen.getChildren().get(i);
+                
+                // Verificar si es una marca X
+                if (node instanceof Group && "marcaX".equals(node.getUserData())) {
+                    Point2D localCoords = node.sceneToLocal(e.getSceneX(), e.getSceneY());
+                    if (node.getBoundsInLocal().contains(localCoords)) {
+                        paneImagen.getChildren().remove(node);
+                        marcasX.remove(node);
+                        break;
                     }
                 }
-            });
-        } else {
-            paneImagen.setOnMouseClicked(null);
-        }
+                // Verificar otros elementos (líneas, círculos, texto)
+                else if ((node instanceof Shape || node instanceof Text) 
+                         && node.getBoundsInParent().contains(e.getX(), e.getY())) {
+                    paneImagen.getChildren().remove(node);
+                    break;
+                }
+            }
+        });
+    } else {
+        // Desactivar modo borrar
+        paneImagen.setOnMouseClicked(null);
     }
+}
 
     @FXML
 private void handleBotonTransportadorOnAction(ActionEvent event) {
@@ -541,7 +554,7 @@ private void handleBotonCirculoOnAction(ActionEvent event) {
     }
 }
 
-    @FXML
+@FXML
 private void handleBotonMarcarXOnAction(ActionEvent event) {
     if (botonMarcarX.isSelected()) {
         modoActual = Modo.MARCA_X;
@@ -551,17 +564,24 @@ private void handleBotonMarcarXOnAction(ActionEvent event) {
             textFieldActual = null;
         }
         
-        paneImagen.setOnMouseClicked(e -> {
-            crearMarcaX(e.getX(), e.getY());
-        });
+        // Configurar el evento del pane solo una vez
+        paneImagen.setOnMouseClicked(this::manejarClickEnPane);
     } else {
         modoActual = Modo.NINGUNO;
         paneImagen.setOnMouseClicked(null);
     }
 }
 
+private void manejarClickEnPane(MouseEvent e) {
+    if (modoActual == Modo.MARCA_X) {
+        crearMarcaX(e.getX(), e.getY());
+    }
+}
+
 private void crearMarcaX(double x, double y) {
     double size = 15;
+    
+    // Crear las líneas de la X
     Line line1 = new Line(0, 0, size*2, size*2);
     Line line2 = new Line(0, size*2, size*2, 0);
     
@@ -570,65 +590,60 @@ private void crearMarcaX(double x, double y) {
     line1.setStrokeWidth(sliderGrosorLinea.getValue());
     line2.setStrokeWidth(sliderGrosorLinea.getValue());
 
-    Pane marcaContainer = new Pane(line1, line2);
-    marcaContainer.setLayoutX(x - size);
-    marcaContainer.setLayoutY(y - size);
-    marcaContainer.setUserData("marcaX");
-    marcasX.add(marcaContainer);
+    // Crear un grupo en lugar de un Pane para mejor manejo
+    Group marcaX = new Group(line1, line2);
+    marcaX.setLayoutX(x - size);
+    marcaX.setLayoutY(y - size);
+    marcaX.setUserData("marcaX");
+    
+    // Configurar eventos para la marca X
+    marcaX.setOnMouseClicked(this::manejarClickEnMarcaX);
+    
+   
 
-    // Configurar interacción
-    marcaContainer.setOnMouseClicked(e -> {
-        if (e.getClickCount() == 2) {
-            line1.setStroke(colorPicker.getValue());
-            line2.setStroke(colorPicker.getValue());
-        }
-    });
-
-    // Hacer arrastrable
-    marcaContainer.setOnMousePressed(e -> {
-        marcaContainer.setUserData(new Point2D(e.getSceneX(), e.getSceneY()));
-        e.consume();
-    });
-
-    /*marcaContainer.setOnMouseDragged(e -> {
-        Point2D dragStart = (Point2D) marcaContainer.getUserData();
-        if (dragStart != null) {
-            double deltaX = e.getSceneX() - dragStart.getX();
-            double deltaY = e.getSceneY() - dragStart.getY();
-            marcaContainer.setLayoutX(marcaContainer.getLayoutX() + deltaX);
-            marcaContainer.setLayoutY(marcaContainer.getLayoutY() + deltaY);
-            marcaContainer.setUserData(new Point2D(e.getSceneX(), e.getSceneY()));
-            e.consume();
-        }
-    });*/
-
-    paneImagen.getChildren().add(marcaContainer);
+    paneImagen.getChildren().add(marcaX);
+    marcasX.add(marcaX); // Añadir a la lista de marcas
 }
-   @FXML
+
+private void manejarClickEnMarcaX(MouseEvent e) {
+    if (e.getClickCount() == 2) { // Doble click para cambiar color
+        Node marca = (Node) e.getSource();
+        if (marca instanceof Group) {
+            for (Node child : ((Group) marca).getChildren()) {
+                if (child instanceof Line) {
+                    ((Line) child).setStroke(colorPicker.getValue());
+                }
+            }
+        }
+    } else if (e.isSecondaryButtonDown()) { // Click derecho para borrar
+        Node marca = (Node) e.getSource();
+        paneImagen.getChildren().remove(marca);
+        marcasX.remove(marca);
+        e.consume();
+    }
+}
+  @FXML
 private void handleBotonBorrarTodo(ActionEvent event) {
-
-    // 1. Elimina las marcas X que tienes en la lista auxiliar
+    // Crear una copia de la lista para evitar ConcurrentModificationException
+    List<Node> copiaMarcas = new ArrayList<>(marcasX);
+    
+    // Eliminar todas las marcas del pane
+    for (Node marca : copiaMarcas) {
+        paneImagen.getChildren().remove(marca);
+    }
+    
+    // Limpiar la lista
     marcasX.clear();
-
-    /* 2. Elimina del pane todos los nodos que sean:
-          – Line, Circle, Polyline, Rectangle, etc.
-          – Text
-          – Pane con userData == "marcaX"
-       …pero conserva:
-          – imageview          (la carta)
-          – imageRegla         (la regla)
-          – imageTransportador (el transportador)
-          – cualquier otro nodo que quieras mantener                 */
+    
+    // También eliminar otros elementos dibujados (opcional)
     paneImagen.getChildren().removeIf(node ->
-            ( node instanceof Shape          // Line, Circle…
-           || node instanceof Text
-           || (node instanceof Pane && "marcaX".equals(node.getUserData())) )
-        && node != imageview
-        && node != imageRegla
-        && node != imageTransportador
+        (node instanceof Shape || node instanceof Text) &&
+        node != imageview &&
+        node != imageRegla &&
+        node != imageTransportador
     );
-
-    // 3. Limpia variables de estado si lo necesitas
+    
+    // Limpiar variables de estado
     elementoSeleccionado = null;
     if (textFieldActual != null) {
         paneImagen.getChildren().remove(textFieldActual);
