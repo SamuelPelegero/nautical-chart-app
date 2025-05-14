@@ -66,7 +66,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ToggleButton botonMarcarX;
     @FXML
-    private ToggleButton botonBorrarTodo;
+    private Button botonBorrarTodo;
     @FXML
     private ToggleButton toggleBotonRegla;
     @FXML

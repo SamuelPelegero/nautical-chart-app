@@ -58,9 +58,6 @@
                             </image>
                         </ImageView>
                      </graphic>
-                     <toggleGroup>
-                        <ToggleGroup fx:id="grupo" />
-                     </toggleGroup>
                   </ToggleButton>
                   <ToggleButton fx:id="toggleBotonRegla" mnemonicParsing="false" onAction="#handleBotonReglaOnAction" stylesheets="@../resources/menu%20estilos.css">
                      <graphic>
@@ -71,7 +68,7 @@
                           </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="botonTexto" mnemonicParsing="false" onAction="#handleBotonTextoOnAction" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
+                  <ToggleButton fx:id="botonTexto" mnemonicParsing="false" onAction="#handleBotonTextoOnAction" stylesheets="@../resources/menu%20estilos.css">
                      <graphic>
                         <ImageView fitHeight="59.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -79,6 +76,9 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="grupo" />
+                     </toggleGroup>
                   </ToggleButton>
                    <ToggleButton fx:id="botonMarcarX" onAction="#handleBotonMarcarXOnAction" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                         <graphic>
@@ -127,15 +127,15 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                    <ToggleButton fx:id="botonBorrarTodo" onAction="#handleBotonBorrarTodo" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
-                        <graphic>
-                            <ImageView fitHeight="55.0" fitWidth="55.0">
-                                <image>
-                                    <Image url="@../resources/delete-all.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </ToggleButton>
+                  <Button fx:id="botonBorrarTodo" mnemonicParsing="false" onAction="#handleBotonBorrarTodo" prefHeight="70.0" prefWidth="80.0" stylesheets="@../resources/menu%20estilos.css">
+                     <graphic>
+                        <ImageView fitHeight="55.0" fitWidth="55.0">
+                           <image>
+                              <Image url="@../resources/delete-all.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </items>
                <VBox.margin>
                   <Insets />
