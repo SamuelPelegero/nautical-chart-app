@@ -129,6 +129,7 @@ public class FXMLLogInController {
     
     @FXML
     public void initialize() {
+
         
         if (userField != null && passwordField != null && bAccept != null) {
             bAccept.disableProperty().bind(
