@@ -399,67 +399,30 @@ public void initialize(URL url, ResourceBundle rb) {
 
     }
 
-    private void userDefaultOnAction(ActionEvent event) {
-        image = ImageViewUserDefault.getImage();
-        
-    }
-
-    private void user1OnAction(ActionEvent event) {
-        image = ImageViewUser1.getImage();
-    }
-
-    private void user3OnAction(ActionEvent event) {
-        image = imageViewUser3.getImage();
-    }
-
-    private void user2OnAction(ActionEvent event) {
-        image = ImageViewUser2.getImage();
-    }
-
     @FXML
 private void seleccionarAvatar(ActionEvent event) {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Seleccionar imagen de avatar");
-    
-    // Configurar filtros para imágenes
+
     fileChooser.getExtensionFilters().addAll(
         new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif"),
         new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
     );
-    
-    // Establecer directorio inicial (opcional)
+
     fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-    
-    Stage stage = (Stage) btnSeleccionarAvatar.getScene().getWindow();
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     File archivoSeleccionado = fileChooser.showOpenDialog(stage);
-    
+
     if (archivoSeleccionado != null) {
         try {
-            // Cargar la imagen de forma asíncrona para evitar bloqueos
-            Image imagen = new Image(archivoSeleccionado.toURI().toString(), true); // El segundo parámetro 'true' es para carga en background
-            image = imagen;
-            // Configurar listener para cuando la imagen termine de cargar
-            imagen.progressProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal.doubleValue() == 1.0) { // Cuando la carga está completa
-                    Platform.runLater(() -> {
-                        lblRutaAvatar.setText(archivoSeleccionado.getName());
-                        imgPreview.setImage(imagen);
+            image = new Image(archivoSeleccionado.toURI().toString());
+            imgPreview.setImage(image);
+            lblRutaAvatar.setText(archivoSeleccionado.getName());
 
+            System.out.println("Imagen cargada: " + archivoSeleccionado.toURI());
+            System.out.println("Dimensiones: " + image.getWidth() + " x " + image.getHeight());
 
-                    });
-                }
-            });
-            
-            // Manejar errores de carga
-            imagen.errorProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal) {
-                    Platform.runLater(() -> {
-                        lblRutaAvatar.setText("Error al cargar la imagen");
-                        System.err.println("Error loading image: " + imagen.getException());
-                    });
-                }
-            });
-            
         } catch (Exception e) {
             lblRutaAvatar.setText("Error al cargar la imagen");
             e.printStackTrace();

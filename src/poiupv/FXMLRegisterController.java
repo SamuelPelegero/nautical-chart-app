@@ -168,7 +168,7 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
     if (validEmail.get() && validPassword.get() && confirmPasswords.get() && validDate.get() && validUser.get() && !navegacion.exitsNickName(userField.getText())) {
         System.out.println("✅ Registro exitoso!");
         
-        navegacion.registerUser(userField.getText(),emailField.getText(), passwordField.getText(), image, dateField.getValue());
+        navegacion.registerUser(userField.getText(),emailField.getText(), passwordField.getText(),imgPreview.getImage() , dateField.getValue());
         
         
         // Aquí puedes agregar lógica para guardar el usuario, enviar datos, etc.
@@ -429,54 +429,34 @@ dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
         
     }
 
-    private void userDefaultOnAction(ActionEvent event) {
-        image = ImageViewUserDefault.getImage();
-        
-    }
-
-    private void user1OnAction(ActionEvent event) {
-        image = ImageViewUser1.getImage();
-    }
-
-    private void user3OnAction(ActionEvent event) {
-        image = imageViewUser3.getImage();
-    }
-
-    private void user2OnAction(ActionEvent event) {
-        image = ImageViewUser2.getImage();
-    }
-
     @FXML
-    private void seleccionarAvatar(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+private void seleccionarAvatar(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Seleccionar imagen de avatar");
-    
-    // Configurar filtros para imágenes
+
     fileChooser.getExtensionFilters().addAll(
         new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif"),
         new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
     );
-    
-    // Establecer directorio inicial (opcional)
+
     fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-    
-    Stage stage = (Stage) btnSeleccionarAvatar.getScene().getWindow();
+
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     File archivoSeleccionado = fileChooser.showOpenDialog(stage);
-    
+
     if (archivoSeleccionado != null) {
         try {
-            // Mostrar nombre del archivo (sin ruta completa)
+            image = new Image(archivoSeleccionado.toURI().toString());
+            imgPreview.setImage(image);
             lblRutaAvatar.setText(archivoSeleccionado.getName());
-            
-            // Cargar y mostrar la imagen seleccionada
-            Image imagen = new Image(archivoSeleccionado.toURI().toString());
-            image = imagen;
-            imgPreview.setImage(imagen);
-            
+
+            System.out.println("Imagen cargada: " + archivoSeleccionado.toURI());
+            System.out.println("Dimensiones: " + image.getWidth() + " x " + image.getHeight());
+
         } catch (Exception e) {
             lblRutaAvatar.setText("Error al cargar la imagen");
             e.printStackTrace();
         }
     }
-    }
+}
  }
