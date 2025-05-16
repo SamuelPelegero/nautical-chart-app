@@ -6,8 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -44,7 +42,7 @@
             <RowConstraints maxHeight="50.0" minHeight="-Infinity" prefHeight="50.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="50.0" minHeight="-Infinity" prefHeight="50.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="90.0" minHeight="10.0" prefHeight="50.0" vgrow="ALWAYS" />
-            <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="-Infinity" prefHeight="70.0" vgrow="ALWAYS" />
             <RowConstraints minHeight="0.0" prefHeight="0.0" vgrow="ALWAYS" />
             <RowConstraints minHeight="-Infinity" prefHeight="65.33333333333331" vgrow="ALWAYS" />
             <RowConstraints />
@@ -197,56 +195,25 @@
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
                <children>
                   <Label text="Cambiar avatar:" textFill="#025477" />
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="86.0" prefWidth="697.0">
                      <children>
-                        <ToggleButton fx:id="userDefault" mnemonicParsing="false" onAction="#userDefaultOnAction">
+                        <ImageView fx:id="imgPreview" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/user.png" />
+                           </image>
+                        </ImageView>
+                        <Button fx:id="btnSeleccionarAvatar" alignment="CENTER" mnemonicParsing="false" onAction="#seleccionarAvatar" style="-fx-background-color: #0685BC;" stylesheets="@../resources/menu%20estilos.css" text="Seleccionar imagen" textFill="WHITE">
                            <graphic>
-                              <ImageView fx:id="ImageViewUserDefault" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../resources/user.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <toggleGroup>
-                              <ToggleGroup fx:id="grupito" />
-                           </toggleGroup>
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                        </ToggleButton>
-                        <ToggleButton fx:id="user1" mnemonicParsing="false" onAction="#user1OnAction" toggleGroup="$grupito">
-                           <graphic>
-                              <ImageView fx:id="ImageViewUser1" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/gamer.png" />
+                                    <Image url="@../resources/file-explorer.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                            <HBox.margin>
-                              <Insets right="20.0" />
+                              <Insets left="10.0" top="10.0" />
                            </HBox.margin>
-                        </ToggleButton>
-                        <ToggleButton fx:id="user2" mnemonicParsing="false" onAction="#user2OnAction" toggleGroup="$grupito">
-                           <graphic>
-                              <ImageView fx:id="ImageViewUser2" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/woman.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                        </ToggleButton>
-                        <ToggleButton fx:id="user3" mnemonicParsing="false" onAction="#user3OnAction" toggleGroup="$grupito">
-                           <graphic>
-                              <ImageView fx:id="imageViewUser3" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/hacker.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </ToggleButton>
+                        </Button>
                      </children>
                   </HBox>
                </children>

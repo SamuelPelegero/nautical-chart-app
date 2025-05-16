@@ -5,6 +5,7 @@
  */
 package javafxmlapplication;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -40,6 +41,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.NavDAOException;
@@ -104,26 +106,17 @@ public class FXMLRegisterController implements Initializable {
     
     @FXML
     private Button bIniciarSesion;
-    @FXML
-    private ToggleButton userDefault;
-    @FXML
-    private ToggleButton user1;
-    @FXML
-    private ToggleButton user2;
-    @FXML
-    private ToggleButton user3;
-  
-    @FXML
-    private ToggleGroup grupito;
-    @FXML
     private ImageView ImageViewUserDefault;
-    @FXML
     private ImageView ImageViewUser1;
-    @FXML
     private ImageView ImageViewUser2;
-    @FXML
     private ImageView imageViewUser3;
     private Image image;
+    @FXML
+    private Button btnSeleccionarAvatar;
+    @FXML
+    private Label lblRutaAvatar;
+    @FXML
+    private ImageView imgPreview;
 
     private void checkPassword() {
         String password = passwordField.getText();
@@ -243,7 +236,7 @@ private void handleBAcceptOnAction(ActionEvent event) throws NavDAOException {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        image = ImageViewUserDefault.getImage();
+        image = imgPreview.getImage();
         
         
         
@@ -436,24 +429,54 @@ dateField.valueProperty().addListener((obs, oldVal, newVal) -> {
         
     }
 
-    @FXML
     private void userDefaultOnAction(ActionEvent event) {
         image = ImageViewUserDefault.getImage();
         
     }
 
-    @FXML
     private void user1OnAction(ActionEvent event) {
         image = ImageViewUser1.getImage();
     }
 
-    @FXML
     private void user3OnAction(ActionEvent event) {
         image = imageViewUser3.getImage();
     }
 
-    @FXML
     private void user2OnAction(ActionEvent event) {
         image = ImageViewUser2.getImage();
+    }
+
+    @FXML
+    private void seleccionarAvatar(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Seleccionar imagen de avatar");
+    
+    // Configurar filtros para imágenes
+    fileChooser.getExtensionFilters().addAll(
+        new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif"),
+        new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
+    );
+    
+    // Establecer directorio inicial (opcional)
+    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+    
+    Stage stage = (Stage) btnSeleccionarAvatar.getScene().getWindow();
+    File archivoSeleccionado = fileChooser.showOpenDialog(stage);
+    
+    if (archivoSeleccionado != null) {
+        try {
+            // Mostrar nombre del archivo (sin ruta completa)
+            lblRutaAvatar.setText(archivoSeleccionado.getName());
+            
+            // Cargar y mostrar la imagen seleccionada
+            Image imagen = new Image(archivoSeleccionado.toURI().toString());
+            image = imagen;
+            imgPreview.setImage(imagen);
+            
+        } catch (Exception e) {
+            lblRutaAvatar.setText("Error al cargar la imagen");
+            e.printStackTrace();
+        }
+    }
     }
  }

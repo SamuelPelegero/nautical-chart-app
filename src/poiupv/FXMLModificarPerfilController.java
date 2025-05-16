@@ -5,6 +5,7 @@
  */
 package poiupv;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -43,6 +44,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Navigation;
@@ -98,26 +100,22 @@ public class FXMLModificarPerfilController implements Initializable {
     private TextField userField;
     @FXML
     private Label userError;
-    @FXML
     private ToggleButton userDefault;
-    @FXML
-    private ToggleGroup grupito;
-    @FXML
     private ImageView ImageViewUserDefault;
-    @FXML
     private ToggleButton user1;
-    @FXML
     private ImageView ImageViewUser1;
-    @FXML
     private ToggleButton user2;
-    @FXML
     private ImageView ImageViewUser2;
-    @FXML
     private ToggleButton user3;
-    @FXML
     private ImageView imageViewUser3;
 
     private Image image;
+    @FXML
+    private ImageView imgPreview;
+    @FXML
+    private Label lblRutaAvatar;
+    @FXML
+    private Button btnSeleccionarAvatar;
   
     
     
@@ -241,7 +239,8 @@ public void initialize(URL url, ResourceBundle rb) {
     passwordField.setText(user.getPassword());
     passwordConfirmField.setText(user.getPassword());
     dateField.setValue(user.getBirthdate());
-    
+    if(user.getAvatar() != null)imgPreview.setImage(user.getAvatar());
+
     Platform.runLater(() -> {
         Image userAvatar = user.getAvatar();
         List<ToggleButton> toggleButtons = List.of(userDefault, user1, user2, user3);
@@ -400,25 +399,73 @@ public void initialize(URL url, ResourceBundle rb) {
 
     }
 
-    @FXML
     private void userDefaultOnAction(ActionEvent event) {
         image = ImageViewUserDefault.getImage();
         
     }
 
-    @FXML
     private void user1OnAction(ActionEvent event) {
         image = ImageViewUser1.getImage();
     }
 
-    @FXML
     private void user3OnAction(ActionEvent event) {
         image = imageViewUser3.getImage();
     }
 
-    @FXML
     private void user2OnAction(ActionEvent event) {
         image = ImageViewUser2.getImage();
     }
- }
+
+    @FXML
+private void seleccionarAvatar(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Seleccionar imagen de avatar");
+    
+    // Configurar filtros para imágenes
+    fileChooser.getExtensionFilters().addAll(
+        new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif"),
+        new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
+    );
+    
+    // Establecer directorio inicial (opcional)
+    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+    
+    Stage stage = (Stage) btnSeleccionarAvatar.getScene().getWindow();
+    File archivoSeleccionado = fileChooser.showOpenDialog(stage);
+    
+    if (archivoSeleccionado != null) {
+        try {
+            // Cargar la imagen de forma asíncrona para evitar bloqueos
+            Image imagen = new Image(archivoSeleccionado.toURI().toString(), true); // El segundo parámetro 'true' es para carga en background
+            image = imagen;
+            // Configurar listener para cuando la imagen termine de cargar
+            imagen.progressProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal.doubleValue() == 1.0) { // Cuando la carga está completa
+                    Platform.runLater(() -> {
+                        lblRutaAvatar.setText(archivoSeleccionado.getName());
+                        imgPreview.setImage(imagen);
+
+
+                    });
+                }
+            });
+            
+            // Manejar errores de carga
+            imagen.errorProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) {
+                    Platform.runLater(() -> {
+                        lblRutaAvatar.setText("Error al cargar la imagen");
+                        System.err.println("Error loading image: " + imagen.getException());
+                    });
+                }
+            });
+            
+        } catch (Exception e) {
+            lblRutaAvatar.setText("Error al cargar la imagen");
+            e.printStackTrace();
+        }
+    }
+}
+    }
+ 
 

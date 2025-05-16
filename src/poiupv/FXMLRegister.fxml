@@ -6,8 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -18,7 +16,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 
 <VBox minHeight="600.0" minWidth="500.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.FXMLRegisterController">
    <children>
@@ -45,7 +42,7 @@
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" vgrow="ALWAYS" />
             <RowConstraints minHeight="-Infinity" prefHeight="50.0" vgrow="ALWAYS" />
             <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="ALWAYS" />
-            <RowConstraints minHeight="-Infinity" prefHeight="120.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="-Infinity" prefHeight="70.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="43.333333333333314" minHeight="0.0" prefHeight="0.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="65.33333333333331" minHeight="-Infinity" prefHeight="65.33333333333331" vgrow="ALWAYS" />
             <RowConstraints />
@@ -220,65 +217,36 @@
                </graphic>
             </Button>
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
-               <children>
-                  <Label text="Cambiar avatar:" textFill="#025477" />
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+   <children>
+      <Label text="Cambiar avatar:" textFill="#025477" />
+      <HBox prefHeight="86.0" prefWidth="697.0">
                      <children>
-                        <ToggleButton fx:id="userDefault" mnemonicParsing="false" onAction="#userDefaultOnAction" selected="true">
-                           <graphic>
-                              <ImageView fx:id="ImageViewUserDefault" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/user.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <toggleGroup>
-                              <ToggleGroup fx:id="grupito" />
-                           </toggleGroup>
+            
+                  <!-- Vista previa de la imagen seleccionada -->
+            <ImageView fx:id="imgPreview" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/user.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="btnSeleccionarAvatar" alignment="CENTER" mnemonicParsing="false" onAction="#seleccionarAvatar" style="-fx-background-color: #0685BC;" stylesheets="@../resources/menu%20estilos.css" text="Seleccionar imagen" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/file-explorer.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                            <HBox.margin>
-                              <Insets right="20.0" />
+                              <Insets left="10.0" top="10.0" />
                            </HBox.margin>
-                        </ToggleButton>
-                        <ToggleButton fx:id="user1" mnemonicParsing="false" onAction="#user1OnAction" toggleGroup="$grupito">
-                           <graphic>
-                              <ImageView fx:id="ImageViewUser1" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/gamer.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                        </ToggleButton>
-                        <ToggleButton fx:id="user2" mnemonicParsing="false" onAction="#user2OnAction" toggleGroup="$grupito">
-                           <graphic>
-                              <ImageView fx:id="ImageViewUser2" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/woman.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                        </ToggleButton>
-                        <ToggleButton fx:id="user3" mnemonicParsing="false" onAction="#user3OnAction" toggleGroup="$grupito">
-                           <graphic>
-                              <ImageView fx:id="imageViewUser3" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/hacker.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </ToggleButton>
+            </Button>
                      </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets left="15.0" />
-               </padding>
-            </VBox>
+      </HBox>
+   </children>
+   <padding>
+      <Insets left="15.0" />
+   </padding>
+</VBox>
             <Label text="¿Ya tienes una cuenta?" textFill="#d09901" GridPane.rowIndex="7">
                <padding>
                   <Insets left="20.0" top="-50.0" />
