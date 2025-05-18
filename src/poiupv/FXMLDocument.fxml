@@ -23,7 +23,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="556.0" prefWidth="853.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poiupv.FXMLDocumentController">
+<VBox prefHeight="556.0" prefWidth="925.0" stylesheets="@../resources/estilos.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="poiupv.FXMLDocumentController">
    <children>
       <VBox VBox.vgrow="NEVER">
          <VBox.margin>
@@ -118,20 +118,20 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
+                  <ToggleButton mnemonicParsing="false" prefHeight="49.0" prefWidth="40.0" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
+                     <graphic>
+                        <ImageView fitHeight="58.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/brocha.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
                   <ToggleButton fx:id="toggleBotonCoordenadas" mnemonicParsing="false" onAction="#handleBotonCoordenadasOnAction" stylesheets="@../resources/menu%20estilos.css">
                      <graphic>
                         <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/coordenadas.jpg" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </ToggleButton>
-                  <ToggleButton fx:id="toggleBotonPintar" mnemonicParsing="false" onAction="#handleBotonPintarOnAction" stylesheets="@../resources/menu%20estilos.css">
-                     <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resources/brocha.png" />
                            </image>
                         </ImageView>
                      </graphic>
