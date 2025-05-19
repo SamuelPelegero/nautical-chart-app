@@ -66,9 +66,9 @@
                <children>
                   <TableView fx:id="tabla" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="350.0" prefHeight="1000.0" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn fx:id="fecha" prefWidth="124.66669178009033" text="Fecha" />
-                      <TableColumn fx:id="pregunta" prefWidth="311.33335876464844" text="Preguntas respondidas" />
-                        <TableColumn fx:id="resultado" prefWidth="121.33334350585938" text="\% de aciertos" />
+                      <TableColumn fx:id="fecha" prefWidth="171.99994468688965" text="Fecha" />
+                      <TableColumn fx:id="columnaAciertos" prefWidth="213.99998474121094" text="Aciertos" />
+                        <TableColumn fx:id="columnaFallos" prefWidth="174.66671752929688" text="Fallos" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="20.0" left="10.0" right="10.0" />

@@ -60,10 +60,7 @@ public class FXMLMostrarResultadosController implements Initializable {
     private VBox Vbox;
     @FXML
     private TableColumn<Session, String> fecha;
-    @FXML
-    private TableColumn<Session, String> pregunta;
-    @FXML
-    private TableColumn<Session, String> resultado;
+
     
     private User user;
     
@@ -72,6 +69,10 @@ public class FXMLMostrarResultadosController implements Initializable {
     private Stage menustage;
     
     private FXMLMenuController menuController;
+    @FXML
+    private TableColumn<Session, String> columnaAciertos;
+    @FXML
+    private TableColumn<Session, String> columnaFallos;
     /**
      * Initializes the controller class.
      */
@@ -98,18 +99,14 @@ public void initialize(URL url, ResourceBundle rb) {
         return new SimpleStringProperty(fechaFormateada);
     });
     
-    pregunta.setCellValueFactory(cellData -> {
+    columnaAciertos.setCellValueFactory(cellData -> {
     Session sesion = cellData.getValue();
-    int totalPreguntas = sesion.getHits() + sesion.getFaults();
-    return new SimpleStringProperty(totalPreguntas + "");
+    return new SimpleStringProperty(sesion.getHits() + "");
 });
 
-resultado.setCellValueFactory(cellData -> {
+columnaFallos.setCellValueFactory(cellData -> {
     Session sesion = cellData.getValue();
-    int hits = sesion.getHits();
-    int total = hits + sesion.getFaults();
-    String texto = total > 0 ? String.format("%.0f%% ", hits * 100.0 / total) : "0% ";
-    return new SimpleStringProperty(texto);
+    return new SimpleStringProperty(sesion.getFaults() + "");
 });
        
     
