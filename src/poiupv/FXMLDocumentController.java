@@ -51,8 +51,6 @@ public class FXMLDocumentController implements Initializable {
     private ListView<Poi> map_listview;
     @FXML private ScrollPane map_scrollpane;
     @FXML private Slider zoom_slider;
-    @FXML private MenuButton map_pin;
-    @FXML private MenuItem pin_info;
     private Label mousePosistion;
     @FXML private SplitPane splitPane;
     @FXML private Label mousePosition;
@@ -71,6 +69,7 @@ public class FXMLDocumentController implements Initializable {
     private ToggleButton toggleBotonRegla;
     @FXML
     private ToggleButton toggleBotonCoordenadas;
+    @FXML
     private ImageView imageTransportador;
     private double originalImageWidth;
     private double originalImageHeight;
@@ -85,17 +84,68 @@ public class FXMLDocumentController implements Initializable {
     private double inicioXArc;
     private Line lineaDesdeTransportador;
     private double centroXTransportador, centroYTransportador;
-    private ImageView imageRegla;
+    
+     @FXML private ImageView imageRegla;
     private Line lineaHorizontal, lineaVertical;
     @FXML private Slider sliderTransportador;
     private double initialAngleRegla = 0;
     private double initialMouseAngle = 0;
+    @FXML
+    private ToggleButton brocha;
+    
+    
+    
+    
+    
+    
+
+
+@FXML
+private void brochaOnAction(ActionEvent event) {
+    if (brocha.isSelected()) {
+        // Desactivar otras herramientas
+       
+        // Configurar el comportamiento de la brocha (cambiar color)
+        paneImagen.setOnMouseClicked(e -> {
+            // Buscar el elemento más arriba en la jerarquía que contiene el punto clickeado
+            for (int i = paneImagen.getChildren().size() - 1; i >= 0; i--) {
+                Node nodo = paneImagen.getChildren().get(i);
+                
+                // Verificar si el nodo contiene el punto clickeado
+                if (nodo.getBoundsInParent().contains(e.getX(), e.getY())) {
+                    // Cambiar color según el tipo de nodo
+                    if (nodo instanceof Shape) {
+                        ((Shape) nodo).setStroke(colorPicker.getValue());
+                        if (((Shape) nodo).getFill() != null && !((Shape) nodo).getFill().equals(Color.TRANSPARENT)) {
+                            ((Shape) nodo).setFill(colorPicker.getValue());
+                        }
+                    } 
+                    else if (nodo instanceof Text) {
+                        ((Text) nodo).setFill(colorPicker.getValue());
+                    }
+                    else if (nodo instanceof Group && "marcaX".equals(nodo.getUserData())) {
+                        // Caso especial para las marcas X (que son Groups con líneas)
+                        for (Node child : ((Group) nodo).getChildren()) {
+                            if (child instanceof Line) {
+                                ((Line) child).setStroke(colorPicker.getValue());
+                            }
+                        }
+                    }
+                    break; // Solo cambiar el color del elemento superior
+                }
+            }
+        });
+    } else {
+        // Desactivar el comportamiento de la brocha
+        paneImagen.setOnMouseClicked(null);
+    }
+}
     
     private enum Modo { TEXTO, MARCA_X, NINGUNO, SELECCION }
 private Modo modoActual = Modo.NINGUNO;
 private TextField textFieldActual = null;
 private List<Node> marcasX = new ArrayList<>();
-private Node elementoSeleccionado = null;
+
     @FXML
     void zoomIn(ActionEvent event) {
         double sliderVal = zoom_slider.getValue();
@@ -168,15 +218,16 @@ sliderGrosorLinea.setValue(2); // valor por defecto
 sliderGrosorLinea.setMaxWidth(160);
 colorPicker.setValue(Color.BLACK); // valor por defecto
         
-        colorPicker.setOnAction(e -> {
-        // Solo cambiar color si hay elemento seleccionado
-        if (elementoSeleccionado != null) {
-            cambiarColorElementoSeleccionado(null);
-        }
-    });
-        // Nuevas configuraciones
-        configurarSeleccionElementos();
+        Image icono = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
+    ImageView iconoView = new ImageView(icono);
+    iconoView.setFitWidth(55);
+    iconoView.setFitHeight(55);
+    botonTransportador.setGraphic(iconoView);  // Esta imagen es solo del botón
     
+     
+    
+
+        // Nuevas configuraciones
 
         //initData();
         zoom_slider.setMin(0.2);
@@ -202,10 +253,7 @@ colorPicker.setValue(Color.BLACK); // valor por defecto
     grupo.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
         // Limpiar todos los eventos y estados
         // Limpiar selección al cambiar de modo
-    if (elementoSeleccionado != null) {
-        elementoSeleccionado.setEffect(null);
-        elementoSeleccionado = null;
-    }
+   
         // Restablecer modo
     modoActual = Modo.NINGUNO;
     
@@ -232,18 +280,51 @@ colorPicker.setValue(Color.BLACK); // valor por defecto
     }
     // ... otros modos
     
-    // Volver a habilitar la selección si no hay modo activo
-    if (modoActual == Modo.NINGUNO) {
-        configurarSeleccionElementos();
+
+});
+    
+    imageTransportador.setOnMousePressed(e -> {
+    if (e.isPrimaryButtonDown()) {
+        // Guardamos la posición del ratón relativa al nodo para mantener la diferencia
+        imageTransportador.setUserData(new Point2D(e.getX(), e.getY()));
+        e.consume();
     }
 });
+
+imageTransportador.setOnMouseDragged(e -> {
+    Point2D dragAnchor = (Point2D) imageTransportador.getUserData();
+    if (dragAnchor != null) {
+        double scale = zoomGroup.getScaleX();  // Ajusta al nodo que tenga el zoom
+
+        double newX = (e.getSceneX() - paneImagen.localToScene(0, 0).getX() - dragAnchor.getX()) / scale;
+        double newY = (e.getSceneY() - paneImagen.localToScene(0, 0).getY() - dragAnchor.getY()) / scale;
+
+        imageTransportador.setLayoutX(newX);
+        imageTransportador.setLayoutY(newY);
+        e.consume();
+    }
+});
+imageRegla.setOnMouseDragged(e -> {
+    Point2D dragAnchor = (Point2D) imageRegla.getUserData();
+    if (dragAnchor != null) {
+        double scale = zoomGroup.getScaleX();  // Ajusta al nodo que tenga el zoom
+
+        double newX = (e.getSceneX() - paneImagen.localToScene(0, 0).getX() - dragAnchor.getX()) / scale;
+        double newY = (e.getSceneY() - paneImagen.localToScene(0, 0).getY() - dragAnchor.getY()) / scale;
+
+        imageRegla.setLayoutX(newX);
+        imageRegla.setLayoutY(newY);
+        e.consume();
+    }
+});
+
 
 
     }
 
     @FXML
     private void showPosition(MouseEvent event) {
-        mousePosistion.setText("sceneX: " + (int) event.getSceneX() + ", sceneY: " + (int) event.getSceneY() + "\n"
+        mousePosition.setText("sceneX: " + (int) event.getSceneX() + ", sceneY: " + (int) event.getSceneY() + "\n"
                 + "         X: " + (int) event.getX() + ",          Y: " + (int) event.getY());
     }
 
@@ -295,7 +376,7 @@ colorPicker.setValue(Color.BLACK); // valor por defecto
         }
     }
 
-    @FXML
+ @FXML
 private void handleBotonTextoOnAction(ActionEvent event) {
     if (botonTexto.isSelected()) {
         modoActual = Modo.TEXTO;
@@ -315,6 +396,14 @@ private void handleBotonTextoOnAction(ActionEvent event) {
             textFieldActual = new TextField();
             textFieldActual.setLayoutX(e.getX());
             textFieldActual.setLayoutY(e.getY());
+            
+            // Aplicar tamaño y color inicial
+            actualizarEstiloTextField(textFieldActual);
+            
+            // Actualizar estilo dinámicamente si cambian tamaño o color (opcional)
+            spinnerTamanoTexto.valueProperty().addListener((obs, oldVal, newVal) -> actualizarEstiloTextField(textFieldActual));
+            colorPicker.valueProperty().addListener((obs, oldVal, newVal) -> actualizarEstiloTextField(textFieldActual));
+            
             paneImagen.getChildren().add(textFieldActual);
             textFieldActual.requestFocus();
 
@@ -350,6 +439,22 @@ private void finalizarTexto() {
     }
 }
 
+// Método auxiliar para actualizar tamaño y color del TextField
+private void actualizarEstiloTextField(TextField tf) {
+    int tamano = spinnerTamanoTexto.getValue();
+    Color color = colorPicker.getValue();
+    tf.setStyle("-fx-font-size: " + tamano + "px; -fx-text-fill: " + toRgbString(color) + ";");
+}
+
+// Convierte un Color a un string RGB para CSS
+private String toRgbString(Color c) {
+    return String.format("rgb(%d,%d,%d)", 
+        (int)(c.getRed() * 255), 
+        (int)(c.getGreen() * 255), 
+        (int)(c.getBlue() * 255));
+}
+
+
 
     
 @FXML
@@ -384,41 +489,38 @@ private void handleToggleBotonBorrar(ActionEvent event) {
     }
 }
 
-    @FXML
+@FXML
 private void handleBotonTransportadorOnAction(ActionEvent event) {
     if (botonTransportador.isSelected()) {
         if (imageTransportador == null) {
+            // Cargar la imagen desde cero, no compartirla con el botón
             Image imagen = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
             imageTransportador = new ImageView(imagen);
-            imageTransportador.setFitWidth(200);
+            imageTransportador.setFitWidth(200); // Ajusta el tamaño como quieras
             imageTransportador.setPreserveRatio(true);
-            imageTransportador.setOpacity(0.5); // Transparencia al 50%
-            
+            imageTransportador.setOpacity(0.5);
+
+            // Hacerlo movible
             imageTransportador.setOnMousePressed(e -> {
-            if (e.isPrimaryButtonDown()) {
-             // Convertir coordenadas de escena a locales dentro del paneImagen
-             Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-             imageTransportador.setUserData(localPoint);
-             e.consume();
-            }
-            }); 
+                if (e.isPrimaryButtonDown()) {
+                    Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                    imageTransportador.setUserData(localPoint);
+                    e.consume();
+                }
+            });
 
             imageTransportador.setOnMouseDragged(e -> {
-            Point2D dragStart = (Point2D) imageTransportador.getUserData();
-            if (dragStart != null) {
-            // Coordenadas actuales del ratón, también convertidas
-            Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-
-            double deltaX = currentPoint.getX() - dragStart.getX();
-            double deltaY = currentPoint.getY() - dragStart.getY();
-
-            imageTransportador.setLayoutX(imageTransportador.getLayoutX() + deltaX);
-            imageTransportador.setLayoutY(imageTransportador.getLayoutY() + deltaY);
-
-            imageTransportador.setUserData(currentPoint);
-            e.consume();
-    }
-});
+                Point2D dragStart = (Point2D) imageTransportador.getUserData();
+                if (dragStart != null) {
+                    Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                    double deltaX = currentPoint.getX() - dragStart.getX();
+                    double deltaY = currentPoint.getY() - dragStart.getY();
+                    imageTransportador.setLayoutX(imageTransportador.getLayoutX() + deltaX);
+                    imageTransportador.setLayoutY(imageTransportador.getLayoutY() + deltaY);
+                    imageTransportador.setUserData(currentPoint);
+                    e.consume();
+                }
+            });
         }
 
         if (!paneImagen.getChildren().contains(imageTransportador)) {
@@ -431,11 +533,13 @@ private void handleBotonTransportadorOnAction(ActionEvent event) {
     }
 }
 
+       
+
     @FXML
     private void handleBotonLineaOnAction(ActionEvent event) {
     if (botonLinea.isSelected()) {
         modoActual = Modo.NINGUNO;
-        limpiarSeleccion();
+        
 
         // 🚫 Hacer temporales todos los nodos no interactuables (solo para evitar moverlos)
         for (Node node : paneImagen.getChildren()) {
@@ -644,82 +748,64 @@ private void handleBotonBorrarTodo(ActionEvent event) {
     );
     
     // Limpiar variables de estado
-    elementoSeleccionado = null;
+   
     if (textFieldActual != null) {
         paneImagen.getChildren().remove(textFieldActual);
         textFieldActual = null;
     }
 }
     
-    @FXML
+@FXML
 private void handleBotonReglaOnAction(ActionEvent event) {
     if (toggleBotonRegla.isSelected()) {
         if (imageRegla == null) {
-            Image imagen = new Image(getClass().getResource("/resources/regla.jpg").toExternalForm());
+            // Cargar la imagen desde cero, independiente del botón
+            Image imagen = new Image(getClass().getResource("/resources/regla.png").toExternalForm());
             imageRegla = new ImageView(imagen);
             imageRegla.setFitWidth(200);
             imageRegla.setPreserveRatio(true);
             imageRegla.setOpacity(0.5);
-            
-            // Establecer punto inicial de rotación en el centro
-            imageRegla.setTranslateX(200);
-            imageRegla.setTranslateY(100);
-            imageRegla.setRotate(0);
 
+            // Hacer movible con cálculo correcto según zoom y posición
             imageRegla.setOnMousePressed(e -> {
-                Point2D center = new Point2D(
-                    imageRegla.getBoundsInParent().getMinX() + imageRegla.getBoundsInParent().getWidth() / 2,
-                    imageRegla.getBoundsInParent().getMinY() + imageRegla.getBoundsInParent().getHeight() / 2
-                );
-
-                Point2D mouse = new Point2D(e.getSceneX(), e.getSceneY());
-                initialMouseAngle = Math.atan2(mouse.getY() - center.getY(), mouse.getX() - center.getX());
-                initialAngleRegla = imageRegla.getRotate();
-
-                // Guardamos posición para mover
                 if (e.isPrimaryButtonDown()) {
-                    Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-                    imageRegla.setUserData(localPoint);
+                    // Guardamos la posición del clic relativa a la imagen para arrastrar bien
+                    Point2D mousePressed = new Point2D(e.getX(), e.getY());
+                    imageRegla.setUserData(mousePressed);
+                    e.consume();
                 }
             });
 
             imageRegla.setOnMouseDragged(e -> {
-                if (e.isSecondaryButtonDown()) {
-                    Point2D center = new Point2D(
-                        imageRegla.getBoundsInParent().getMinX() + imageRegla.getBoundsInParent().getWidth() / 2,
-                        imageRegla.getBoundsInParent().getMinY() + imageRegla.getBoundsInParent().getHeight() / 2
-                    );
+                Point2D dragAnchor = (Point2D) imageRegla.getUserData();
+                if (dragAnchor != null) {
+                    double scale = zoomGroup.getScaleX();  // Ajusta según el nodo con zoom
 
-                    Point2D mouse = new Point2D(e.getSceneX(), e.getSceneY());
-                    double angle = Math.atan2(mouse.getY() - center.getY(), mouse.getX() - center.getX());
-                    double deltaAngle = Math.toDegrees(angle - initialMouseAngle);
+                    // Calculamos la nueva posición teniendo en cuenta el zoom y offset del pane
+                    double newX = (e.getSceneX() - paneImagen.localToScene(0, 0).getX() - dragAnchor.getX()) / scale;
+                    double newY = (e.getSceneY() - paneImagen.localToScene(0, 0).getY() - dragAnchor.getY()) / scale;
 
-                    imageRegla.setRotate(initialAngleRegla + deltaAngle);
-                } else if (e.isPrimaryButtonDown()) {
-                    Point2D dragStart = (Point2D) imageRegla.getUserData();
-                    if (dragStart != null) {
-                        Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-                        double deltaX = currentPoint.getX() - dragStart.getX();
-                        double deltaY = currentPoint.getY() - dragStart.getY();
-                        imageRegla.setLayoutX(imageRegla.getLayoutX() + deltaX);
-                        imageRegla.setLayoutY(imageRegla.getLayoutY() + deltaY);
-                        imageRegla.setUserData(currentPoint);
-                    }
+                    imageRegla.setLayoutX(newX);
+                    imageRegla.setLayoutY(newY);
+                    e.consume();
                 }
-                e.consume();
             });
         }
 
+        // Añadimos la imagen si no está ya en el panel
         if (!paneImagen.getChildren().contains(imageRegla)) {
             paneImagen.getChildren().add(imageRegla);
-            imageRegla.setLayoutX(200);
+            imageRegla.setLayoutX(100);
             imageRegla.setLayoutY(100);
         }
     } else {
-        paneImagen.getChildren().remove(imageRegla);
+        // Si se desactiva el toggle, quitar la regla
+        if (imageRegla != null) {
+            paneImagen.getChildren().remove(imageRegla);
+        }
     }
 }
-    
+
     @FXML
 private void handleBotonCoordenadasOnAction(ActionEvent event) {
     if (toggleBotonCoordenadas.isSelected()) {
@@ -743,104 +829,7 @@ private void handleBotonCoordenadasOnAction(ActionEvent event) {
         if (lineaVertical != null) paneImagen.getChildren().remove(lineaVertical);
     }
 }
-private void cambiarColorElementoSeleccionado(ActionEvent event) {
-    if (elementoSeleccionado != null) {
-        Color nuevoColor = colorPicker.getValue();
-        
-        if (elementoSeleccionado instanceof Line) {
-            ((Line) elementoSeleccionado).setStroke(nuevoColor);
-        } 
-        else if (elementoSeleccionado instanceof Circle) {
-            ((Circle) elementoSeleccionado).setStroke(nuevoColor);
-        } 
-        else if (elementoSeleccionado instanceof Text) {
-            ((Text) elementoSeleccionado).setFill(nuevoColor);
-        }
-        else if (elementoSeleccionado instanceof Pane && "marcaX".equals(elementoSeleccionado.getUserData())) {
-            Pane marcaX = (Pane) elementoSeleccionado;
-            for (Node linea : marcaX.getChildren()) {
-                if (linea instanceof Line) {
-                    ((Line) linea).setStroke(nuevoColor);
-                }
-            }
-        }
-        
-        // Actualizar grosor para formas
-        if (elementoSeleccionado instanceof Shape) {
-            ((Shape) elementoSeleccionado).setStrokeWidth(sliderGrosorLinea.getValue());
-        }
-    }
-}
 
-    private void configurarSeleccionElementos() {
-    paneImagen.setOnMouseClicked(e -> {
-        // Solo procesar si no estamos en modo de dibujo activo
-        if (modoActual == Modo.NINGUNO || modoActual == Modo.SELECCION) {
-            // Limpiar selección previa
-            if (elementoSeleccionado != null) {
-                elementoSeleccionado.setEffect(null);
-            }
-            
-            // Buscar el elemento más superior bajo el cursor
-            elementoSeleccionado = null;
-            for (int i = paneImagen.getChildren().size() - 1; i >= 0; i--) {
-                Node node = paneImagen.getChildren().get(i);
-                
-                // Ignorar la imagen base y herramientas
-                if (node == imageview || node == imageTransportador || node == imageRegla) {
-                    continue;
-                }
-                
-                if (node instanceof Shape || node instanceof Text || 
-                    (node instanceof Pane && "marcaX".equals(node.getUserData()))) {
-                    
-                    if (node.getBoundsInParent().contains(e.getX(), e.getY())) {
-                        elementoSeleccionado = node;
-                        node.setEffect(new DropShadow(20, Color.DODGERBLUE));
-                        cambiarColorElementoSeleccionado(null); // Cambiar color inmediato
-                        break;
-                    }
-                }
-            }
-        }
-        
-        // Manejar doble clic para cualquier modo (excepto cuando hay campo de texto activo)
-        if (e.getClickCount() == 2 && textFieldActual == null) {
-            for (int i = paneImagen.getChildren().size() - 1; i >= 0; i--) {
-                Node node = paneImagen.getChildren().get(i);
-                
-                if (node instanceof Shape || node instanceof Text || 
-                    (node instanceof Pane && "marcaX".equals(node.getUserData()))) {
-                    
-                    if (node.getBoundsInParent().contains(e.getX(), e.getY())) {
-                        if (node instanceof Shape) {
-                            ((Shape) node).setStroke(colorPicker.getValue());
-                        } 
-                        else if (node instanceof Text) {
-                            ((Text) node).setFill(colorPicker.getValue());
-                        }
-                        else if (node instanceof Pane) {
-                            Pane marcaX = (Pane) node;
-                            for (Node linea : marcaX.getChildren()) {
-                                if (linea instanceof Line) {
-                                    ((Line) linea).setStroke(colorPicker.getValue());
-                                }
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-    });
-}
-
-    private void limpiarSeleccion() {
-    if (elementoSeleccionado != null) {
-        elementoSeleccionado.setEffect(null);
-        elementoSeleccionado = null;
-    }
-}
     
     private void configurarDobleClic() {
     paneImagen.setOnMouseClicked(e -> {
@@ -865,6 +854,26 @@ private void cambiarColorElementoSeleccionado(ActionEvent event) {
             }
         }
     });
+}
+    
+    private void limpiarEventos() {
+    paneImagen.setOnMouseClicked(null);
+    paneImagen.setOnMousePressed(null);
+    paneImagen.setOnMouseDragged(null);
+    paneImagen.setOnMouseReleased(null);
+    
+    // Restaurar interacción con otros elementos
+    for (Node node : paneImagen.getChildren()) {
+        node.setMouseTransparent(false);
+    }
+    
+    // Limpiar referencias a elementos temporales
+    linePainting = null;
+    circlePainting = null;
+    if (textFieldActual != null) {
+        paneImagen.getChildren().remove(textFieldActual);
+        textFieldActual = null;
+    }
 }
     
 }

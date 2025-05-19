@@ -59,11 +59,11 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton fx:id="toggleBotonRegla" mnemonicParsing="false" onAction="#handleBotonReglaOnAction" stylesheets="@../resources/menu%20estilos.css">
+                  <ToggleButton fx:id="toggleBotonRegla" mnemonicParsing="false" onAction="#handleBotonReglaOnAction" prefHeight="71.0" prefWidth="102.0" stylesheets="@../resources/menu%20estilos.css">
                      <graphic>
-                        <ImageView fx:id="imageRegla" fitHeight="55.0" fitWidth="71.333" mouseTransparent="false" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="imageRegla" fitHeight="57.0" fitWidth="64.0" mouseTransparent="false" opacity="0.5" pickOnBounds="true" preserveRatio="true">
                           <image>
-                                  <Image url="@../resources/reglafoto.png" />
+                                  <Image url="@../resources/regla.png" />
                           </image>
                           </ImageView>
                      </graphic>
@@ -118,7 +118,7 @@
                         </ImageView>
                      </graphic>
                   </ToggleButton>
-                  <ToggleButton mnemonicParsing="false" prefHeight="49.0" prefWidth="40.0" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
+                  <ToggleButton fx:id="brocha" mnemonicParsing="false" onAction="#brochaOnAction" prefHeight="49.0" prefWidth="40.0" stylesheets="@../resources/menu%20estilos.css" toggleGroup="$grupo">
                      <graphic>
                         <ImageView fitHeight="58.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                            <image>
