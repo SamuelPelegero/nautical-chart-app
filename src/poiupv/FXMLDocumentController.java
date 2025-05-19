@@ -96,7 +96,74 @@ public class FXMLDocumentController implements Initializable {
     private ToggleButton brocha;
     private Group grupoRegla;
     
-    
+    private void inicializarRegla() {
+    if (imageRegla == null) {
+        imageRegla = new ImageView(new Image(getClass().getResource("/resources/regla.png").toExternalForm()));
+        imageRegla.setFitWidth(400);
+        imageRegla.setPreserveRatio(true);
+        imageRegla.setOpacity(0.5);
+        imageRegla.setPickOnBounds(true);
+        imageRegla.setVisible(false);
+
+        imageRegla.setOnMousePressed(e -> {
+            if (e.isPrimaryButtonDown()) {
+                Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                imageRegla.setUserData(new Point2D(
+                    localPoint.getX() - imageRegla.getLayoutX(),
+                    localPoint.getY() - imageRegla.getLayoutY()
+                ));
+                e.consume();
+            }
+        });
+
+        imageRegla.setOnMouseDragged(e -> {
+            Point2D dragAnchor = (Point2D) imageRegla.getUserData();
+            if (dragAnchor != null) {
+                double zoom = zoomGroup.getScaleX();
+                Point2D scenePoint = new Point2D(e.getSceneX(), e.getSceneY());
+                Point2D localPoint = paneImagen.sceneToLocal(scenePoint);
+                double correctedX = localPoint.getX() / zoom;
+                double correctedY = localPoint.getY() / zoom;
+                imageRegla.setLayoutX(correctedX - dragAnchor.getX());
+                imageRegla.setLayoutY(correctedY - dragAnchor.getY());
+                e.consume();
+            }
+        });
+
+        paneImagen.getChildren().add(imageRegla);
+    }
+}
+private void inicializarTransportador() {
+    if (imageTransportador == null) {
+        imageTransportador = new ImageView(new Image(getClass().getResource("/resources/transportador.png").toExternalForm()));
+        imageTransportador.setFitWidth(400);
+        imageTransportador.setPreserveRatio(true);
+        imageTransportador.setOpacity(0.5);
+        imageTransportador.setPickOnBounds(true);
+
+        imageTransportador.setOnMousePressed(e -> {
+            if (e.isPrimaryButtonDown()) {
+                Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                imageTransportador.setUserData(localPoint);
+                e.consume();
+            }
+        });
+
+        imageTransportador.setOnMouseDragged(e -> {
+            Point2D dragStart = (Point2D) imageTransportador.getUserData();
+            if (dragStart != null) {
+                Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
+                double deltaX = currentPoint.getX() - dragStart.getX();
+                double deltaY = currentPoint.getY() - dragStart.getY();
+                imageTransportador.setLayoutX(imageTransportador.getLayoutX() + deltaX);
+                imageTransportador.setLayoutY(imageTransportador.getLayoutY() + deltaY);
+                imageTransportador.setUserData(currentPoint);
+                e.consume();
+            }
+        });
+    }
+}
+
     
     
     @Override
@@ -110,11 +177,9 @@ public class FXMLDocumentController implements Initializable {
     }
     map_scrollpane.setContent(contentGroup);
     
-    
-    imageRegla = new ImageView();
-    imageRegla.setVisible(false);
-    paneImagen.getChildren().add(imageRegla);
-        
+  
+            inicializarRegla();
+    inicializarTransportador();
         spinnerTamanoTexto.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 72, 14)); // min=10, max=72, default=14
 sliderGrosorLinea.setMin(1);
 sliderGrosorLinea.setMax(10); // grosor máximo para líneas
@@ -258,103 +323,26 @@ imageRegla.setOnMouseDragged(e -> {
     
 @FXML
 private void handleBotonReglaOnAction(ActionEvent event) {
+    inicializarRegla();
+
     if (toggleBotonRegla.isSelected()) {
-        // Cargar imagen solo si no está cargada
-        if (imageRegla.getImage() == null) {
-            Image img = new Image(getClass().getResource("/resources/regla.png").toExternalForm());
-            imageRegla.setImage(img);
-            imageRegla.setFitWidth(200);
-            imageRegla.setPreserveRatio(true);
-            imageRegla.setOpacity(0.5);
-            
-            // Configurar eventos de arrastre (igual que el transportador)
-            imageRegla.setOnMousePressed(e -> {
-                if (e.isPrimaryButtonDown()) {
-                    Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-                    imageRegla.setUserData(new Point2D(
-                        localPoint.getX() - imageRegla.getLayoutX(),
-                        localPoint.getY() - imageRegla.getLayoutY()
-                    ));
-                    e.consume();
-                }
-            });
-
-           imageRegla.setOnMouseDragged(e -> {
-    Point2D dragAnchor = (Point2D) imageRegla.getUserData();
-    if (dragAnchor != null) {
-        double zoom = zoomGroup.getScaleX(); // Escala actual
-
-        // Coordenadas del ScrollPane
-        Bounds viewportBounds = map_scrollpane.getViewportBounds();
-        Bounds contentBounds = zoomGroup.getBoundsInParent();
-
-        double scrollX = map_scrollpane.getHvalue() * (contentBounds.getWidth() - viewportBounds.getWidth());
-        double scrollY = map_scrollpane.getVvalue() * (contentBounds.getHeight() - viewportBounds.getHeight());
-
-        // Posición del ratón en la escena
-        Point2D scenePoint = new Point2D(e.getSceneX(), e.getSceneY());
-
-        // Convertimos a coordenadas locales del paneImagen
-        Point2D localPoint = paneImagen.sceneToLocal(scenePoint);
-
-        // Compensamos zoom y scroll
-        double correctedX = (localPoint.getX() + scrollX) / zoom;
-        double correctedY = (localPoint.getY() + scrollY) / zoom;
-
-        imageRegla.setLayoutX(correctedX - dragAnchor.getX());
-        imageRegla.setLayoutY(correctedY - dragAnchor.getY());
-        e.consume();
-    }
-});
-
+        if (!paneImagen.getChildren().contains(imageRegla)) {
+            paneImagen.getChildren().add(imageRegla);
         }
-        
-        // Mostrar y posicionar la regla
         imageRegla.setVisible(true);
         imageRegla.setLayoutX(100);
         imageRegla.setLayoutY(100);
         imageRegla.toFront();
     } else {
-        // Ocultar la regla
         imageRegla.setVisible(false);
     }
 }
-    
+
 
 @FXML
 private void handleBotonTransportadorOnAction(ActionEvent event) {
+    inicializarTransportador();
     if (botonTransportador.isSelected()) {
-        if (imageTransportador == null) {
-            // Cargar la imagen desde cero, no compartirla con el botón
-            Image imagen = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
-            imageTransportador = new ImageView(imagen);
-            imageTransportador.setFitWidth(200); // Ajusta el tamaño como quieras
-            imageTransportador.setPreserveRatio(true);
-            imageTransportador.setOpacity(0.5);
-
-            // Hacerlo movible
-            imageTransportador.setOnMousePressed(e -> {
-                if (e.isPrimaryButtonDown()) {
-                    Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-                    imageTransportador.setUserData(localPoint);
-                    e.consume();
-                }
-            });
-
-            imageTransportador.setOnMouseDragged(e -> {
-                Point2D dragStart = (Point2D) imageTransportador.getUserData();
-                if (dragStart != null) {
-                    Point2D currentPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-                    double deltaX = currentPoint.getX() - dragStart.getX();
-                    double deltaY = currentPoint.getY() - dragStart.getY();
-                    imageTransportador.setLayoutX(imageTransportador.getLayoutX() + deltaX);
-                    imageTransportador.setLayoutY(imageTransportador.getLayoutY() + deltaY);
-                    imageTransportador.setUserData(currentPoint);
-                    e.consume();
-                }
-            });
-        }
-
         if (!paneImagen.getChildren().contains(imageTransportador)) {
             paneImagen.getChildren().add(imageTransportador);
             imageTransportador.setLayoutX(100);
@@ -365,9 +353,6 @@ private void handleBotonTransportadorOnAction(ActionEvent event) {
     }
 }
 
-   
-   
-   
    
    
    
