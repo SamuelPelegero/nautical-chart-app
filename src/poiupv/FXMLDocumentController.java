@@ -101,33 +101,11 @@ public class FXMLDocumentController implements Initializable {
         imageRegla = new ImageView(new Image(getClass().getResource("/resources/regla.png").toExternalForm()));
       
         imageRegla.setPreserveRatio(true);
-        imageRegla.setOpacity(0.5);
+        imageRegla.setOpacity(1);
         imageRegla.setPickOnBounds(true);
         imageRegla.setVisible(false);
 
-imageRegla.setOnMousePressed(e -> {
-    if (e.isPrimaryButtonDown()) {
-        // Obtenemos la posición del clic dentro del grupo con zoom
-        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
-        imageRegla.setUserData(new Point2D(
-            localPoint.getX() - imageRegla.getLayoutX(),
-            localPoint.getY() - imageRegla.getLayoutY()
-        ));
-        e.consume();
-    }
-});
 
-imageRegla.setOnMouseDragged(e -> {
-    Point2D dragAnchor = (Point2D) imageRegla.getUserData();
-    if (dragAnchor != null) {
-        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
-
-        // Aplicamos el movimiento corregido
-        imageRegla.setLayoutX(localPoint.getX() - dragAnchor.getX());
-        imageRegla.setLayoutY(localPoint.getY() - dragAnchor.getY());
-        e.consume();
-    }
-});
         paneImagen.getChildren().add(imageRegla);
         zoomTransportador(sliderTransportador.getValue());
        
@@ -285,36 +263,55 @@ imageTransportador.setOnMouseDragged(e -> {
 
 
 imageRegla.setOnMousePressed(e -> {
-    if (e.isPrimaryButtonDown()) {
-        // Obtenemos la posición del clic dentro del grupo con zoom
-        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
-        imageRegla.setUserData(new Point2D(
-            localPoint.getX() - imageRegla.getLayoutX(),
-            localPoint.getY() - imageRegla.getLayoutY()
-        ));
-        e.consume();
+    if (e.isSecondaryButtonDown()) {
+        // Centro real de la imagen dentro del zoomGroup
+        double centerX = imageRegla.getLayoutX() + imageRegla.getBoundsInLocal().getWidth() / 2;
+        double centerY = imageRegla.getLayoutY() + imageRegla.getBoundsInLocal().getHeight() / 2;
+
+        Point2D centerScene = imageRegla.localToScene(centerX - imageRegla.getLayoutX(), centerY - imageRegla.getLayoutY());
+        Point2D mouseScene = new Point2D(e.getSceneX(), e.getSceneY());
+
+        initialMouseAngle = Math.atan2(mouseScene.getY() - centerScene.getY(), mouseScene.getX() - centerScene.getX());
+        initialAngleRegla = imageRegla.getRotate();
     }
+
+    if (e.isPrimaryButtonDown()) {
+        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        imageRegla.setUserData(localPoint);
+    }
+
+    e.consume();
 });
-
-imageRegla.setScaleX(sliderTransportador.getValue());
-imageRegla.setScaleY(sliderTransportador.getValue());
-
-imageTransportador.setScaleX(sliderTransportador.getValue());
-imageTransportador.setScaleY(sliderTransportador.getValue());
-
 
 imageRegla.setOnMouseDragged(e -> {
-    Point2D dragAnchor = (Point2D) imageRegla.getUserData();
-    if (dragAnchor != null) {
-        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+    if (e.isSecondaryButtonDown()) {
+        // Rotación con botón derecho
+        double centerX = imageRegla.getLayoutX() + imageRegla.getBoundsInLocal().getWidth() / 2;
+        double centerY = imageRegla.getLayoutY() + imageRegla.getBoundsInLocal().getHeight() / 2;
 
-        // Aplicamos el movimiento corregido
-        imageRegla.setLayoutX(localPoint.getX() - dragAnchor.getX());
-        imageRegla.setLayoutY(localPoint.getY() - dragAnchor.getY());
-        e.consume();
+        Point2D centerScene = imageRegla.localToScene(centerX - imageRegla.getLayoutX(), centerY - imageRegla.getLayoutY());
+        Point2D mouseScene = new Point2D(e.getSceneX(), e.getSceneY());
+
+        double currentMouseAngle = Math.atan2(mouseScene.getY() - centerScene.getY(), mouseScene.getX() - centerScene.getX());
+        double deltaAngle = Math.toDegrees(currentMouseAngle - initialMouseAngle);
+
+        imageRegla.setRotate(initialAngleRegla + deltaAngle);
     }
-});
 
+    if (e.isPrimaryButtonDown()) {
+        Point2D dragStart = (Point2D) imageRegla.getUserData();
+        if (dragStart != null) {
+            Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+            double deltaX = localPoint.getX() - dragStart.getX();
+            double deltaY = localPoint.getY() - dragStart.getY();
+            imageRegla.setLayoutX(imageRegla.getLayoutX() + deltaX);
+            imageRegla.setLayoutY(imageRegla.getLayoutY() + deltaY);
+            imageRegla.setUserData(localPoint);
+        }
+    }
+
+    e.consume();
+});
 
 
     }
@@ -351,16 +348,6 @@ private void handleBotonTransportadorOnAction(ActionEvent event) {
         paneImagen.getChildren().remove(imageTransportador);
     }
 }
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
 
 @FXML
 private void brochaOnAction(ActionEvent event) {
