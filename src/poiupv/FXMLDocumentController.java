@@ -99,44 +99,44 @@ public class FXMLDocumentController implements Initializable {
     private void inicializarRegla() {
     if (imageRegla == null) {
         imageRegla = new ImageView(new Image(getClass().getResource("/resources/regla.png").toExternalForm()));
-        imageRegla.setFitWidth(400);
+      
         imageRegla.setPreserveRatio(true);
         imageRegla.setOpacity(0.5);
         imageRegla.setPickOnBounds(true);
         imageRegla.setVisible(false);
 
-        imageRegla.setOnMousePressed(e -> {
-            if (e.isPrimaryButtonDown()) {
-                Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
-                imageRegla.setUserData(new Point2D(
-                    localPoint.getX() - imageRegla.getLayoutX(),
-                    localPoint.getY() - imageRegla.getLayoutY()
-                ));
-                e.consume();
-            }
-        });
+imageRegla.setOnMousePressed(e -> {
+    if (e.isPrimaryButtonDown()) {
+        // Obtenemos la posición del clic dentro del grupo con zoom
+        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        imageRegla.setUserData(new Point2D(
+            localPoint.getX() - imageRegla.getLayoutX(),
+            localPoint.getY() - imageRegla.getLayoutY()
+        ));
+        e.consume();
+    }
+});
 
-        imageRegla.setOnMouseDragged(e -> {
-            Point2D dragAnchor = (Point2D) imageRegla.getUserData();
-            if (dragAnchor != null) {
-                double zoom = zoomGroup.getScaleX();
-                Point2D scenePoint = new Point2D(e.getSceneX(), e.getSceneY());
-                Point2D localPoint = paneImagen.sceneToLocal(scenePoint);
-                double correctedX = localPoint.getX() / zoom;
-                double correctedY = localPoint.getY() / zoom;
-                imageRegla.setLayoutX(correctedX - dragAnchor.getX());
-                imageRegla.setLayoutY(correctedY - dragAnchor.getY());
-                e.consume();
-            }
-        });
+imageRegla.setOnMouseDragged(e -> {
+    Point2D dragAnchor = (Point2D) imageRegla.getUserData();
+    if (dragAnchor != null) {
+        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
 
+        // Aplicamos el movimiento corregido
+        imageRegla.setLayoutX(localPoint.getX() - dragAnchor.getX());
+        imageRegla.setLayoutY(localPoint.getY() - dragAnchor.getY());
+        e.consume();
+    }
+});
         paneImagen.getChildren().add(imageRegla);
+        zoomTransportador(sliderTransportador.getValue());
+       
     }
 }
 private void inicializarTransportador() {
     if (imageTransportador == null) {
         imageTransportador = new ImageView(new Image(getClass().getResource("/resources/transportador.png").toExternalForm()));
-        imageTransportador.setFitWidth(400);
+        
         imageTransportador.setPreserveRatio(true);
         imageTransportador.setOpacity(0.5);
         imageTransportador.setPickOnBounds(true);
@@ -161,6 +161,8 @@ private void inicializarTransportador() {
                 e.consume();
             }
         });
+        
+        zoomTransportador(sliderTransportador.getValue());
     }
 }
 
@@ -218,9 +220,9 @@ toggleBotonRegla.setGraphic(iconoView2);
    
         
         sliderTransportador.setMaxWidth(160);
-        sliderTransportador.setMin(1);
-        sliderTransportador.setMax(3);
-        sliderTransportador.setValue(1.5);
+        sliderTransportador.setMin(3);
+        sliderTransportador.setMax(15);
+        sliderTransportador.setValue(3);
         sliderTransportador.valueProperty().addListener((o, oldVal, newVal) -> zoomTransportador((Double) newVal));
        
         
@@ -280,38 +282,35 @@ imageTransportador.setOnMouseDragged(e -> {
         e.consume();
     }
 });
+
+
 imageRegla.setOnMousePressed(e -> {
     if (e.isPrimaryButtonDown()) {
-        // Guardamos la posición relativa al nodo (imagenRegla) para mantener la diferencia
-        imageRegla.setUserData(new Point2D(e.getX(), e.getY()));
+        // Obtenemos la posición del clic dentro del grupo con zoom
+        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
+        imageRegla.setUserData(new Point2D(
+            localPoint.getX() - imageRegla.getLayoutX(),
+            localPoint.getY() - imageRegla.getLayoutY()
+        ));
         e.consume();
     }
 });
 
+imageRegla.setScaleX(sliderTransportador.getValue());
+imageRegla.setScaleY(sliderTransportador.getValue());
+
+imageTransportador.setScaleX(sliderTransportador.getValue());
+imageTransportador.setScaleY(sliderTransportador.getValue());
+
+
 imageRegla.setOnMouseDragged(e -> {
     Point2D dragAnchor = (Point2D) imageRegla.getUserData();
     if (dragAnchor != null) {
-        double zoom = zoomGroup.getScaleX(); // Escala actual
+        Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
 
-        // Coordenadas del ScrollPane
-        Bounds viewportBounds = map_scrollpane.getViewportBounds();
-        Bounds contentBounds = zoomGroup.getBoundsInParent();
-
-        double scrollX = map_scrollpane.getHvalue() * (contentBounds.getWidth() - viewportBounds.getWidth());
-        double scrollY = map_scrollpane.getVvalue() * (contentBounds.getHeight() - viewportBounds.getHeight());
-
-        // Posición del ratón en la escena
-        Point2D scenePoint = new Point2D(e.getSceneX(), e.getSceneY());
-
-        // Convertimos a coordenadas locales del paneImagen
-        Point2D localPoint = paneImagen.sceneToLocal(scenePoint);
-
-        // Compensamos zoom y scroll
-        double correctedX = (localPoint.getX() + scrollX) / zoom;
-        double correctedY = (localPoint.getY() + scrollY) / zoom;
-
-        imageRegla.setLayoutX(correctedX - dragAnchor.getX());
-        imageRegla.setLayoutY(correctedY - dragAnchor.getY());
+        // Aplicamos el movimiento corregido
+        imageRegla.setLayoutX(localPoint.getX() - dragAnchor.getX());
+        imageRegla.setLayoutY(localPoint.getY() - dragAnchor.getY());
         e.consume();
     }
 });
@@ -434,7 +433,7 @@ private List<Node> marcasX = new ArrayList<>();
     
     private void zoomTransportador(double scaleValue) {
             
-    double escala = Math.max(0.5, Math.min(scaleValue, 3.0));
+    double escala = Math.max(1, Math.min(scaleValue, 15));
 
     if (imageRegla != null && paneImagen.getChildren().contains(imageRegla)) {
         imageRegla.setScaleX(escala);
