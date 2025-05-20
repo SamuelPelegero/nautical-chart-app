@@ -250,11 +250,16 @@ toggleBotonRegla.setGraphic(iconoView2);
 imageTransportador.setOnMouseDragged(e -> {
     Point2D dragAnchor = (Point2D) imageTransportador.getUserData();
     if (dragAnchor != null) {
-        double scale = zoomGroup.getScaleX();  // Ajusta al nodo que tenga el zoom
+        double scale = zoomGroup.getScaleX();
 
         double newX = (e.getSceneX() - paneImagen.localToScene(0, 0).getX() - dragAnchor.getX()) / scale;
         double newY = (e.getSceneY() - paneImagen.localToScene(0, 0).getY() - dragAnchor.getY()) / scale;
 
+        // ❗️ No permitir mover más a la izquierda del borde izquierdo (x >= 0)
+        if (newX < 0) newX = 0;
+        // Limitar hacia arriba
+        if (newY < 0) newY = 0;
+        
         imageTransportador.setLayoutX(newX);
         imageTransportador.setLayoutY(newY);
         e.consume();
@@ -304,8 +309,13 @@ imageRegla.setOnMouseDragged(e -> {
             Point2D localPoint = zoomGroup.sceneToLocal(e.getSceneX(), e.getSceneY());
             double deltaX = localPoint.getX() - dragStart.getX();
             double deltaY = localPoint.getY() - dragStart.getY();
-            imageRegla.setLayoutX(imageRegla.getLayoutX() + deltaX);
-            imageRegla.setLayoutY(imageRegla.getLayoutY() + deltaY);
+            double newLayoutX = imageRegla.getLayoutX() + deltaX;
+            double newLayoutY = imageRegla.getLayoutY() + deltaY;
+
+            if (newLayoutX < 0) newLayoutX = 0;
+            if (newLayoutY < 0) newLayoutY = 0;
+            imageRegla.setLayoutX(newLayoutX);
+            imageRegla.setLayoutY(newLayoutY);
             imageRegla.setUserData(localPoint);
         }
     }
