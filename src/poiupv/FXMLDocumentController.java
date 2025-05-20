@@ -97,28 +97,37 @@ public class FXMLDocumentController implements Initializable {
     private Group grupoRegla;
     
     private void inicializarRegla() {
-    if (imageRegla == null) {
-        imageRegla = new ImageView(new Image(getClass().getResource("/resources/regla.png").toExternalForm()));
-      
+     if (imageRegla == null) {
+        Image imagenRegla = new Image(getClass().getResource("/resources/regla.png").toExternalForm());
+         double originalImageWidthRegla = imagenRegla.getWidth();
+         double originalImageHeightRegla = imagenRegla.getHeight();
+        
+        imageRegla = new ImageView(imagenRegla);
         imageRegla.setPreserveRatio(true);
         imageRegla.setOpacity(1);
         imageRegla.setPickOnBounds(true);
         imageRegla.setVisible(false);
 
-
         paneImagen.getChildren().add(imageRegla);
-        zoomTransportador(sliderTransportador.getValue());
-       
+        
+        // Aplicar zoom inicial inmediatamente
+        double zoomInicial = sliderTransportador.getValue();
+        double newWidth = originalImageWidthRegla * zoomInicial;
+        imageRegla.setFitWidth(newWidth);
     }
+       
+    
 }
 private void inicializarTransportador() {
-    if (imageTransportador == null) {
-        imageTransportador = new ImageView(new Image(getClass().getResource("/resources/transportador.png").toExternalForm()));
+   if (imageTransportador == null) {
+        Image imagenTransportador = new Image(getClass().getResource("/resources/transportador.png").toExternalForm());
+       double originalImageWidthTransportador = imagenTransportador.getWidth();
+       double originalImageHeightTransportador = imagenTransportador.getHeight();
         
+        imageTransportador = new ImageView(imagenTransportador);
         imageTransportador.setPreserveRatio(true);
         imageTransportador.setOpacity(0.5);
         imageTransportador.setPickOnBounds(true);
-
         imageTransportador.setOnMousePressed(e -> {
             if (e.isPrimaryButtonDown()) {
                 Point2D localPoint = paneImagen.sceneToLocal(e.getSceneX(), e.getSceneY());
@@ -141,6 +150,10 @@ private void inicializarTransportador() {
         });
         
         zoomTransportador(sliderTransportador.getValue());
+        // Aplicar zoom inicial inmediatamente
+        double zoomInicial = sliderTransportador.getValue();
+        double newWidth = originalImageWidthTransportador * zoomInicial;
+        imageTransportador.setFitWidth(newWidth);
     }
 }
 
@@ -158,8 +171,6 @@ private void inicializarTransportador() {
     map_scrollpane.setContent(contentGroup);
     
   
-            inicializarRegla();
-    inicializarTransportador();
         spinnerTamanoTexto.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 72, 14)); // min=10, max=72, default=14
 sliderGrosorLinea.setMin(1);
 sliderGrosorLinea.setMax(10); // grosor máximo para líneas
@@ -198,13 +209,22 @@ toggleBotonRegla.setGraphic(iconoView2);
    
         
         sliderTransportador.setMaxWidth(160);
-        sliderTransportador.setMin(3);
+        sliderTransportador.setMin(5);
         sliderTransportador.setMax(15);
-        sliderTransportador.setValue(3);
-        sliderTransportador.valueProperty().addListener((o, oldVal, newVal) -> zoomTransportador((Double) newVal));
+        sliderTransportador.setValue(7);
        
         
         
+            inicializarRegla();
+    inicializarTransportador();
+    
+     zoomTransportador(sliderTransportador.getValue());
+     
+     
+     
+      sliderTransportador.valueProperty().addListener((o, oldVal, newVal) -> zoomTransportador((Double) newVal));
+       
+     
             // Listener para manejar cambios entre modos
     grupo.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
         // Limpiar todos los eventos y estados
@@ -432,12 +452,12 @@ private List<Node> marcasX = new ArrayList<>();
             
     double escala = Math.max(1, Math.min(scaleValue, 15));
 
-    if (imageRegla != null && paneImagen.getChildren().contains(imageRegla)) {
+    if (imageRegla != null ) {
         imageRegla.setScaleX(escala);
         imageRegla.setScaleY(escala);
     }
 
-    if (imageTransportador != null && paneImagen.getChildren().contains(imageTransportador)) {
+    if (imageTransportador != null ) {
         imageTransportador.setScaleX(escala);
         imageTransportador.setScaleY(escala);
     }
