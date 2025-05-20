@@ -677,16 +677,20 @@ private void handleToggleBotonBorrar(ActionEvent event) {
 
         paneImagen.setOnMouseDragged(e -> {
             if (linePainting != null) {
-                linePainting.setEndX(e.getX());
-                linePainting.setEndY(e.getY());
+                double endX = Math.max(0, e.getX());
+                double endY = Math.max(0, e.getY());
+                linePainting.setEndX(endX);
+                linePainting.setEndY(endY);
             }
             e.consume();
         });
 
         paneImagen.setOnMouseReleased(e -> {
             if (linePainting != null) {
-                linePainting.setEndX(e.getX());
-                linePainting.setEndY(e.getY());
+                double endX = Math.max(0, e.getX());
+                double endY = Math.max(0, e.getY());
+                linePainting.setEndX(endX);
+                linePainting.setEndY(endY);
                 linePainting = null;
 
                 // ✅ Restaurar interacción normal al terminar de pintar
@@ -718,6 +722,9 @@ private void handleBotonCirculoOnAction(ActionEvent event) {
             textFieldActual = null;
         }
         paneImagen.setOnMousePressed(e -> {
+            double centerX = Math.max(0, e.getX());
+            double centerY = Math.max(0, e.getY());
+            
             circlePainting = new Circle(1);
 
             // Aplicar color y grosor
@@ -727,9 +734,9 @@ private void handleBotonCirculoOnAction(ActionEvent event) {
             // El relleno lo dejamos transparente
             circlePainting.setFill(Color.TRANSPARENT);
 
-            circlePainting.setCenterX(e.getX());
-            circlePainting.setCenterY(e.getY());
-            inicioXArc = e.getX(); // para calcular radio
+            circlePainting.setCenterX(centerX);
+            circlePainting.setCenterY(centerY);
+            inicioXArc = centerX; // para calcular radio
 
             paneImagen.getChildren().add(circlePainting);
 
@@ -748,9 +755,17 @@ private void handleBotonCirculoOnAction(ActionEvent event) {
         });
 
         paneImagen.setOnMouseDragged(e -> {
-            if (circlePainting != null) {
-                double radio = Math.abs(e.getX() - inicioXArc);
-                circlePainting.setRadius(radio);
+             if (circlePainting != null) {
+                double mouseX = Math.max(0, e.getX());
+                double radius = Math.abs(mouseX - inicioXArc);
+
+                // Evitar que el círculo se dibuje hacia la izquierda del límite
+                double minX = circlePainting.getCenterX() - radius;
+                if (minX < 0) {
+                    radius = circlePainting.getCenterX(); // Limita el radio
+                }
+
+                circlePainting.setRadius(radius);
                 e.consume();
             }
         });
