@@ -89,6 +89,9 @@ public class FXMLpreguntasController implements Initializable {
     public void setStage(Stage stage){
         this.menustage = stage;
     }
+    public Stage getMenuStage() {
+    return menustage;
+    }
 
     private void cargarPreguntas() throws NavDAOException{
         Navigation navegacion = Navigation.getInstance();

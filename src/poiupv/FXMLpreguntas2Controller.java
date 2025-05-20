@@ -85,6 +85,9 @@ public class FXMLpreguntas2Controller implements Initializable {
     
     Problem problema = null;
 
+    public Stage getMenuStage() {
+    return menustage;
+    }
     public void setMenuController(FXMLMenuController controller) {
         this.menuController = controller;
     }

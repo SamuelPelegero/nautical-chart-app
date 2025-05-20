@@ -79,6 +79,7 @@ public class FXMLLogInController {
                 newStage.setMinWidth(600);
                 newStage.setMinHeight(600);
                 newStage.setMaximized(true);
+                controller.configurarCierreSesion(newStage);
                 newStage.show();
             } catch (IOException e) {
                 e.printStackTrace();

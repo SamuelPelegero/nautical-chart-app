@@ -64,8 +64,13 @@ public class FXMLMenuController {
         stage.setMinWidth(600);
         stage.setMinHeight(600);
         stage.setMaximized(true);
+        stage.setOnCloseRequest(e -> {
+            e.consume();            // Evita cierre automático
+            stage.close();          // Cierra la ventana actual
+            preguntasController.getMenuStage().show(); // Muestra el menú
+        });
         stage.show();
-        
+
 
 
 
@@ -164,5 +169,13 @@ public class FXMLMenuController {
     public void fallar() {
         faults++;
     }
-
+    public void configurarCierreSesion(Stage stage) {
+    stage.setOnCloseRequest(e -> {
+        System.out.println("Ventana cerrada por la 'X'");
+        if (user != null) {
+            user.addSession(hits, faults);
+            System.out.println("Sesión guardada correctamente");
+        }
+    });
+    }
 }

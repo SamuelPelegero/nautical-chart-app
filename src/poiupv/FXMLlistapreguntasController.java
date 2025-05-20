@@ -107,6 +107,11 @@ public class FXMLlistapreguntasController implements Initializable {
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         stage.setMaximized(true);
         stage.setResizable(false);
+        stage.setOnCloseRequest(e -> {
+            e.consume();            // Evita cierre automático
+            stage.close();          // Cierra la ventana actual
+            controller.getMenuStage().show(); // Muestra el menú
+        });
         stage.show();
 
         // Cerrar ventana actual si es necesario
@@ -139,6 +144,11 @@ public class FXMLlistapreguntasController implements Initializable {
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
         stage.setMaximized(true);
         stage.setResizable(false);
+        stage.setOnCloseRequest(e -> {
+            e.consume();            // Evita cierre automático
+            stage.close();          // Cierra la ventana actual
+            preguntasController.getMenuStage().show(); // Muestra el menú
+        });
         stage.show();
         
         
@@ -163,7 +173,10 @@ public class FXMLlistapreguntasController implements Initializable {
 
         } else {
             System.out.println("Acción Cancelada");
-        }
+        }        
+    }
+    public Stage getMenuStage() {
+    return menustage;
     }
        public class ProblemListCell extends ListCell<Problem> {
     @Override
